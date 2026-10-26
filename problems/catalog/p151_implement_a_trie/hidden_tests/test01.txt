@@ -1,0 +1,8 @@
+INPUT:
+4
+INSERT hello
+SEARCH he
+STARTSWITH he
+SEARCH hello
+EXPECTED:
+false true true

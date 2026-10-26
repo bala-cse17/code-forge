@@ -1,0 +1,7 @@
+INPUT:
+barfoothefoobarman
+2
+foo
+bar
+EXPECTED:
+0 9

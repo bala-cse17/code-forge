@@ -1,0 +1,5 @@
+INPUT:
+50 25 1
+25 25
+EXPECTED:
+1

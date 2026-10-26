@@ -1,0 +1,51 @@
+{
+  "id": "p097_word_ladder",
+  "number": 97,
+  "slug": "word-ladder",
+  "category_id": 10,
+  "category_name": "Graphs",
+  "title": "Word Ladder",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "A transformation sequence from word `beginWord` to `endWord` using a dictionary `wordList` changes one letter at a time. Return the number of words in the shortest transformation sequence, or 0.",
+  "input_format": "First line contains `beginWord` and `endWord`. Second line contains `k` (words in list). Following `k` lines contain the words.",
+  "output_format": "Shortest transformation length or 0.",
+  "constraints": "1 <= length(word) <= 10\n1 <= k <= 5000",
+  "sample_tests": [
+    {
+      "input": "hit cog\n5\nhot\ndot\ndog\nlot\nlog",
+      "output": "0",
+      "explanation": "cog is not in wordList so impossible."
+    },
+    {
+      "input": "hit cog\n6\nhot\ndot\ndog\nlot\nlog\ncog",
+      "output": "5",
+      "explanation": "hit -> hot -> dot -> dog -> cog (5 words)."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "a c\n2\na\nc",
+      "output": "2"
+    },
+    {
+      "input": "lead gold\n4\nload\ngoad\ngold\nhead",
+      "output": "4"
+    }
+  ],
+  "hints": [
+    "Model words as nodes in an unweighted graph where edges connect words differing by 1 character.",
+    "Use BFS to find the shortest path from beginWord to endWord.",
+    "Generate next words by replacing each character with 'a'-'z'."
+  ],
+  "starter_code": {
+    "python": "# Word Ladder\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Word Ladder\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Word Ladder\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Word Ladder\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Word Ladder\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nif lines:\n    parts = lines[0].split()\n    begin, end = parts[0], parts[1]\n    k = int(lines[1])\n    words = set(lines[2:2+k])\n    if end not in words: print(0); sys.exit(0)\n    from collections import deque\n    q = deque([(begin, 1)])\n    visited = {begin}\n    ans = 0\n    while q:\n        curr, dist = q.popleft()\n        if curr == end: ans = dist; break\n        for i in range(len(curr)):\n            for c in 'abcdefghijklmnopqrstuvwxyz':\n                nxt = curr[:i] + c + curr[i+1:]\n                if nxt in words and nxt not in visited:\n                    visited.add(nxt)\n                    q.append((nxt, dist + 1))\n    print(ans)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

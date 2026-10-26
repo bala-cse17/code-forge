@@ -1,0 +1,51 @@
+{
+  "id": "p172_alien_dictionary_order",
+  "number": 172,
+  "slug": "alien-dictionary",
+  "category_id": 18,
+  "category_name": "Mixed Advanced Problems",
+  "title": "Alien Dictionary",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "In an alien language, surprisingly, they also use English lowercase letters, but in a different alphabetical order. Given a sequence of `words` and the alien `order`, return `true` if words are sorted lexicographically in this language, or `false`.",
+  "input_format": "First line contains `n` and `order` (26 unique chars). Following `n` lines contain the words.",
+  "output_format": "true if sorted, false otherwise.",
+  "constraints": "1 <= n <= 100\n1 <= length(word) <= 20",
+  "sample_tests": [
+    {
+      "input": "2 hlabcdefgijkmnopqrstuvwxyz\nhello\nleetcode",
+      "output": "true",
+      "explanation": "'h' comes before 'l' in alien order."
+    },
+    {
+      "input": "3 worldabcefghijkmnpqstuvxyz\nword\nworld\nrow",
+      "output": "false",
+      "explanation": "'d' comes after 'l' in alien order so word cannot precede world."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2 abcdefghijklmnopqrstuvwxyz\napple\napp",
+      "output": "false"
+    },
+    {
+      "input": "1 abcdefghijklmnopqrstuvwxyz\nsingle",
+      "output": "true"
+    }
+  ],
+  "hints": [
+    "Map each alien character to its index/weight in a hash map.",
+    "Compare adjacent word pairs character by character.",
+    "If word1 is a prefix of word2 but longer, order is invalid."
+  ],
+  "starter_code": {
+    "python": "# Alien Dictionary\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Alien Dictionary\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Alien Dictionary\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Alien Dictionary\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Alien Dictionary\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nif lines:\n    parts = lines[0].split()\n    n, order = int(parts[0]), parts[1]\n    words = lines[1:1+n]\n    rank = {c: i for i, c in enumerate(order)}\n    def is_less(w1, w2):\n        for c1, c2 in zip(w1, w2):\n            if c1 != c2: return rank[c1] < rank[c2]\n        return len(w1) <= len(w2)\n    ok = all(is_less(words[i], words[i+1]) for i in range(len(words)-1))\n    print('true' if ok else 'false')\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

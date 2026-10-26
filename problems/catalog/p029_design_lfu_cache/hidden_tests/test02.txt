@@ -1,0 +1,8 @@
+INPUT:
+1 4
+PUT 2 1
+GET 2
+PUT 3 2
+GET 2
+EXPECTED:
+1 -1

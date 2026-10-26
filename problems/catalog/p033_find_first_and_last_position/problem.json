@@ -1,0 +1,64 @@
+{
+  "id": "p033_find_first_and_last_position",
+  "number": 33,
+  "slug": "find-first-and-last-position",
+  "category_id": 4,
+  "category_name": "Searching and Sorting",
+  "title": "Find First and Last Position",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given an array of integers `nums` sorted in non-decreasing order, find the starting and ending position of a given `target` value. If not found, return `-1 -1`.",
+  "input_format": "First line contains `n` and `target`. Second line contains `n` sorted integers.",
+  "output_format": "Space-separated first and last indices.",
+  "constraints": "0 <= n <= 10^5\n-10^9 <= target <= 10^9",
+  "sample_tests": [
+    {
+      "input": "6 8\n5 7 7 8 8 10",
+      "output": "3 4",
+      "explanation": "8 starts at 3 and ends at 4."
+    },
+    {
+      "input": "6 6\n5 7 7 8 8 10",
+      "output": "-1 -1",
+      "explanation": "6 is not in array."
+    },
+    {
+      "input": "0 0\n",
+      "output": "-1 -1",
+      "explanation": "Empty array."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1 1\n1",
+      "output": "0 0"
+    },
+    {
+      "input": "2 2\n2 2",
+      "output": "0 1"
+    },
+    {
+      "input": "4 3\n1 3 3 5",
+      "output": "1 2"
+    },
+    {
+      "input": "5 8\n8 8 8 8 8",
+      "output": "0 4"
+    }
+  ],
+  "hints": [
+    "Run two binary searches: one for the lower bound and one for the upper bound.",
+    "bisect_left finds first occurrence.",
+    "bisect_right - 1 finds last occurrence."
+  ],
+  "starter_code": {
+    "python": "# Find First and Last Position\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Find First and Last Position\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Find First and Last Position\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Find First and Last Position\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Find First and Last Position\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, target = int(data[0]), int(data[1])\n    nums = [int(x) for x in data[2:2+n]]\n    import bisect\n    l = bisect.bisect_left(nums, target)\n    r = bisect.bisect_right(nums, target) - 1\n    if l <= r and l < n and nums[l] == target: print(f'{l} {r}')\n    else: print('-1 -1')\nelse:\n    print('-1 -1')\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

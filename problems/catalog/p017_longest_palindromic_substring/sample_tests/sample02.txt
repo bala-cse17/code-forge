@@ -1,0 +1,4 @@
+INPUT:
+cbbd
+EXPECTED:
+bb

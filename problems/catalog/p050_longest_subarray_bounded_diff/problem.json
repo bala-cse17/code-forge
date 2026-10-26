@@ -1,0 +1,60 @@
+{
+  "id": "p050_longest_subarray_bounded_diff",
+  "number": 50,
+  "slug": "longest-subarray-with-bounded-maximum-difference",
+  "category_id": 5,
+  "category_name": "Two Pointers and Sliding Window",
+  "title": "Longest Subarray With Bounded Maximum Difference",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Given an array of integers `nums` and an integer `limit`, return the size of the longest non-empty subarray such that the absolute difference between any two elements of this subarray is less than or equal to `limit`.",
+  "input_format": "First line contains `n` and `limit`. Second line contains `n` integers.",
+  "output_format": "Length of longest valid subarray.",
+  "constraints": "1 <= n <= 10^5\n0 <= limit <= 10^9",
+  "sample_tests": [
+    {
+      "input": "4 4\n8 2 4 7",
+      "output": "2",
+      "explanation": "Subarray [2,4] or [4,7] diff <= 4."
+    },
+    {
+      "input": "6 5\n10 1 2 4 7 2",
+      "output": "4",
+      "explanation": "Subarray [1, 2, 4, 7] has max diff 7 - 1 = 6 > 5. Subarray [2, 4, 7, 2] has max diff 7 - 2 = 5 <= 5, length 4."
+    },
+    {
+      "input": "6 0\n4 2 2 2 4 4",
+      "output": "3",
+      "explanation": "Subarray [2,2,2] length 3."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "3 2\n1 5 9",
+      "output": "1"
+    },
+    {
+      "input": "5 3\n1 2 3 4 5",
+      "output": "4"
+    },
+    {
+      "input": "4 10\n1 2 3 4",
+      "output": "4"
+    }
+  ],
+  "hints": [
+    "Use two monotonic deques: one increasing (tracks min) and one decreasing (tracks max).",
+    "At each step, condition is `max_dq[0] - min_dq[0] <= limit`.",
+    "Advance left pointer whenever condition is violated to shrink the window."
+  ],
+  "starter_code": {
+    "python": "# Longest Subarray With Bounded Maximum Difference\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Longest Subarray With Bounded Maximum Difference\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Longest Subarray With Bounded Maximum Difference\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Longest Subarray With Bounded Maximum Difference\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Longest Subarray With Bounded Maximum Difference\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, limit = int(data[0]), int(data[1])\n    nums = [int(x) for x in data[2:2+n]]\n    from collections import deque\n    min_dq = deque()\n    max_dq = deque()\n    l = ans = 0\n    for r in range(n):\n        while min_dq and nums[min_dq[-1]] >= nums[r]: min_dq.pop()\n        min_dq.append(r)\n        while max_dq and nums[max_dq[-1]] <= nums[r]: max_dq.pop()\n        max_dq.append(r)\n        while nums[max_dq[0]] - nums[min_dq[0]] > limit:\n            l += 1\n            if min_dq[0] < l: min_dq.popleft()\n            if max_dq[0] < l: max_dq.popleft()\n        ans = max(ans, r - l + 1)\n    print(ans)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

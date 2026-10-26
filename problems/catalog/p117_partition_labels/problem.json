@@ -1,0 +1,59 @@
+{
+  "id": "p117_partition_labels",
+  "number": 117,
+  "slug": "partition-labels",
+  "category_id": 12,
+  "category_name": "Greedy Algorithms",
+  "title": "Partition Labels",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "You are given a string `s`. We want to partition the string into as many parts as possible so that each letter appears in at most one part. Return a list of integers representing the size of these parts.",
+  "input_format": "A single line containing string `s`.",
+  "output_format": "Space-separated partition sizes.",
+  "constraints": "1 <= length(s) <= 500",
+  "sample_tests": [
+    {
+      "input": "ababcbacadefegdehijhklij",
+      "output": "9 7 8",
+      "explanation": "Partitions: 'ababcbaca' (9), 'defegde' (7), 'hijhklij' (8)."
+    },
+    {
+      "input": "eccbbbbdec",
+      "output": "10",
+      "explanation": "Entire string is one partition."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "a",
+      "output": "1"
+    },
+    {
+      "input": "abc",
+      "output": "1 1 1"
+    },
+    {
+      "input": "aba",
+      "output": "3"
+    },
+    {
+      "input": "abaccbdeffed",
+      "output": "6 6"
+    }
+  ],
+  "hints": [
+    "Find the last occurrence index of each character in `s`.",
+    "Iterate through string, extending `end = max(end, last[char])`.",
+    "When the current index equals `end`, cut the partition."
+  ],
+  "starter_code": {
+    "python": "# Partition Labels\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Partition Labels\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Partition Labels\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Partition Labels\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Partition Labels\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ns = sys.stdin.read().rstrip('\\r\\n')\nlast = {c: i for i, c in enumerate(s)}\nstart = end = 0\nres = []\nfor i, c in enumerate(s):\n    end = max(end, last[c])\n    if i == end:\n        res.append(str(end - start + 1))\n        start = i + 1\nprint(' '.join(res))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

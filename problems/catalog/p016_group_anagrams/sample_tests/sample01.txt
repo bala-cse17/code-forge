@@ -1,0 +1,5 @@
+INPUT:
+6
+eat tea tan ate nat bat
+EXPECTED:
+3 2 1

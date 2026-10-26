@@ -1,0 +1,4 @@
+INPUT:
+algorithm
+EXPECTED:
+mhtirogla

@@ -1,0 +1,64 @@
+{
+  "id": "p068_largest_rectangle_in_histogram",
+  "number": 68,
+  "slug": "largest-rectangle-in-histogram",
+  "category_id": 7,
+  "category_name": "Stacks and Queues",
+  "title": "Largest Rectangle in Histogram",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an array of integers `heights` representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.",
+  "input_format": "First line contains integer `n`, followed by `n` bar heights.",
+  "output_format": "Area of the largest rectangle.",
+  "constraints": "1 <= n <= 10^5\n0 <= heights[i] <= 10^4",
+  "sample_tests": [
+    {
+      "input": "6\n2 1 5 6 2 3",
+      "output": "10",
+      "explanation": "The largest rectangle has height 5 and width 2: area = 10."
+    },
+    {
+      "input": "2\n2 4",
+      "output": "4",
+      "explanation": "Largest rectangle is 4 (or 2*2=4)."
+    },
+    {
+      "input": "1\n1",
+      "output": "1",
+      "explanation": "Single bar area 1."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "5\n1 1 1 1 1",
+      "output": "5"
+    },
+    {
+      "input": "4\n4 3 2 1",
+      "output": "6"
+    },
+    {
+      "input": "5\n2 1 2 1 2",
+      "output": "5"
+    },
+    {
+      "input": "3\n0 9 0",
+      "output": "9"
+    }
+  ],
+  "hints": [
+    "Maintain a monotonic increasing stack of bar indices.",
+    "When height decreases, the bar at the top of the stack cannot extend further right.",
+    "Calculate rectangle area using popped height and width `(i - stk[-1] - 1)`."
+  ],
+  "starter_code": {
+    "python": "# Largest Rectangle in Histogram\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Largest Rectangle in Histogram\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Largest Rectangle in Histogram\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Largest Rectangle in Histogram\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Largest Rectangle in Histogram\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    h = [int(x) for x in data[1:1+n]] + [0]\n    stk = []\n    max_area = 0\n    for i in range(len(h)):\n        while stk and h[stk[-1]] > h[i]:\n            height = h[stk.pop()]\n            width = i if not stk else (i - stk[-1] - 1)\n            max_area = max(max_area, height * width)\n        stk.append(i)\n    print(max_area)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

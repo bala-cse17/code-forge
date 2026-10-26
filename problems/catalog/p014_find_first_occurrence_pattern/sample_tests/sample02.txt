@@ -1,0 +1,5 @@
+INPUT:
+leetcode
+leeto
+EXPECTED:
+-1

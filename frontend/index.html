@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CODE COMBAT Pro - Offline Competitive Programming Platform</title>
+  <title>CODE-COMBAT - Think. Code. Compete.</title>
   <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 </head>
 <body>
 
@@ -18,19 +19,22 @@
 
     <ul class="nav-links">
       <li><a class="nav-item active" onclick="App.navigate('home')" id="nav-home">Home</a></li>
-      <li><a class="nav-item" onclick="App.navigate('intro')" id="nav-intro">Rules & Guidelines</a></li>
-      <li><a class="nav-item" onclick="App.navigate('problems')" id="nav-problems">Challenges</a></li>
+      <li><a class="nav-item" onclick="App.navigate('problems')" id="nav-problems">Challenges (180)</a></li>
+      <li><a class="nav-item" onclick="App.navigate('submissions')" id="nav-submissions">Submissions</a></li>
+      <li><a class="nav-item" onclick="App.navigate('profile')" id="nav-profile">Profile &amp; Mastery</a></li>
       <li><a class="nav-item" onclick="App.navigate('leaderboard')" id="nav-leaderboard">Leaderboard</a></li>
-      <li><a class="nav-item" onclick="App.navigate('projector')" id="nav-projector">📺 Big Screen</a></li>
+      <li><a class="nav-item" onclick="App.navigate('intro')" id="nav-intro">Guide</a></li>
       <li><a class="nav-item" onclick="App.navigate('admin')" id="nav-admin">Admin</a></li>
     </ul>
 
-    <div style="display:flex; align-items:center; gap:1rem;">
+    <div style="display:flex; align-items:center; gap:0.75rem;">
+      <button class="btn btn-secondary" onclick="App.toggleTheme()" id="btn-theme-toggle" style="padding:0.35rem 0.65rem; font-size:0.85rem;" title="Toggle Light / Dark Mode">🌙</button>
       <div class="user-badge" id="user-badge" style="display:none; align-items:center;">
-        <span id="user-name-display">Participant</span>
+        <span id="user-name-display" onclick="App.navigate('profile')" style="cursor:pointer;" title="View Profile">Participant</span>
         <span class="user-score" id="user-score-display">0 pts</span>
-        <span onclick="App.logout()" style="cursor:pointer; font-size:0.9rem; margin-left:0.5rem; opacity:0.75;" title="Sign out / Switch participant">🚪</span>
+        <span onclick="App.logout()" style="cursor:pointer; font-size:0.9rem; margin-left:0.5rem; opacity:0.75;" title="Sign out">🚪</span>
       </div>
+      <button class="btn btn-primary" id="btn-nav-login" style="padding:0.35rem 0.85rem; font-size:0.82rem;" onclick="App.navigate('register')">Sign In</button>
     </div>
   </header>
 
@@ -53,13 +57,13 @@
         <div style="margin-bottom: 1.5rem;">
           <img src="assets/logo.jpg" alt="CODE COMBAT" style="max-width: 220px; width: 100%; border-radius: 16px; border: 2px solid var(--border-color); box-shadow: 0 0 35px rgba(0,242,254,0.25), 0 12px 30px rgba(0,0,0,0.8); transition: transform 0.3s ease;">
         </div>
-        <h1 class="hero-title">Compete. Code. Conquer.</h1>
-        <p class="hero-subtitle">The zero-dependency, ultra-fast offline competitive programming platform for college hackathons and coding contests.</p>
+        <h1 class="hero-title">Think. Code. Compete.</h1>
+        <p class="hero-subtitle">The permanent continuous coding practice platform. Exactly 180 curated challenges across 18 core software engineering topics with instant polyglot execution, 100% free learning hints, and comprehensive progress tracking.</p>
         <div class="hero-actions">
-          <button class="btn btn-primary" onclick="App.navigate('register')">⚔️ Enter Arena (Register)</button>
-          <button class="btn btn-secondary" onclick="App.navigate('intro')">📜 Rules & Guidelines</button>
-          <button class="btn btn-secondary" onclick="App.navigate('problems')">📂 Browse Challenges</button>
-          <button class="btn btn-secondary" onclick="App.navigate('leaderboard')">🏆 Live Rankings</button>
+          <button class="btn btn-primary" onclick="App.navigate('problems')">🚀 Explore 180 Challenges</button>
+          <button class="btn btn-secondary" onclick="App.navigate('profile')">👤 My Progress &amp; Bookmarks</button>
+          <button class="btn btn-secondary" onclick="App.navigate('leaderboard')">🏆 Practice Standings</button>
+          <button class="btn btn-secondary" onclick="App.navigate('intro')">📖 Practice Guide</button>
         </div>
       </div>
 
@@ -348,47 +352,103 @@
       </div>
     </section>
 
-    <!-- VIEW 2: REGISTRATION -->
+    <!-- VIEW 2: AUTHENTICATION (SIGN IN & REGISTER) -->
     <section id="view-register" class="view-section">
-      <div style="max-width: 480px; margin: 3rem auto; background:var(--bg-card); border:1px solid var(--border-color); padding:2rem; border-radius:var(--radius-md);">
-        <h2 style="margin-bottom:0.5rem; color:#fff;">Participant Registration</h2>
-        <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1.5rem;">Enter your details to begin the offline coding competition.</p>
-        
-        <form id="form-register" onsubmit="App.handleRegister(event)">
-          <div class="form-group">
-            <label class="form-label">Full Name</label>
-            <input type="text" id="reg-name" class="form-control" placeholder="e.g. John Doe" required>
+      <div style="max-width: 480px; margin: 2rem auto; background:var(--bg-card); border:1px solid var(--border-color); padding:2rem; border-radius:var(--radius-md); box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+        <div style="display:flex; border-bottom:1px solid var(--border-color); margin-bottom:1.5rem;">
+          <button id="tab-btn-signin" class="tab-btn active" style="flex:1; text-align:center; padding:0.6rem;" onclick="App.switchAuthTab('login')">🔑 Sign In</button>
+          <button id="tab-btn-signup" class="tab-btn" style="flex:1; text-align:center; padding:0.6rem;" onclick="App.switchAuthTab('register')">⚔️ Register</button>
+        </div>
+
+        <!-- Form: Sign In -->
+        <form id="form-login" onsubmit="App.handleLogin(event)">
+          <h2 style="margin-bottom:0.4rem; color:#fff; font-size:1.4rem;">Participant Sign In</h2>
+          <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:1.25rem;">Enter your registration number and password to restore your session.</p>
+          <div class="form-group" style="margin-bottom:1rem;">
+            <label class="form-label">Registration / Roll Number</label>
+            <input type="text" id="login-reg-no" class="form-control" placeholder="e.g. 21CS101" required autocomplete="username">
           </div>
-          <div class="form-group">
+          <div class="form-group" style="margin-bottom:1.25rem;">
+            <label class="form-label">Password</label>
+            <input type="password" id="login-password" class="form-control" placeholder="Enter your password" autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%; padding:0.75rem;">Enter Arena ⚔️</button>
+        </form>
+
+        <!-- Form: Register -->
+        <form id="form-register" onsubmit="App.handleRegister(event)" style="display:none;">
+          <h2 style="margin-bottom:0.4rem; color:#fff; font-size:1.4rem;">Participant Registration</h2>
+          <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:1.25rem;">Create your profile for the offline competitive programming challenge.</p>
+          <div class="form-group" style="margin-bottom:0.85rem;">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="reg-name" class="form-control" placeholder="e.g. John Doe" required autocomplete="name">
+          </div>
+          <div class="form-group" style="margin-bottom:0.85rem;">
             <label class="form-label">College / Department</label>
             <input type="text" id="reg-college" class="form-control" placeholder="e.g. MIT - Computer Science" required>
           </div>
-          <div class="form-group">
+          <div class="form-group" style="margin-bottom:0.85rem;">
             <label class="form-label">Registration / Roll Number</label>
             <input type="text" id="reg-no" class="form-control" placeholder="e.g. 21CS101" required>
           </div>
-          <button type="submit" class="btn btn-primary" style="width:100%; margin-top:1rem;">Enter Arena ⚔️</button>
+          <div class="form-group" style="margin-bottom:1.25rem;">
+            <label class="form-label">Password (Optional / Tournament Security)</label>
+            <input type="password" id="reg-password" class="form-control" placeholder="Create a password (min 4 characters)" autocomplete="new-password">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%; padding:0.75rem;">Register &amp; Enter Arena ⚔️</button>
         </form>
       </div>
     </section>
 
     <!-- VIEW 3: PROBLEMS & ROUNDS LIST -->
     <section id="view-problems" class="view-section">
-      <div class="filter-bar">
-        <div>
-          <h2 style="margin:0 0 0.25rem 0;">⚔️ Competition Rounds (15 Challenges)</h2>
-          <span style="font-size:0.82rem; color:var(--text-secondary);">Round 1, Round 2, Round 3 &bull; Admin Password Protection</span>
-          <div id="master-volume-container" class="master-volume-box" style="margin-top:0.6rem;"></div>
+      <div class="filter-bar" style="flex-direction:column; align-items:stretch; gap:1rem;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h2 style="margin:0 0 0.25rem 0;">⚔️ Practice Challenge Explorer</h2>
+            <span style="font-size:0.85rem; color:var(--text-secondary);">180 Curated Challenges &bull; 18 Core Topics &bull; All Difficulties Unlocked</span>
+            <div id="master-volume-container" class="master-volume-box" style="margin-top:0.6rem;"></div>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center;">
+            <input type="text" id="prob-search-input" class="form-control" placeholder="🔍 Search by title or ID..." oninput="App.applyProblemFilters()" style="width:210px; padding:0.4rem 0.75rem; font-size:0.85rem;">
+            <select id="prob-topic-select" class="form-control" onchange="App.applyProblemFilters()" style="width:auto; padding:0.4rem 0.75rem; font-size:0.85rem;">
+              <option value="all">🏷️ All Topics (180)</option>
+            </select>
+            <select id="prob-status-select" class="form-control" onchange="App.applyProblemFilters()" style="width:auto; padding:0.4rem 0.75rem; font-size:0.85rem;">
+              <option value="all">All Status</option>
+              <option value="solved">✓ Solved</option>
+              <option value="unsolved">⏳ Todo</option>
+            </select>
+            <button id="chip-filter-bookmark" class="btn btn-secondary" onclick="App.toggleBookmarkFilter()" style="padding:0.4rem 0.75rem; font-size:0.85rem;">
+              ⭐ Bookmarked <span id="bookmark-count-badge" style="background:rgba(245,158,11,0.2); color:var(--accent-amber); padding:0.1rem 0.4rem; border-radius:10px; font-size:0.75rem; margin-left:0.25rem;">0</span>
+            </button>
+            <select id="prob-sort-select" class="form-control" onchange="App.applyProblemFilters()" style="width:auto; padding:0.4rem 0.75rem; font-size:0.85rem;">
+              <option value="default">Sort: Problem #</option>
+              <option value="easy-first">Difficulty: Easy ➔ Hard</option>
+              <option value="hard-first">Difficulty: Hard ➔ Easy</option>
+              <option value="title-asc">Title: A ➔ Z</option>
+              <option value="points-desc">Points: High ➔ Low</option>
+            </select>
+          </div>
         </div>
-        <div class="filter-chips">
-          <button class="chip active" id="chip-filter-all" onclick="App.filterProblems('all', this)">All Rounds (15)</button>
-          <button class="chip" id="chip-filter-easy" onclick="App.filterProblems('Easy', this)">🟢 Round 1: Easy (100 pts) <span id="chip-lock-easy"></span></button>
-          <button class="chip" id="chip-filter-medium" onclick="App.filterProblems('Medium', this)">🟡 Round 2: Medium (200 pts) <span id="chip-lock-medium"></span></button>
-          <button class="chip" id="chip-filter-hard" onclick="App.filterProblems('Hard', this)">🔴 Round 3: Hard (300 pts) <span id="chip-lock-hard"></span></button>
+
+        <!-- 18 Topic Category Quick Pills Bar -->
+        <div id="category-pills-bar" style="display:flex; gap:0.5rem; overflow-x:auto; padding-bottom:0.5rem; scrollbar-width:thin;">
+          <!-- Loaded dynamically via App.renderCategoryPills() -->
+        </div>
+
+        <!-- Difficulty Quick Filters -->
+        <div class="filter-chips" style="width:100%; margin-top:0.25rem;">
+          <button class="chip active" id="chip-filter-all" onclick="App.filterProblems('all', this)">All Difficulties (180)</button>
+          <button class="chip" id="chip-filter-easy" onclick="App.filterProblems('Easy', this)">🟢 Easy (72)</button>
+          <button class="chip" id="chip-filter-medium" onclick="App.filterProblems('Medium', this)">🟡 Medium (72)</button>
+          <button class="chip" id="chip-filter-hard" onclick="App.filterProblems('Hard', this)">🔴 Hard (36)</button>
         </div>
       </div>
 
-      <!-- Dynamic Round Folders Container -->
+      <!-- Problem Table Container -->
       <div id="category-folders-container" class="category-folders-container">
         <!-- Loaded dynamically via App.renderProblemsFolders() -->
       </div>
@@ -402,7 +462,10 @@
         <div class="panel">
           <div class="panel-header">
             <div class="panel-title" id="ide-prob-title">Problem Statement</div>
-            <span id="ide-prob-badge" class="badge badge-easy">Easy</span>
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <span id="ide-prob-badge" class="badge badge-easy">Easy</span>
+              <button id="ide-bookmark-btn" onclick="App.toggleCurrentBookmark()" class="btn btn-secondary" style="padding:0.25rem 0.55rem; font-size:0.8rem;" title="Bookmark Challenge">⭐ Save</button>
+            </div>
           </div>
           <div class="panel-body" id="ide-prob-description">
             <!-- Dynamic Problem Description -->
@@ -418,9 +481,12 @@
               <div class="editor-controls">
                 <select id="ide-lang-select" class="form-control" style="padding:0.3rem 0.6rem; width:auto; font-size:0.85rem;" onchange="App.handleLanguageChange()">
                   <option value="python">Python 3 (Standard input / print)</option>
+                  <option value="cpp">C++ (g++ / std=c++17)</option>
                   <option value="c">C (Standard main / scanf / printf)</option>
                   <option value="java">Java (Standard Scanner / Solution.java)</option>
                   <option value="python_class">Python 3 (Class / LeetCode)</option>
+                  <option value="javascript">JavaScript (Node.js / readFileSync)</option>
+                  <option value="sql">SQL (SQLite in-memory sandbox)</option>
                 </select>
                 <button class="btn btn-secondary" style="padding:0.3rem 0.6rem; font-size:0.8rem;" onclick="App.resetCode()">Reset</button>
                 <button class="btn btn-secondary" id="btn-insert-solution" style="padding:0.3rem 0.65rem; font-size:0.8rem; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.35); color:var(--accent-amber); font-weight:600;" onclick="App.openSolutionModal()" title="Insert working solution (Admin password required)">🔒 Insert Solution</button>
@@ -431,7 +497,7 @@
               </div>
             </div>
 
-            <div class="editor-wrapper">
+            <div class="editor-wrapper" id="ide-editor-container">
               <div class="line-numbers" id="editor-lines"></div>
               <textarea class="code-textarea" id="editor-code" spellcheck="false"></textarea>
             </div>
@@ -451,6 +517,7 @@
               <button class="tab-btn active" onclick="App.switchOutputTab('sample-tests', this)">Sample Tests</button>
               <button class="tab-btn" onclick="App.switchOutputTab('custom-input', this)">Custom Stdin</button>
               <button class="tab-btn" onclick="App.switchOutputTab('submission-res', this)">Submission Verdict</button>
+              <button class="tab-btn" onclick="App.switchOutputTab('history', this)">History (0)</button>
             </div>
 
             <div class="panel-body" style="padding:0.75rem;">
@@ -475,11 +542,55 @@
                 </div>
               </div>
 
+              <!-- Tab 4: Problem Submission History -->
+              <div id="tab-history" class="tab-pane">
+                <div id="ide-history-container" style="color:var(--text-secondary); font-size:0.88rem;">
+                  Submit solutions to view your attempt history for this problem.
+                </div>
+              </div>
+
             </div>
           </div>
 
         </div>
 
+      </div>
+    </section>
+
+    <!-- VIEW: CONTESTS -->
+    <section id="view-contests" class="view-section">
+      <div class="panel" style="padding:1.5rem; margin-bottom:1.5rem; background:linear-gradient(135deg, rgba(0,242,254,0.08), rgba(121,40,202,0.12)); border:1px solid var(--border-color);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h1 style="color:#fff; font-size:1.6rem; margin-bottom:0.25rem; display:flex; align-items:center; gap:0.5rem;">
+              <span>🏆</span> Contests &amp; Rounds
+            </h1>
+            <p style="color:var(--text-secondary); font-size:0.9rem; margin:0;">Participate in scheduled programming contests, test your algorithmic skills, and climb the standings!</p>
+          </div>
+          <div style="display:flex; gap:0.5rem;">
+            <button class="btn btn-primary" onclick="App.loadContests()">↻ Refresh Contests</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contests Grid -->
+      <div id="contests-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(340px, 1fr)); gap:1.25rem; margin-bottom:1.5rem;">
+        <!-- Populated dynamically by App.loadContests() -->
+      </div>
+
+      <!-- Contest Standings Modal -->
+      <div id="contest-standings-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content" style="max-width:850px; width:92%; max-height:85vh; display:flex; flex-direction:column;">
+          <div class="modal-header">
+            <h3 id="contest-modal-title" style="color:#fff; font-size:1.15rem; margin:0;">Contest Standings</h3>
+            <button class="modal-close" onclick="App.closeContestModal()">✕</button>
+          </div>
+          <div class="modal-body" style="overflow-y:auto; padding:1.25rem;">
+            <div id="contest-standings-table-container">
+              Loading standings...
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -532,6 +643,265 @@
               Waiting for live submissions...
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: SUBMISSION HISTORY -->
+    <section id="view-submissions" class="view-section">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h1 style="color:#fff; font-size:1.8rem; margin-bottom:0.25rem; display:flex; align-items:center; gap:0.5rem;">
+            <span>📜</span> Submission History
+          </h1>
+          <p style="color:var(--text-secondary); font-size:0.9rem;">
+            Inspect past submissions, runtimes, verdicts, and source code.
+          </p>
+        </div>
+        <button class="btn btn-secondary" onclick="App.loadSubmissions()">🔄 Refresh</button>
+      </div>
+
+      <!-- Filters Bar -->
+      <div class="panel" style="padding:1rem 1.25rem; margin-bottom:1.25rem;">
+        <div style="display:flex; flex-wrap:wrap; gap:1rem; align-items:center;">
+          <div style="flex:1; min-width:180px;">
+            <label style="display:block; font-size:0.75rem; color:var(--text-muted); margin-bottom:0.3rem; font-weight:600;">FILTER BY PROBLEM</label>
+            <select id="sub-filter-problem" class="form-control" onchange="App.filterSubmissions()" style="width:100%; font-size:0.85rem; padding:0.45rem 0.75rem;">
+              <option value="">All Problems</option>
+            </select>
+          </div>
+          <div style="width:160px;">
+            <label style="display:block; font-size:0.75rem; color:var(--text-muted); margin-bottom:0.3rem; font-weight:600;">VERDICT</label>
+            <select id="sub-filter-status" class="form-control" onchange="App.filterSubmissions()" style="width:100%; font-size:0.85rem; padding:0.45rem 0.75rem;">
+              <option value="">All Verdicts</option>
+              <option value="ACCEPTED">Accepted (AC)</option>
+              <option value="WRONG_ANSWER">Wrong Answer (WA)</option>
+              <option value="TIME_LIMIT_EXCEEDED">Time Limit (TLE)</option>
+              <option value="COMPILATION_ERROR">Compilation Error</option>
+              <option value="RUNTIME_ERROR">Runtime Error</option>
+            </select>
+          </div>
+          <div style="width:140px;">
+            <label style="display:block; font-size:0.75rem; color:var(--text-muted); margin-bottom:0.3rem; font-weight:600;">LANGUAGE</label>
+            <select id="sub-filter-lang" class="form-control" onchange="App.filterSubmissions()" style="width:100%; font-size:0.85rem; padding:0.45rem 0.75rem;">
+              <option value="">All Languages</option>
+              <option value="python">Python 3</option>
+              <option value="cpp">C++</option>
+              <option value="c">C</option>
+              <option value="java">Java</option>
+              <option value="javascript">JavaScript</option>
+            </select>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.5rem; margin-top:1.2rem;">
+            <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.85rem; color:var(--text-secondary); cursor:pointer;">
+              <input type="checkbox" id="sub-filter-mine" checked onchange="App.filterSubmissions()">
+              <span>My Submissions Only</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submissions Table -->
+      <div class="panel" style="padding:1.25rem;">
+        <div style="overflow-x:auto;">
+          <table class="problems-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Problem</th>
+                <th>Author</th>
+                <th>Language</th>
+                <th>Verdict</th>
+                <th>Passed</th>
+                <th>Score</th>
+                <th>Runtime</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="submissions-table-body">
+              <tr>
+                <td colspan="9" style="text-align:center; padding:2rem; color:var(--text-muted);">
+                  Loading submissions...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.25rem; font-size:0.85rem; color:var(--text-muted);">
+          <span id="sub-page-info">Showing page 1</span>
+          <div style="display:flex; gap:0.5rem;">
+            <button class="btn btn-secondary" id="btn-sub-prev" onclick="App.prevSubPage()" disabled style="padding:0.35rem 0.75rem; font-size:0.8rem;">← Previous</button>
+            <button class="btn btn-secondary" id="btn-sub-next" onclick="App.nextSubPage()" style="padding:0.35rem 0.75rem; font-size:0.8rem;">Next →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: PARTICIPANT PROFILE & PROGRESS -->
+    <section id="view-profile" class="view-section">
+      <!-- Profile Header Banner -->
+      <div class="panel" style="padding:1.75rem; margin-bottom:1.5rem; background:linear-gradient(135deg, rgba(0,242,254,0.08), rgba(121,40,202,0.12)); border:1px solid var(--border-color);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem;">
+          <div style="display:flex; gap:1.25rem; align-items:center;">
+            <div style="width:72px; height:72px; border-radius:50%; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-purple)); display:flex; align-items:center; justify-content:center; font-size:2.2rem; box-shadow:0 0 25px rgba(0,242,254,0.3); border:2px solid #fff;">
+              👤
+            </div>
+            <div>
+              <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.25rem;">
+                <h1 id="prof-name" style="color:#fff; font-size:1.7rem; margin:0;">Participant</h1>
+                <span id="prof-rank-badge" class="badge badge-easy" style="font-size:0.75rem;">Rank #-</span>
+              </div>
+              <div style="display:flex; gap:1rem; flex-wrap:wrap; font-size:0.88rem; color:var(--text-secondary);">
+                <span>🏫 <span id="prof-college">-</span></span>
+                <span>📋 Reg: <code id="prof-reg-no" style="font-family:var(--font-mono); color:var(--accent-cyan);">-</code></span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; gap:1.5rem; align-items:center;">
+            <div style="text-align:right;">
+              <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Total Score</div>
+              <div id="prof-total-score" style="font-size:2rem; font-weight:800; color:var(--accent-cyan); text-shadow:0 0 15px rgba(0,242,254,0.4);">0 pts</div>
+            </div>
+            <button class="btn btn-secondary" onclick="App.logout()" style="padding:0.5rem 0.9rem; font-size:0.85rem;" title="Sign out">🚪 Sign Out</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Problem Solved Statistics Cards (LeetCode Style) -->
+      <div class="stats-grid" style="margin-bottom:1.5rem;">
+        <div class="stat-card">
+          <div class="stat-label">Total Solved</div>
+          <div class="stat-value" id="prof-solved-count" style="color:var(--accent-cyan);">0</div>
+          <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.25rem;" id="prof-solved-total-label">out of 180 challenges</div>
+          <div style="width:100%; height:6px; background:rgba(255,255,255,0.08); border-radius:3px; margin-top:0.6rem; overflow:hidden;">
+            <div id="prof-bar-total" style="height:100%; width:0%; background:var(--accent-cyan); transition:width 0.5s ease;"></div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="color:var(--accent-green);">🟢 Easy Challenges</div>
+          <div class="stat-value" id="prof-easy-count" style="color:var(--accent-green);">0</div>
+          <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.25rem;" id="prof-easy-total-label">0 / 72 Solved</div>
+          <div style="width:100%; height:6px; background:rgba(255,255,255,0.08); border-radius:3px; margin-top:0.6rem; overflow:hidden;">
+            <div id="prof-bar-easy" style="height:100%; width:0%; background:var(--accent-green); transition:width 0.5s ease;"></div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="color:var(--accent-amber);">🟡 Medium Challenges</div>
+          <div class="stat-value" id="prof-medium-count" style="color:var(--accent-amber);">0</div>
+          <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.25rem;" id="prof-medium-total-label">0 / 72 Solved</div>
+          <div style="width:100%; height:6px; background:rgba(255,255,255,0.08); border-radius:3px; margin-top:0.6rem; overflow:hidden;">
+            <div id="prof-bar-medium" style="height:100%; width:0%; background:var(--accent-amber); transition:width 0.5s ease;"></div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="color:var(--accent-red);">🔴 Hard Challenges</div>
+          <div class="stat-value" id="prof-hard-count" style="color:var(--accent-red);">0</div>
+          <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.25rem;" id="prof-hard-total-label">0 / 36 Solved</div>
+          <div style="width:100%; height:6px; background:rgba(255,255,255,0.08); border-radius:3px; margin-top:0.6rem; overflow:hidden;">
+            <div id="prof-bar-hard" style="height:100%; width:0%; background:var(--accent-red); transition:width 0.5s ease;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bookmarked Challenges Section -->
+      <div class="panel" style="padding:1.25rem; margin-bottom:1.5rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+          <h3 style="color:#fff; font-size:1.05rem; margin:0; display:flex; align-items:center; gap:0.5rem;">
+            <span>⭐</span> Bookmarked Challenges
+          </h3>
+          <button class="btn btn-secondary" onclick="App.navigate('problems')" style="padding:0.25rem 0.65rem; font-size:0.75rem;">Browse All ➔</button>
+        </div>
+        <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">Your bookmarked challenges for revision and mastery.</p>
+        <div id="prof-bookmarks-list" style="display:flex; flex-wrap:wrap; gap:0.5rem; max-height:220px; overflow-y:auto;">
+          <div style="color:var(--text-muted); font-size:0.85rem; text-align:center; width:100%; padding:1rem;">No bookmarked challenges yet. Click the star ⭐ on any challenge to save it here.</div>
+        </div>
+      </div>
+
+      <!-- Activity Calendar & Performance Row -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1.25rem; margin-bottom:1.5rem;">
+        <!-- Activity Timeline / Calendar -->
+        <div class="panel" style="padding:1.25rem;">
+          <h3 style="color:#fff; font-size:1.05rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem;">
+            <span>📅</span> Submission Activity Timeline
+          </h3>
+          <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">Daily submission frequency and accepted solves.</p>
+          <div id="prof-activity-container" style="display:flex; flex-direction:column; gap:0.6rem;">
+            <div style="color:var(--text-muted); font-size:0.85rem; text-align:center; padding:1.5rem;">No submission activity yet.</div>
+          </div>
+        </div>
+
+        <!-- Solved Problems Quick Index -->
+        <div class="panel" style="padding:1.25rem;">
+          <h3 style="color:#fff; font-size:1.05rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem;">
+            <span>🏆</span> Solved Problems
+          </h3>
+          <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">All completed programming challenges.</p>
+          <div id="prof-solved-list" style="display:flex; flex-wrap:wrap; gap:0.5rem; max-height:220px; overflow-y:auto;">
+            <div style="color:var(--text-muted); font-size:0.85rem; text-align:center; width:100%; padding:1.5rem;">No problems solved yet. Enter the arena to compete!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Badges & Achievements Section -->
+      <div class="panel" style="padding:1.25rem; margin-bottom:1.5rem;">
+        <h3 style="color:#fff; font-size:1.05rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem;">
+          <span>🎖️</span> Badges &amp; Achievements
+        </h3>
+        <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">Unlock milestones by solving challenges and submitting lightning-fast solutions.</p>
+        <div id="prof-achievements-container" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(210px, 1fr)); gap:0.85rem;">
+          <div style="color:var(--text-muted); font-size:0.85rem; text-align:center; padding:1rem; grid-column:1/-1;">Loading achievements...</div>
+        </div>
+      </div>
+
+      <!-- Profile & Security Settings -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1.25rem; margin-bottom:1.5rem;">
+        <!-- Edit Profile Form -->
+        <div class="panel" style="padding:1.25rem;">
+          <h3 style="color:#fff; font-size:1.05rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem;">
+            <span>⚙️</span> Edit Profile
+          </h3>
+          <form onsubmit="App.handleUpdateProfile(event)" style="display:flex; flex-direction:column; gap:0.75rem;">
+            <div>
+              <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Email Address</label>
+              <input type="email" id="prof-edit-email" class="form-control" placeholder="user@college.edu">
+            </div>
+            <div>
+              <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">College / Institution</label>
+              <input type="text" id="prof-edit-college" class="form-control" placeholder="Institution Name">
+            </div>
+            <div>
+              <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Bio</label>
+              <textarea id="prof-edit-bio" class="form-control" style="height:60px;" placeholder="Aspiring competitive programmer..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="align-self:flex-start;">Save Profile</button>
+          </form>
+        </div>
+
+        <!-- Change Password Form -->
+        <div class="panel" style="padding:1.25rem;">
+          <h3 style="color:#fff; font-size:1.05rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem;">
+            <span>🔒</span> Change Password
+          </h3>
+          <form onsubmit="App.handleChangePassword(event)" style="display:flex; flex-direction:column; gap:0.75rem;">
+            <div>
+              <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Current Password</label>
+              <input type="password" id="prof-old-pass" class="form-control" placeholder="Current password (leave blank if none)">
+            </div>
+            <div>
+              <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">New Password</label>
+              <input type="password" id="prof-new-pass" class="form-control" required placeholder="New password (min 4 chars)">
+            </div>
+            <div>
+              <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Confirm New Password</label>
+              <input type="password" id="prof-confirm-pass" class="form-control" required placeholder="Confirm new password">
+            </div>
+            <button type="submit" class="btn btn-secondary" style="align-self:flex-start;">Update Password</button>
+          </form>
         </div>
       </div>
     </section>
@@ -897,6 +1267,174 @@
           </div>
         </div>
 
+        <!-- Real-Time Analytics & Platform Insights -->
+        <div class="panel" style="padding:1.5rem; border-left:4px solid var(--accent-cyan);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;">
+            <h3 style="color:var(--accent-cyan); font-size:1.1rem; margin:0; display:flex; align-items:center; gap:0.5rem;">
+              <span>📈</span> Real-Time Analytics &amp; Solve Rates
+            </h3>
+            <button class="btn btn-secondary" onclick="Admin.loadAnalytics()" style="font-size:0.78rem; padding:0.25rem 0.65rem;">🔄 Refresh</button>
+          </div>
+          <div class="stats-grid" id="admin-analytics-grid" style="margin-bottom:1rem;">
+            <div class="stat-card">
+              <div class="stat-label">Total Participants</div>
+              <div class="stat-value" id="admin-stat-participants">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Total Submissions</div>
+              <div class="stat-value" id="admin-stat-submissions">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Accepted Submissions</div>
+              <div class="stat-value" id="admin-stat-accepted" style="color:var(--accent-green);">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Acceptance Rate</div>
+              <div class="stat-value" id="admin-stat-rate" style="color:var(--accent-cyan);">0%</div>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1rem;">
+            <div style="background:var(--bg-primary); padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+              <div style="font-size:0.85rem; font-weight:700; color:#fff; margin-bottom:0.5rem;">Language Distribution:</div>
+              <div id="admin-lang-breakdown" style="font-size:0.85rem; color:var(--text-secondary);">No data yet.</div>
+            </div>
+            <div style="background:var(--bg-primary); padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+              <div style="font-size:0.85rem; font-weight:700; color:#fff; margin-bottom:0.5rem;">Difficulty Solve Counts:</div>
+              <div id="admin-diff-breakdown" style="font-size:0.85rem; color:var(--text-secondary);">No data yet.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Participant Moderation Panel -->
+        <div class="panel" style="padding:1.5rem; border-left:4px solid var(--accent-purple);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.75rem;">
+            <h3 style="color:var(--accent-purple); font-size:1.1rem; margin:0; display:flex; align-items:center; gap:0.5rem;">
+              <span>👥</span> Participant Moderation
+            </h3>
+            <button class="btn btn-secondary" onclick="Admin.loadParticipants()" style="font-size:0.78rem; padding:0.25rem 0.65rem;">🔄 Refresh</button>
+          </div>
+          <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:1rem;">
+            Inspect registered participants, reset individual scores for infractions, or remove accounts.
+          </p>
+          <div style="overflow-x:auto; max-height:260px; overflow-y:auto;">
+            <table class="problems-table" style="font-size:0.85rem;">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Reg No</th>
+                  <th>College</th>
+                  <th>Score</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-participants-table-body">
+                <tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:1.5rem;">Loading participants...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Security Audit Logs -->
+        <div class="panel" style="padding:1.5rem; border-left:4px solid var(--accent-cyan);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.75rem;">
+            <h3 style="color:var(--accent-cyan); font-size:1.1rem; margin:0; display:flex; align-items:center; gap:0.5rem;">
+              <span>📜</span> Security Audit Logs
+            </h3>
+            <button class="btn btn-secondary" onclick="Admin.loadAuditLogs()" style="font-size:0.78rem; padding:0.25rem 0.65rem;">🔄 Refresh</button>
+          </div>
+          <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:1rem;">
+            Immutable trail of administrative actions, score resets, credential changes, and set switches.
+          </p>
+          <div style="overflow-x:auto; max-height:220px; overflow-y:auto;">
+            <table class="problems-table" style="font-size:0.82rem;">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Action</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody id="admin-audit-table-body">
+                <tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding:1rem;">Loading audit logs...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Contest Management -->
+        <div class="panel" style="padding:1.5rem; border-left:4px solid var(--accent-green);">
+          <h3 style="color:var(--accent-green); font-size:1.1rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
+            <span>🏆</span> Contest Scheduler &amp; Creator
+          </h3>
+          <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:1rem;">
+            Schedule a new live competition round, set duration, and publish to the Contests tab.
+          </p>
+          <form onsubmit="Admin.createContest(event)" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:1rem;">
+            <div>
+              <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Contest Title</label>
+              <input type="text" id="admin-contest-title" class="form-control" required placeholder="e.g. Code Combat Weekly Sprint #2">
+            </div>
+            <div>
+              <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Contest Status</label>
+              <select id="admin-contest-status" class="form-control">
+                <option value="upcoming">Upcoming ⏳</option>
+                <option value="active">Active 🟢</option>
+                <option value="ended">Ended 🏁</option>
+              </select>
+            </div>
+            <div style="grid-column:1/-1;">
+              <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Short Description</label>
+              <input type="text" id="admin-contest-desc" class="form-control" placeholder="Round rules, problem sets, and prize details">
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary" style="padding:0.4rem 1rem;">Create &amp; Publish Contest</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Problem Creator & Management -->
+        <div class="panel" style="padding:1.5rem; border-left:4px solid var(--accent-purple);">
+          <h3 style="color:var(--accent-purple); font-size:1.1rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
+            <span>🧩</span> Problem Creator &amp; Database Sync
+          </h3>
+          <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:1rem;">
+            Add or update custom challenges in the platform's SQLite database.
+          </p>
+          <form onsubmit="Admin.saveProblem(event)" style="display:flex; flex-direction:column; gap:0.85rem;">
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem;">
+              <div>
+                <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Problem ID (slug)</label>
+                <input type="text" id="admin-prob-id" class="form-control" required placeholder="e.g. binary-tree-inorder">
+              </div>
+              <div>
+                <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Title</label>
+                <input type="text" id="admin-prob-title" class="form-control" required placeholder="Binary Tree Inorder Traversal">
+              </div>
+              <div>
+                <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Difficulty</label>
+                <select id="admin-prob-diff" class="form-control">
+                  <option value="Easy">Easy (100 pts)</option>
+                  <option value="Medium">Medium (200 pts)</option>
+                  <option value="Hard">Hard (300 pts)</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Points</label>
+                <input type="number" id="admin-prob-pts" class="form-control" value="100">
+              </div>
+            </div>
+            <div>
+              <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Problem Statement (Markdown supported)</label>
+              <textarea id="admin-prob-desc" class="form-control" style="height:80px;" required placeholder="Given the root of a binary tree..."></textarea>
+            </div>
+            <div>
+              <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.25rem;">Constraints</label>
+              <input type="text" id="admin-prob-constraints" class="form-control" placeholder="1 <= N <= 10^5, -10^9 <= val <= 10^9">
+            </div>
+            <button type="submit" class="btn btn-secondary" style="align-self:flex-start; padding:0.4rem 1rem;">Save Problem to Database</button>
+          </form>
+        </div>
+
         <!-- 6. Full Competition Reset -->
         <div class="panel" style="padding:1.5rem; border-left:4px solid var(--accent-red); background:rgba(239,68,68,0.04);">
           <h3 style="color:var(--accent-red); font-size:1.1rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
@@ -1019,6 +1557,30 @@
           <button type="submit" class="btn btn-primary" id="btn-sol-lock-submit" style="padding:0.45rem 1.25rem; font-weight:700; background:linear-gradient(135deg, var(--accent-amber), #d97706); border-color:var(--accent-amber); color:#000;">🔓 Unlock &amp; Insert</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Modal: View Submitted Source Code -->
+  <div id="modal-view-code" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); z-index:2100; align-items:center; justify-content:center;">
+    <div style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius-md); max-width:750px; width:92%; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:var(--shadow-glow); animation:fadeIn 0.2s ease-out;">
+      <div style="padding:1.25rem 1.5rem; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <span style="font-size:1.2rem;">💻</span>
+            <h3 id="modal-code-title" style="color:#fff; font-size:1.15rem; margin:0;">Submission Code</h3>
+            <span id="modal-code-status" class="badge badge-easy">ACCEPTED</span>
+          </div>
+          <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.25rem;" id="modal-code-meta">Language: Python | Runtime: 0.05s | Timestamp: -</div>
+        </div>
+        <button onclick="App.closeCodeModal()" style="background:none; border:none; color:var(--text-muted); font-size:1.4rem; cursor:pointer;" title="Close">✕</button>
+      </div>
+      <div style="padding:1.25rem 1.5rem; overflow-y:auto; flex:1; background:var(--bg-primary);">
+        <pre id="modal-code-display" style="margin:0; font-family:var(--font-mono); font-size:0.9rem; line-height:1.6; color:#e2e8f0; white-space:pre-wrap; word-break:break-all;"></pre>
+      </div>
+      <div style="padding:0.9rem 1.5rem; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; background:var(--bg-card);">
+        <button class="btn btn-secondary" onclick="App.copyModalCode()" id="btn-copy-code" style="font-size:0.85rem; padding:0.4rem 0.9rem;">📋 Copy Code</button>
+        <button class="btn btn-primary" onclick="App.closeCodeModal()" style="font-size:0.85rem; padding:0.4rem 1.2rem;">Close</button>
+      </div>
     </div>
   </div>
 

@@ -1,0 +1,52 @@
+{
+  "id": "p094_clone_graph",
+  "number": 94,
+  "slug": "clone-graph",
+  "category_id": 10,
+  "category_name": "Graphs",
+  "title": "Clone Graph",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given a reference to a connected undirected graph node, return a deep copy (clone) of the graph. Output the adjacency list of the cloned graph.",
+  "input_format": "First line contains `n` (number of nodes). Following `n` lines contain adjacency list for node `i` (1-indexed).",
+  "output_format": "Adjacency list of cloned graph.",
+  "constraints": "0 <= n <= 100",
+  "sample_tests": [
+    {
+      "input": "4\n2 4\n1 3\n2 4\n1 3",
+      "output": "2 4\n1 3\n2 4\n1 3",
+      "explanation": "Cloned 4-node cycle graph."
+    },
+    {
+      "input": "1\n",
+      "output": "",
+      "explanation": "Single node with no neighbors."
+    },
+    {
+      "input": "0",
+      "output": "",
+      "explanation": "Empty graph."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2\n2\n1",
+      "output": "2\n1"
+    }
+  ],
+  "hints": [
+    "Use a hash map to map original nodes to their cloned counterparts.",
+    "Use BFS or DFS traversal to visit every reachable node.",
+    "Clone each neighbor and attach it to the cloned node's adjacency list."
+  ],
+  "starter_code": {
+    "python": "# Clone Graph\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Clone Graph\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Clone Graph\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Clone Graph\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Clone Graph\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nif lines:\n    n = int(lines[0])\n    for line in lines[1:1+n]:\n        print(line)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

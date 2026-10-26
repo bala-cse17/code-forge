@@ -1,0 +1,51 @@
+{
+  "id": "p156_design_word_dictionary",
+  "number": 156,
+  "slug": "design-a-word-dictionary",
+  "category_id": 16,
+  "category_name": "Tries and Advanced Data Structures",
+  "title": "Design a Word Dictionary",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Design a data structure that supports adding new words and finding if a string matches any previously added string, where '.' can match any letter.",
+  "input_format": "First line contains integer `m`. Following `m` lines contain `ADD word` or `SEARCH word`.",
+  "output_format": "Outputs of SEARCH commands (true/false) separated by space.",
+  "constraints": "1 <= m <= 1000",
+  "sample_tests": [
+    {
+      "input": "5\nADD bad\nADD dad\nADD mad\nSEARCH pad\nSEARCH .ad",
+      "output": "false true",
+      "explanation": "pad not added, .ad matches bad/dad/mad."
+    },
+    {
+      "input": "3\nADD cat\nSEARCH c.t\nSEARCH d.t",
+      "output": "true false",
+      "explanation": "c.t matches cat."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2\nADD a\nSEARCH .",
+      "output": "true"
+    },
+    {
+      "input": "3\nADD ab\nSEARCH a.\nSEARCH .b",
+      "output": "true true"
+    }
+  ],
+  "hints": [
+    "Use a Trie to store words.",
+    "When encountering '.', recursively check all child branches of the current Trie node.",
+    "Base case: string fully consumed and current node marks end of word."
+  ],
+  "starter_code": {
+    "python": "# Design a Word Dictionary\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Design a Word Dictionary\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Design a Word Dictionary\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Design a Word Dictionary\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Design a Word Dictionary\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nout = []\ntrie = {}\ndef add(w):\n    node = trie\n    for c in w: node = node.setdefault(c, {})\n    node['#'] = True\ndef search(node, w, idx):\n    if idx == len(w): return '#' in node\n    ch = w[idx]\n    if ch == '.':\n        return any(search(node[nxt], w, idx + 1) for nxt in node if nxt != '#')\n    if ch not in node: return False\n    return search(node[ch], w, idx + 1)\nif lines:\n    m = int(lines[0])\n    for line in lines[1:1+m]:\n        cmd = line.split()\n        if not cmd: continue\n        if cmd[0] == 'ADD': add(cmd[1])\n        elif cmd[0] == 'SEARCH': out.append('true' if search(trie, cmd[1], 0) else 'false')\nprint(' '.join(out))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

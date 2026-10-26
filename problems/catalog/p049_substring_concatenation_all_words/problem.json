@@ -1,0 +1,51 @@
+{
+  "id": "p049_substring_concatenation_all_words",
+  "number": 49,
+  "slug": "substring-with-concatenation-of-all-words",
+  "category_id": 5,
+  "category_name": "Two Pointers and Sliding Window",
+  "title": "Substring With Concatenation of All Words",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Given a string `s` and an array of strings `words` all of the same length, return the starting indices of all concatenated substrings in `s` that contain each word in `words` exactly once, sorted ascending.",
+  "input_format": "First line contains `s`. Second line contains integer `m` (number of words). Following `m` lines contain the words.",
+  "output_format": "Space-separated starting indices, or empty line if none.",
+  "constraints": "1 <= length(s) <= 10^4\n1 <= m <= 5000\nAll words have the same length.",
+  "sample_tests": [
+    {
+      "input": "barfoothefoobarman\n2\nfoo\nbar",
+      "output": "0 9",
+      "explanation": "Substrings starting at 0 and 9 are 'barfoo' and 'foobar'."
+    },
+    {
+      "input": "wordgoodgoodgoodbestword\n4\nword\ngood\nbest\nword",
+      "output": "",
+      "explanation": "No valid substring."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "barfoofoobarthefoobarman\n3\nbar\nfoo\nthe",
+      "output": "6 9 12"
+    },
+    {
+      "input": "lingmindraboofooowingdingbarrwingmonkeypoundcake\n5\nfooo\nbarr\nwing\nding\nwing",
+      "output": "13"
+    }
+  ],
+  "hints": [
+    "Since all words have equal length `L`, break candidate substrings into chunks of size `L`.",
+    "Compare word frequencies in the candidate window with the target word frequencies.",
+    "Run sliding window with step size `L` to achieve O(N * L)."
+  ],
+  "starter_code": {
+    "python": "# Substring With Concatenation of All Words\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Substring With Concatenation of All Words\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Substring With Concatenation of All Words\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Substring With Concatenation of All Words\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Substring With Concatenation of All Words\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nif lines:\n    s = lines[0]\n    m = int(lines[1])\n    words = lines[2:2+m]\n    if not words or not s: print(''); sys.exit(0)\n    w_len = len(words[0])\n    total_len = w_len * len(words)\n    from collections import Counter\n    w_cnt = Counter(words)\n    res = []\n    for i in range(len(s) - total_len + 1):\n        sub = s[i:i+total_len]\n        seen = Counter([sub[j:j+w_len] for j in range(0, total_len, w_len)])\n        if seen == w_cnt: res.append(str(i))\n    print(' '.join(res))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

@@ -1,0 +1,55 @@
+{
+  "id": "p157_maximum_xor_trie",
+  "number": 157,
+  "slug": "maximum-xor-using-a-trie",
+  "category_id": 16,
+  "category_name": "Tries and Advanced Data Structures",
+  "title": "Maximum XOR Using a Trie",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an array of integers `nums`, find the maximum XOR of two numbers in the array using a binary Trie.",
+  "input_format": "First line contains integer `n`, followed by `n` integers.",
+  "output_format": "Maximum XOR value.",
+  "constraints": "1 <= n <= 10^5\n0 <= nums[i] <= 10^9",
+  "sample_tests": [
+    {
+      "input": "6\n3 10 5 25 2 8",
+      "output": "28",
+      "explanation": "Max XOR is 28 (5 ^ 25)."
+    },
+    {
+      "input": "3\n1 2 3",
+      "output": "3",
+      "explanation": "Max XOR is 3 (1 ^ 2)."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2\n0 0",
+      "output": "0"
+    },
+    {
+      "input": "2\n1 2",
+      "output": "3"
+    },
+    {
+      "input": "4\n8 1 2 12",
+      "output": "14"
+    }
+  ],
+  "hints": [
+    "Insert all binary bit sequences of 31 bits into a binary Trie.",
+    "For each number x, traverse the Trie greedily choosing the opposite bit `1 - bit` whenever available.",
+    "Each successful opposite choice contributes `1 << bit` to the maximum XOR sum."
+  ],
+  "starter_code": {
+    "python": "# Maximum XOR Using a Trie\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Maximum XOR Using a Trie\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Maximum XOR Using a Trie\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Maximum XOR Using a Trie\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Maximum XOR Using a Trie\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    nums = [int(x) for x in data[1:1+n]]\n    trie = {}\n    for x in nums:\n        node = trie\n        for i in range(30, -1, -1):\n            b = (x >> i) & 1\n            node = node.setdefault(b, {})\n    max_xor = 0\n    for x in nums:\n        node = trie\n        cur = 0\n        for i in range(30, -1, -1):\n            b = (x >> i) & 1\n            opp = 1 - b\n            if opp in node:\n                cur |= (1 << i)\n                node = node[opp]\n            else:\n                node = node[b]\n        max_xor = max(max_xor, cur)\n    print(max_xor)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

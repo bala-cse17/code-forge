@@ -1,0 +1,64 @@
+{
+  "id": "p014_find_first_occurrence_pattern",
+  "number": 14,
+  "slug": "find-the-first-occurrence-of-a-pattern",
+  "category_id": 2,
+  "category_name": "Strings",
+  "title": "Find the First Occurrence of a Pattern",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given two strings `haystack` and `needle`, return the index of the first occurrence of `needle` in `haystack`, or `-1` if `needle` is not part of `haystack`.",
+  "input_format": "Two lines, first is `haystack`, second is `needle`.",
+  "output_format": "Index of first occurrence or -1.",
+  "constraints": "1 <= length(haystack), length(needle) <= 10^4",
+  "sample_tests": [
+    {
+      "input": "sadbutsad\nsad",
+      "output": "0",
+      "explanation": "sad occurs at index 0 and 6. First is 0."
+    },
+    {
+      "input": "leetcode\nleeto",
+      "output": "-1",
+      "explanation": "leeto does not occur."
+    },
+    {
+      "input": "hello\nll",
+      "output": "2",
+      "explanation": "ll starts at index 2."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "mississippi\nissip",
+      "output": "4"
+    },
+    {
+      "input": "a\na",
+      "output": "0"
+    },
+    {
+      "input": "abc\nd",
+      "output": "-1"
+    },
+    {
+      "input": "aaaaa\nbba",
+      "output": "-1"
+    }
+  ],
+  "hints": [
+    "Check substrings of length equal to `needle` at every starting index.",
+    "KMP algorithm provides optimal O(n + m) worst-case time.",
+    "Python `haystack.find(needle)` returns the exact first index or -1."
+  ],
+  "starter_code": {
+    "python": "# Find the First Occurrence of a Pattern\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Find the First Occurrence of a Pattern\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Find the First Occurrence of a Pattern\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Find the First Occurrence of a Pattern\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Find the First Occurrence of a Pattern\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().split()\nif len(lines) >= 2:\n    h, n = lines[0], lines[1]\n    print(h.find(n))\nelse:\n    print(-1)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

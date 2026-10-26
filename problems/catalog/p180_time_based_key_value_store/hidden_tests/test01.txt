@@ -1,0 +1,6 @@
+INPUT:
+2
+SET k v 1
+GET k 1
+EXPECTED:
+v

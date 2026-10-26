@@ -1,0 +1,7 @@
+INPUT:
+3
+ADD cat
+SEARCH c.t
+SEARCH d.t
+EXPECTED:
+true false

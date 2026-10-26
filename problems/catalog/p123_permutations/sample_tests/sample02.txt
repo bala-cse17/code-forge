@@ -1,0 +1,6 @@
+INPUT:
+1
+1
+EXPECTED:
+1
+1

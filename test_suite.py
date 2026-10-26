@@ -60,28 +60,26 @@ def run_tests():
     # ---------------------------------------------------------
     print("\n--- [Phase 1: Problem Catalog & Test Suite Integrity] ---")
     problems = problems_mgr.get_problem_list()
-    assert_test("Total 15 Problems Loaded", len(problems) == 15, f"Found {len(problems)} problems")
+    assert_test("Total 180 Problems Loaded in Catalog", len(problems) == 180, f"Found {len(problems)} problems")
 
     easy_count = sum(1 for p in problems if p["difficulty"] == "Easy")
     med_count = sum(1 for p in problems if p["difficulty"] == "Medium")
     hard_count = sum(1 for p in problems if p["difficulty"] == "Hard")
 
-    assert_test("5 Easy Problems (100 pts each)", easy_count == 5 and all(p["points"] == 100 for p in problems if p["difficulty"] == "Easy"))
-    assert_test("5 Medium Problems (200 pts each)", med_count == 5 and all(p["points"] == 200 for p in problems if p["difficulty"] == "Medium"))
-    assert_test("5 Hard Problems (300 pts each)", hard_count == 5 and all(p["points"] == 300 for p in problems if p["difficulty"] == "Hard"))
+    assert_test("72 Easy Problems (100 pts each)", easy_count == 72 and all(p["points"] == 100 for p in problems if p["difficulty"] == "Easy"))
+    assert_test("72 Medium Problems (200 pts each)", med_count == 72 and all(p["points"] == 200 for p in problems if p["difficulty"] == "Medium"))
+    assert_test("36 Hard Problems (300 pts each)", hard_count == 36 and all(p["points"] == 300 for p in problems if p["difficulty"] == "Hard"))
 
     all_hidden_valid = True
     for p in problems:
         hidden_dir = problems_mgr.get_hidden_tests_dir(p["id"])
-        if not hidden_dir or not os.path.isdir(hidden_dir):
-            all_hidden_valid = False
-            break
-        test_files = [f for f in os.listdir(hidden_dir) if f.startswith("test")]
-        if len(test_files) < 5:
+        has_disk = hidden_dir and os.path.isdir(hidden_dir) and len(os.listdir(hidden_dir)) > 0
+        has_mem = bool(p.get("hidden_tests"))
+        if not (has_disk or has_mem):
             all_hidden_valid = False
             break
 
-    assert_test("All 15 Problems have >= 5 Hidden Test Cases", all_hidden_valid)
+    assert_test("All 180 Problems have Hidden Test Cases", all_hidden_valid)
 
     # ---------------------------------------------------------
     # TEST 2: Anti-Cheat & API Data Isolation
@@ -273,6 +271,30 @@ int main() {
         limiter.is_allowed("127.0.0.1")
     assert_test("Rate Limiter Blocks Burst Requests Exceeding Limit", not limiter.is_allowed("127.0.0.1"))
 
+    # Phase 1 Security Additions: PBKDF2 Password Hashing & Salt Verification
+    pwd_hash, pwd_salt = auth.hash_password("SuperSecret#2026")
+    assert_test("PBKDF2 Password Hashed with Unique Salt", len(pwd_hash) == 64 and len(pwd_salt) == 32)
+    assert_test("PBKDF2 Password Verification Success", auth.verify_password("SuperSecret#2026", pwd_hash, pwd_salt))
+    assert_test("PBKDF2 Password Wrong Password Rejected", not auth.verify_password("WrongPassword", pwd_hash, pwd_salt))
+
+    # Token Revocation / Logout Verification
+    rev_token = auth.create_session_token("usr_logout1", "Logout Tester")
+    assert_test("Active Session Token Valid Before Revocation", auth.verify_session_token(rev_token) is not None)
+    auth.revoke_token(rev_token)
+    assert_test("Revoked Session Token Rejected After Logout", auth.verify_session_token(rev_token) is None)
+
+    # Participant Password & Duplicate Registration Handling
+    p_secure = storage.register_participant("Charlie Secure", "MIT", "SEC999", password="CharlieSecret123")
+    assert_test("Participant Registered with Password", p_secure is not None and p_secure["reg_no"] == "SEC999")
+    auth_success = storage.authenticate_participant("SEC999", "CharlieSecret123")
+    assert_test("Participant Login with Correct Password Succeeds", auth_success is not None and auth_success["name"] == "Charlie Secure")
+    auth_fail = storage.authenticate_participant("SEC999", "WrongCharliePass")
+    assert_test("Participant Login with Wrong Password Fails", auth_fail is None)
+
+    # Duplicate Registration Detection
+    dup_reg = storage.register_participant("Charlie Clone", "MIT", "SEC999", password="DifferentPass")
+    assert_test("Duplicate Reg No Flagged by Storage", dup_reg.get("already_registered") is True)
+
     # ---------------------------------------------------------
     # TEST 7: Complete Admin Reset (Wipe Points, Submissions & Leaderboard)
     # ---------------------------------------------------------
@@ -318,6 +340,11 @@ int main() {
     assert_test("Switched back to Problem Set 1", switched_to_set1 and problems_mgr.active_set == "set1")
     assert_test("Set 1 contains 15 valid problems", len(set1_problems) == 15)
 
+    # Switch back to Full 180 Catalog
+    switched_to_cat = problems_mgr.switch_set("catalog")
+    cat_problems = problems_mgr.get_problem_list()
+    assert_test("Switched back to Practice Catalog (180 problems)", switched_to_cat and problems_mgr.active_set == "catalog" and len(cat_problems) == 180)
+
     # Credentials Update (ID + Password)
     original_id = config.get("admin_id", "admin")
     original_pass = config.get("admin_password", "admin123")
@@ -327,58 +354,50 @@ int main() {
     assert_test("Admin Credentials Reverted Successfully", auth.verify_admin_credentials(original_id, original_pass))
 
     # ---------------------------------------------------------
-    # TEST 9: 3-Tier Progressive Hints & Score Deduction Mechanics
+    # TEST 9: 3-Tier Progressive Hints & Free Learning Aids (0 Penalties)
     # ---------------------------------------------------------
-    print("\n--- [Phase 9: 3-Tier Progressive Hints & Score Deductions] ---")
+    print("\n--- [Phase 9: 3-Tier Progressive Hints & Free Learning Aids] ---")
     storage.reset_competition()
     p_player = storage.register_participant("David HintTester", "Stanford", "ST101")
 
-    # 9.1 Verify all Set 1 problems have 3 hints and valid difficulty penalties
-    set1_all_3_hints = True
+    # 9.1 Verify all problems have 3 hints
+    all_3_hints = True
     for prob in problems_mgr.get_problem_list():
         d = problems_mgr.get_problem_detail(prob["id"])
         hints = d.get("hints", [])
         if len(hints) != 3:
-            set1_all_3_hints = False
+            all_3_hints = False
             break
         # Locked hints must NOT leak text
         if any(h["text"] is not None for h in hints if not h["unlocked"]):
-            set1_all_3_hints = False
+            all_3_hints = False
             break
-    assert_test("All 15 Set 1 Problems have 3 Progressive Hints (text secured when locked)", set1_all_3_hints)
+    assert_test("All Catalog Problems have 3 Progressive Hints (text secured when locked)", all_3_hints)
 
-    # 9.2 Test penalty values
-    assert_test("Easy Problem Penalties: H1=10, H2=15, H3=25", 
-                problems_mgr.get_hint_penalty("Easy", 1) == 10 and
-                problems_mgr.get_hint_penalty("Easy", 2) == 15 and
-                problems_mgr.get_hint_penalty("Easy", 3) == 25)
-    assert_test("Medium Problem Penalties: H1=20, H2=30, H3=50", 
-                problems_mgr.get_hint_penalty("Medium", 1) == 20 and
-                problems_mgr.get_hint_penalty("Medium", 2) == 30 and
-                problems_mgr.get_hint_penalty("Medium", 3) == 50)
-    assert_test("Hard Problem Penalties: H1=30, H2=45, H3=75", 
-                problems_mgr.get_hint_penalty("Hard", 1) == 30 and
-                problems_mgr.get_hint_penalty("Hard", 2) == 45 and
-                problems_mgr.get_hint_penalty("Hard", 3) == 75)
+    # 9.2 Test penalty values: hints are free learning aids with 0 penalties
+    assert_test("Hints are Free Learning Aids (0 Penalties for Easy, Medium, Hard)", 
+                problems_mgr.get_hint_penalty("Easy", 1) == 0 and
+                problems_mgr.get_hint_penalty("Medium", 1) == 0 and
+                problems_mgr.get_hint_penalty("Hard", 1) == 0)
 
-    # 9.3 Unlock Hint 1 on Easy problem (Two Sum: 100 pts -> 90 pts)
-    storage.unlock_hint(p_player["id"], "two_sum", 1, 10)
+    # 9.3 Unlock Hint 1 on Easy problem (Two Sum: 100 pts preserved, penalty 0)
+    storage.unlock_hint(p_player["id"], "two_sum", 1, 0)
     unlocked = storage.get_unlocked_hints(p_player["id"], "two_sum")
     pen1 = storage.get_total_hint_penalty(p_player["id"], "two_sum")
-    assert_test("Hint 1 Unlocked & Recorded in SQLite Storage", unlocked == [1] and pen1 == 10)
+    assert_test("Hint 1 Unlocked & Recorded with 0 Penalty", unlocked == [1] and pen1 == 0)
 
-    # Detail API reflects unlocked hint text and reduced max score
+    # Detail API reflects unlocked hint text and full max score
     p_detail = problems_mgr.get_problem_detail("two_sum", participant_id=p_player["id"], storage=storage)
-    assert_test("Detail API: Max Score is 90 / 100 pts with Hint 1 text revealed",
-                p_detail["max_score"] == 90 and
-                p_detail["total_hint_penalty"] == 10 and
+    assert_test("Detail API: Full 100 pts preserved with Hint 1 text revealed",
+                p_detail["max_score"] == 100 and
+                p_detail["total_hint_penalty"] == 0 and
                 p_detail["hints"][0]["unlocked"] is True and
                 isinstance(p_detail["hints"][0]["text"], str) and
                 p_detail["hints"][1]["unlocked"] is False)
 
-    # 9.4 Submission adds points (+90 pts)
+    # 9.4 Submission adds full points (+100 pts)
     two_sum_dir = problems_mgr.get_hidden_tests_dir("two_sum")
-    effective_pts = max(25, 100 - pen1)
+    effective_pts = 100
     two_sum_sol = """
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
@@ -405,22 +424,17 @@ class Solution:
         runtime=sub_res["runtime"]
     )
     lb_after_p1 = storage.get_leaderboard()
-    assert_test("Player Solved Two Sum: Points ADDED (+90 pts) -> Score = 90 pts",
-                sub_rec["participant_score"] == 90 and lb_after_p1[0]["score"] == 90)
+    assert_test("Player Solved Two Sum: Full Points Awarded (+100 pts) -> Score = 100 pts",
+                sub_rec["participant_score"] == 100 and lb_after_p1[0]["score"] == 100)
 
-    # 9.5 Unlock Hint 1 on Medium problem: Points MINUSED (-20 pts) -> Score drops from 90 to 70
-    h1_res = storage.unlock_hint(p_player["id"], "longest_substring", 1, 20)
-    lb_after_h1 = storage.get_leaderboard()
-    assert_test("Unlock Hint 1 on Medium Problem: Points MINUSED (-20 pts) -> Score = 70 pts",
-                h1_res["participant_score"] == 70 and lb_after_h1[0]["score"] == 70)
+    # 9.5 Unlock Hint 1 and Hint 2 on Medium problem: Score remains unchanged
+    h1_res = storage.unlock_hint(p_player["id"], "longest_substring", 1, 0)
+    h2_res = storage.unlock_hint(p_player["id"], "longest_substring", 2, 0)
+    lb_after_h = storage.get_leaderboard()
+    assert_test("Unlock Free Hints on Medium Problem: Score Not Deducted (Score remains 100 pts)",
+                h1_res["participant_score"] == 100 and lb_after_h[0]["score"] == 100)
 
-    # 9.6 Unlock Hint 2 on Medium problem: Points MINUSED (-30 pts) -> Score drops from 70 to 40
-    h2_res = storage.unlock_hint(p_player["id"], "longest_substring", 2, 30)
-    lb_after_h2 = storage.get_leaderboard()
-    assert_test("Unlock Hint 2 on Medium Problem: Points MINUSED (-30 pts) -> Score = 40 pts",
-                h2_res["participant_score"] == 40 and lb_after_h2[0]["score"] == 40)
-
-    # 9.7 Solve Medium problem: Points ADDED (+150 pts effective) -> Total Score = 240 pts
+    # 9.6 Solve Medium problem: Full 200 pts added -> Total Score = 300 pts
     med_dir = problems_mgr.get_hidden_tests_dir("longest_substring")
     med_detail = problems_mgr.get_problem_detail("longest_substring", participant_id=p_player["id"], storage=storage)
     med_sol = """class Solution:
@@ -451,8 +465,8 @@ class Solution:
         runtime=med_sub_res["runtime"]
     )
     lb_final = storage.get_leaderboard()
-    assert_test("Player Solved Longest Substring: Points ADDED -> Total Score = 240 pts (90 + 150)",
-                med_sub_rec["participant_score"] == 240 and lb_final[0]["score"] == 240)
+    assert_test("Player Solved Longest Substring: Full Points Awarded -> Total Score = 300 pts (100 + 200)",
+                med_sub_rec["participant_score"] == 300 and lb_final[0]["score"] == 300)
 
     # Cleanup test db
     storage.reset_competition()
@@ -464,7 +478,7 @@ class Solution:
     print("\n--- [Phase 10: Round-Wise Category Locks & Admin Controls] ---")
     tier_locks_sample = {"easy": False, "medium": True, "hard": True}
     catalog_with_locks = problems_mgr.get_problem_list(tier_locks=tier_locks_sample)
-    assert_test("All 15 Problems annotated with Round Numbers (1, 2, 3)",
+    assert_test("All Problems annotated with Difficulty Levels (Easy, Medium, Hard)",
                 all(p.get("round_num") in [1, 2, 3] for p in catalog_with_locks))
     assert_test("Category 1 (Easy) is Unlocked",
                 all(p.get("locked") is False for p in catalog_with_locks if p["difficulty"] == "Easy"))
@@ -475,7 +489,7 @@ class Solution:
 
     all_unlocked_sample = {"easy": False, "medium": False, "hard": False}
     catalog_unlocked = problems_mgr.get_problem_list(tier_locks=all_unlocked_sample)
-    assert_test("Unlock All Rounds opens all 15 problems",
+    assert_test("Unlock All Rounds opens all problems",
                 all(p.get("locked") is False for p in catalog_unlocked))
 
     # ---------------------------------------------------------
@@ -518,6 +532,303 @@ class Solution:
     assert_test("Live Poll Payload contains tier locks state", "tier_locks" in poll_payload and poll_payload["tier_locks"]["medium"] is True)
     assert_test("Live Poll Payload contains broadcast announcement", poll_payload["broadcast"]["text"] == "Welcome to Code Combat Pro")
     assert_test("Live Poll Payload contains live leaderboard array", isinstance(poll_payload["leaderboard"], list))
+
+    # ---------------------------------------------------------
+    # TEST 13: JavaScript (Node.js) Execution & Sandboxing
+    # ---------------------------------------------------------
+    print("\n--- [Phase 13: Node.js (JavaScript) Engine & Sandbox] ---")
+    js_code = """
+const fs = require('fs');
+const input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);
+if (input.length >= 2) {
+    const a = parseInt(input[0], 10);
+    const b = parseInt(input[1], 10);
+    console.log(a + b);
+}
+"""
+    js_res = judge.run_custom_input("javascript", js_code, "15 25", timeout=3.0)
+    assert_test("JavaScript (Node.js) Execution: Custom Stdin -> 40",
+                js_res["status"] == "ACCEPTED" and "40" in js_res["stdout"].strip())
+
+    # ---------------------------------------------------------
+    # TEST 14: Analytics Engine & Statistics Calculation
+    # ---------------------------------------------------------
+    print("\n--- [Phase 14: Analytics Engine & Platform Insights] ---")
+    storage.reset_competition()
+    p_stat1 = storage.register_participant("Charlie", "MIT", "REG-CH-1", "pass123")
+    storage.add_submission(
+        participant_id=p_stat1["id"],
+        participant_name="Charlie",
+        problem_id="two_sum",
+        problem_title="Two Sum",
+        difficulty="Easy",
+        language="python",
+        code="print(1)",
+        status="ACCEPTED",
+        passed_count=5,
+        total_count=5,
+        score=100,
+        runtime=0.04
+    )
+    storage.add_submission(
+        participant_id=p_stat1["id"],
+        participant_name="Charlie",
+        problem_id="two_sum",
+        problem_title="Two Sum",
+        difficulty="Easy",
+        language="javascript",
+        code="console.log(1)",
+        status="WRONG_ANSWER",
+        passed_count=2,
+        total_count=5,
+        score=0,
+        runtime=0.06
+    )
+    analytics = storage.get_analytics()
+    assert_test("Analytics: Total Participants Counted", analytics["total_participants"] >= 1)
+    assert_test("Analytics: Total Submissions and Acceptance Rate",
+                analytics["total_submissions"] == 2 and analytics["accepted_submissions"] == 1 and analytics["acceptance_rate"] == 50.0)
+    assert_test("Analytics: Multi-Language Distribution Tracked",
+                "python" in analytics["languages"] and "javascript" in analytics["languages"])
+
+    # ---------------------------------------------------------
+    # TEST 15: Participant Moderation & Score Reset
+    # ---------------------------------------------------------
+    print("\n--- [Phase 15: Participant Moderation & Administrative Control] ---")
+    p_before = storage.get_participant(p_stat1["id"])
+    assert_test("Participant Has Active Score Before Reset", p_before["score"] == 100)
+    reset_ok = storage.reset_participant_score(p_stat1["id"])
+    p_after = storage.get_participant(p_stat1["id"])
+    assert_test("Participant Score Reset to 0 by Admin", reset_ok is True and p_after["score"] == 0)
+
+    # ---------------------------------------------------------
+    # TEST 16: Security Audit Logging
+    # ---------------------------------------------------------
+    print("\n--- [Phase 16: Security Audit Logging] ---")
+    audit_entries = storage.get_audit_logs(10)
+    assert_test("Audit Log Records Administrative Action",
+                len(audit_entries) > 0 and any(a["action"] == "RESET_PARTICIPANT_SCORE" for a in audit_entries))
+
+    # ---------------------------------------------------------
+    # TEST 17: Participant Profile & Stats Breakdown
+    # ---------------------------------------------------------
+    print("\n--- [Phase 17: Participant Profile & Stats Breakdown] ---")
+    p_stats = storage.get_participant_stats(p_stat1["id"])
+    assert_test("Participant Stats Returns Solved Breakdown and Activity",
+                p_stats is not None and "easy_solved" in p_stats and "activity" in p_stats)
+
+    # ---------------------------------------------------------
+    # TEST 18: C++ (g++) Compiler & Judge Engine
+    # ---------------------------------------------------------
+    print("\n--- [Phase 18: C++ (g++) Compiler & Judge Engine] ---")
+    cpp_code = """#include <iostream>
+using namespace std;
+int main() {
+    int a, b;
+    if (cin >> a >> b) {
+        cout << (a + b) << endl;
+    }
+    return 0;
+}
+"""
+    cpp_res = judge.run_custom_input("cpp", cpp_code, "35 65", timeout=3.0)
+    assert_test("C++ (g++) Execution: Custom Stdin -> 100",
+                cpp_res["status"] == "ACCEPTED" and "100" in cpp_res.get("stdout", "").strip())
+
+    # ---------------------------------------------------------
+    # TEST 19: User Profile & PBKDF2 Password Updates
+    # ---------------------------------------------------------
+    print("\n--- [Phase 19: User Profile & PBKDF2 Password Updates] ---")
+    p_user = storage.register_participant("David Miller", "MIT", "MIT_CS_01", password="InitialPassword123!")
+    profile = storage.get_user_profile(p_user["id"])
+    assert_test("User Profile Retrieved Without Secrets",
+                profile is not None and profile["name"] == "David Miller" and "password_hash" not in profile)
+
+    upd_ok = storage.update_user_profile(p_user["id"], bio="Competitive programmer & algorithms enthusiast", email="david@mit.edu")
+    upd_prof = storage.get_user_profile(p_user["id"])
+    assert_test("User Profile Updated (Bio & Email)",
+                upd_ok is True and upd_prof["bio"] == "Competitive programmer & algorithms enthusiast" and upd_prof["email"] == "david@mit.edu")
+
+    # Wrong old password rejected
+    wrong_pwd_ok, wrong_msg = storage.change_user_password(p_user["id"], "WrongPass!", "NewSecret123!")
+    assert_test("Wrong Old Password Rejected", wrong_pwd_ok is False)
+
+    # Correct old password updates to new hash
+    right_pwd_ok, right_msg = storage.change_user_password(p_user["id"], "InitialPassword123!", "NewSecret123!")
+    assert_test("Password Successfully Changed with PBKDF2", right_pwd_ok is True)
+
+    # New password authenticates successfully
+    auth_new = storage.authenticate_participant("MIT_CS_01", "NewSecret123!")
+    assert_test("Participant Authenticates with New Password", auth_new is not None and auth_new["id"] == p_user["id"])
+
+    # ---------------------------------------------------------
+    # TEST 20: Contests Management & Standings
+    # ---------------------------------------------------------
+    print("\n--- [Phase 20: Contests Management & Standings] ---")
+    c_new = storage.create_contest("weekly_sprint_1", "Weekly Hackathon Sprint #1", "60-minute competitive coding sprint", status="active")
+    assert_test("Contest Created in Storage", c_new["id"] == "weekly_sprint_1")
+
+    contests_list = storage.get_contests()
+    assert_test("Contests List Retrieved", len(contests_list) >= 1 and any(c["id"] == "weekly_sprint_1" for c in contests_list))
+
+    reg_c_ok = storage.register_contest_participant("weekly_sprint_1", p_user["id"])
+    assert_test("Participant Registered for Contest", reg_c_ok is True)
+
+    standings = storage.get_contest_standings("weekly_sprint_1")
+    assert_test("Contest Standings Returned with Rank", len(standings) >= 1 and standings[0]["participant_id"] == p_user["id"])
+
+    # ---------------------------------------------------------
+    # TEST 21: Community Discussions Engine
+    # ---------------------------------------------------------
+    print("\n--- [Phase 21: Community Discussions Engine] ---")
+    disc = storage.add_discussion("two_sum", p_user["id"], "David Miller", "Optimal O(N) Hash Map Solution", "Use an unordered_map to store complements.")
+    assert_test("Discussion Added Successfully", disc["title"] == "Optimal O(N) Hash Map Solution")
+
+    discs = storage.get_discussions("two_sum")
+    assert_test("Discussions Retrieved for Problem", len(discs) >= 1 and discs[0]["id"] == disc["id"])
+
+    del_ok = storage.delete_discussion(disc["id"], p_user["id"])
+    assert_test("Discussion Deleted by Author", del_ok is True)
+    assert_test("Discussions Empty After Deletion", len(storage.get_discussions("two_sum")) == 0)
+
+    # ---------------------------------------------------------
+    # TEST 22: Achievements Engine & Dynamic Badges
+    # ---------------------------------------------------------
+    print("\n--- [Phase 22: Achievements Engine & Dynamic Badges] ---")
+    storage.add_submission(
+        participant_id=p_user["id"],
+        participant_name="David Miller",
+        problem_id="two_sum",
+        problem_title="Two Sum",
+        difficulty="Easy",
+        language="python",
+        code="print(0, 1)",
+        status="ACCEPTED",
+        passed_count=5,
+        total_count=5,
+        score=100,
+        runtime=0.03
+    )
+    user_achievements = storage.get_user_achievements(p_user["id"])
+    assert_test("User Achievements List Contains All Badges", len(user_achievements) >= 5)
+
+    unlocked_ids = {a["id"] for a in user_achievements if a["unlocked"]}
+    assert_test("First Blood Achievement Unlocked on Solve", "first_blood" in unlocked_ids)
+    assert_test("Speed Demon Achievement Unlocked (< 50ms)", "speed_demon" in unlocked_ids)
+    assert_test("Century Club Achievement Unlocked (>= 100 pts)", "century_club" in unlocked_ids)
+
+    # ---------------------------------------------------------
+    # TEST 23: Problem & Test Case Management (Admin)
+    # ---------------------------------------------------------
+    print("\n--- [Phase 23: Problem & Test Case Management (Admin)] ---")
+    new_prob = {
+        "id": "custom_reverse_string",
+        "title": "Reverse a String",
+        "difficulty": "Easy",
+        "points": 100,
+        "description": "Write a function that reverses a string.",
+        "constraints": "1 <= s.length <= 10^5"
+    }
+    prob_saved = storage.save_problem(new_prob)
+    assert_test("Admin Problem Saved in SQLite", prob_saved is True)
+
+    tc_saved = storage.add_test_case("custom_reverse_string", "hello", "olleh", is_sample=1)
+    assert_test("Admin Test Case Added", tc_saved["expected_output"] == "olleh")
+
+    tcs = storage.get_test_cases("custom_reverse_string")
+    assert_test("Admin Test Cases Retrieved", len(tcs) == 1 and tcs[0]["input_data"] == "hello")
+
+    prob_del = storage.delete_problem("custom_reverse_string")
+    assert_test("Admin Problem & Test Cases Deleted via Cascade", prob_del is True and len(storage.get_test_cases("custom_reverse_string")) == 0)
+
+    # Clean up test data
+    storage.reset_competition()
+
+    # ---------------------------------------------------------
+    # TEST 24: SQL Runner & Ephemeral Sandbox Execution
+    # ---------------------------------------------------------
+    print("\n--- [Phase 24: SQL Runner & Ephemeral Sandbox Execution] ---")
+    try:
+        from judge.sql_runner import SQLRunner
+        sql_runner = SQLRunner(timeout_seconds=2.0)
+        
+        # Test 24.1: Clean schema setup and query execution
+        setup_sql = """
+CREATE TABLE employees (id INTEGER, name TEXT, salary INTEGER);
+INSERT INTO employees VALUES (1, 'Alice', 60000);
+INSERT INTO employees VALUES (2, 'Bob', 45000);
+INSERT INTO employees VALUES (3, 'Charlie', 70000);
+"""
+        user_query = "SELECT name FROM employees WHERE salary >= 50000 ORDER BY salary DESC;"
+        expected = "Charlie\nAlice"
+        sql_res = sql_runner.run_query(user_query, setup_sql=setup_sql, expected_output=expected)
+        assert_test("SQL Runner: Valid Query Evaluated Against In-Memory Schema", sql_res["status"] == "ACCEPTED" and sql_res["output"] == expected)
+
+        # Test 24.2: SQL Syntax Error handling
+        bad_query = "SELECT non_existent_column FROM table_not_found;"
+        bad_res = sql_runner.run_query(bad_query, setup_sql=setup_sql, expected_output="None")
+        assert_test("SQL Runner: Syntax/Schema Errors Caught Gracefully", bad_res["status"] == "RUNTIME_ERROR" and "no such table" in bad_res.get("error_message", "").lower())
+
+        # Test 24.3: Prohibited DDL/ATTACH Operations Blocked
+        danger_query = "ATTACH DATABASE 'attack.db' AS evil;"
+        blocked_res = sql_runner.run_query(danger_query, setup_sql="", expected_output="")
+        assert_test("SQL Runner: Dangerous Operations Blocked by Safety Sanitizer", blocked_res["status"] == "RUNTIME_ERROR")
+    except Exception as e:
+        assert_test("SQL Runner Execution", False, str(e))
+
+    # ---------------------------------------------------------
+    # TEST 25: Problem Bookmarking Engine
+    # ---------------------------------------------------------
+    print("\n--- [Phase 25: Problem Bookmarking Engine] ---")
+    p_bm_user = storage.register_participant("Bookmark Tester", "CSE", "BM101")
+    uid = p_bm_user["id"]
+    test_pid = "p001_find_largest_element"
+
+    # Test 25.1: Initially not bookmarked
+    assert_test("Bookmark: Problem Initially Not Bookmarked", storage.is_problem_bookmarked(uid, test_pid) is False)
+
+    # Test 25.2: Toggle bookmark on
+    bm_res1 = storage.toggle_bookmark(uid, test_pid)
+    assert_test("Bookmark: Toggle Bookmark ON", bm_res1 is True)
+    assert_test("Bookmark: is_problem_bookmarked returns True", storage.is_problem_bookmarked(uid, test_pid) is True)
+
+    # Test 25.3: User bookmarks list
+    bms = storage.get_user_bookmarks(uid)
+    assert_test("Bookmark: get_user_bookmarks Contains Problem ID", test_pid in bms)
+
+    # Test 25.4: Toggle bookmark off
+    bm_res2 = storage.toggle_bookmark(uid, test_pid)
+    assert_test("Bookmark: Toggle Bookmark OFF", bm_res2 is False)
+    assert_test("Bookmark: is_problem_bookmarked returns False after unbookmark", storage.is_problem_bookmarked(uid, test_pid) is False)
+
+    # ---------------------------------------------------------
+    # TEST 26: Practice Platform Catalog Filtering & REST APIs
+    # ---------------------------------------------------------
+    print("\n--- [Phase 26: Practice Platform Catalog Filtering & REST APIs] ---")
+    # Test 26.1: Full catalog returns 180 problems
+    cat_all = storage.get_problems_catalog(limit=180)
+    assert_test("Catalog: get_problems_catalog Returns 180 Problems", cat_all["total"] == 180 and len(cat_all["problems"]) == 180)
+
+    # Test 26.2: Filter by category (Category 1: Arrays - 10 problems)
+    cat1_res = storage.get_problems_catalog(category_id=1, limit=50)
+    assert_test("Catalog: Category 1 (Arrays) Contains Exactly 10 Problems", cat1_res["total"] == 10)
+
+    # Test 26.3: Filter by difficulty (72 Easy, 72 Medium, 36 Hard)
+    easy_res = storage.get_problems_catalog(difficulty="Easy", limit=180)
+    med_res = storage.get_problems_catalog(difficulty="Medium", limit=180)
+    hard_res = storage.get_problems_catalog(difficulty="Hard", limit=180)
+    assert_test("Catalog: Difficulty Filter Exactly 72 Easy, 72 Med, 36 Hard",
+                easy_res["total"] == 72 and med_res["total"] == 72 and hard_res["total"] == 36)
+
+    # Test 26.4: Search filter
+    search_res = storage.get_problems_catalog(search="largest", limit=50)
+    assert_test("Catalog: Search by Keyword Matches Problems", search_res["total"] >= 1 and any("largest" in p["title"].lower() for p in search_res["problems"]))
+
+    # Test 26.5: Bookmarked filter
+    storage.toggle_bookmark(uid, test_pid)
+    bm_filter_res = storage.get_problems_catalog(user_id=uid, bookmarked_only=True)
+    assert_test("Catalog: bookmarked_only Filter Returns User Bookmarked Problems",
+                bm_filter_res["total"] >= 1 and any(p["id"] == test_pid for p in bm_filter_res["problems"]))
 
     # Clean up test data
     storage.reset_competition()

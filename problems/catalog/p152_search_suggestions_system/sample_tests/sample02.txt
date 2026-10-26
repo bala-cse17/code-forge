@@ -1,0 +1,12 @@
+INPUT:
+3 havana
+havana
+haven
+havoc
+EXPECTED:
+havana haven havoc
+havana haven havoc
+havana haven havoc
+havana
+havana
+havana

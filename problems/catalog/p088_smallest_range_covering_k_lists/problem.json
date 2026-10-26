@@ -1,0 +1,51 @@
+{
+  "id": "p088_smallest_range_covering_k_lists",
+  "number": 88,
+  "slug": "smallest-range-covering-k-lists",
+  "category_id": 9,
+  "category_name": "Heaps and Priority Queues",
+  "title": "Smallest Range Covering K Lists",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "You have `k` lists of sorted integers. Find the smallest range `[a, b]` that includes at least one number from each of the `k` lists.",
+  "input_format": "First line contains `k`. Following `k` lines contain integer `len` followed by `len` integers.",
+  "output_format": "Two integers `a b` defining the smallest range.",
+  "constraints": "1 <= k <= 3500",
+  "sample_tests": [
+    {
+      "input": "3\n5 4 10 15 24 26\n4 0 9 12 20\n4 5 18 22 30",
+      "output": "20 24",
+      "explanation": "[20, 24] contains 24 from list 1, 20 from list 2, and 22 from list 3."
+    },
+    {
+      "input": "3\n3 1 2 3\n3 1 2 3\n3 1 2 3",
+      "output": "1 1",
+      "explanation": "All lists share 1."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2\n2 1 5\n2 2 4",
+      "output": "2 2"
+    },
+    {
+      "input": "2\n1 10\n1 20",
+      "output": "10 20"
+    }
+  ],
+  "hints": [
+    "Use a min-heap containing one pointer from each list.",
+    "Track the current max value among all elements currently in the heap.",
+    "Update best range `cur_max - min_val` and advance the pointer of the minimum element."
+  ],
+  "starter_code": {
+    "python": "# Smallest Range Covering K Lists\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Smallest Range Covering K Lists\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Smallest Range Covering K Lists\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Smallest Range Covering K Lists\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Smallest Range Covering K Lists\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys, heapq\nlines = sys.stdin.read().splitlines()\nif lines:\n    k = int(lines[0])\n    lists = []\n    for line in lines[1:1+k]:\n        parts = [int(x) for x in line.split()]\n        if parts: lists.append(parts[1:1+parts[0]])\n    pq = []\n    cur_max = float('-inf')\n    for i in range(k):\n        heapq.heappush(pq, (lists[i][0], i, 0))\n        cur_max = max(cur_max, lists[i][0])\n    best = [float('-inf'), float('inf')]\n    while len(pq) == k:\n        val, r, c = heapq.heappop(pq)\n        if cur_max - val < best[1] - best[0]:\n            best = [val, cur_max]\n        if c + 1 < len(lists[r]):\n            nxt = lists[r][c+1]\n            heapq.heappush(pq, (nxt, r, c + 1))\n            cur_max = max(cur_max, nxt)\n        else: break\n    print(f'{best[0]} {best[1]}')\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

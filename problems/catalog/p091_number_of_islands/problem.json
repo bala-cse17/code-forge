@@ -1,0 +1,60 @@
+{
+  "id": "p091_number_of_islands",
+  "number": 91,
+  "slug": "number-of-islands",
+  "category_id": 10,
+  "category_name": "Graphs",
+  "title": "Number of Islands",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given an `m x n` 2D binary grid `grid` which represents a map of '1's (land) and '0's (water), return the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.",
+  "input_format": "First line contains `m` and `n`. Following `m` lines contain `n` characters (0 or 1).",
+  "output_format": "The number of islands.",
+  "constraints": "1 <= m, n <= 300",
+  "sample_tests": [
+    {
+      "input": "4 5\n1 1 1 1 0\n1 1 0 1 0\n1 1 0 0 0\n0 0 0 0 0",
+      "output": "1",
+      "explanation": "One single large island."
+    },
+    {
+      "input": "4 5\n1 1 0 0 0\n1 1 0 0 0\n0 0 1 0 0\n0 0 0 1 1",
+      "output": "3",
+      "explanation": "Three separate islands."
+    },
+    {
+      "input": "1 1\n0",
+      "output": "0",
+      "explanation": "Water only."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1 1\n1",
+      "output": "1"
+    },
+    {
+      "input": "3 3\n1 0 1\n0 1 0\n1 0 1",
+      "output": "5"
+    },
+    {
+      "input": "2 2\n0 0\n0 0",
+      "output": "0"
+    }
+  ],
+  "hints": [
+    "Iterate over each cell in the grid.",
+    "When a cell with '1' is encountered, trigger BFS or DFS to visit the entire connected island.",
+    "Mark visited cells to avoid re-counting."
+  ],
+  "starter_code": {
+    "python": "# Number of Islands\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Number of Islands\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Number of Islands\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Number of Islands\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Number of Islands\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    m, n = int(data[0]), int(data[1])\n    grid = []\n    idx = 2\n    for _ in range(m):\n        grid.append(data[idx:idx+n])\n        idx += n\n    visited = [[False]*n for _ in range(m)]\n    def dfs(r, c):\n        if r < 0 or r >= m or c < 0 or c >= n or visited[r][c] or grid[r][c] == '0': return\n        visited[r][c] = True\n        dfs(r+1, c); dfs(r-1, c); dfs(r, c+1); dfs(r, c-1)\n    islands = 0\n    for r in range(m):\n        for c in range(n):\n            if grid[r][c] == '1' and not visited[r][c]:\n                dfs(r, c)\n                islands += 1\n    print(islands)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

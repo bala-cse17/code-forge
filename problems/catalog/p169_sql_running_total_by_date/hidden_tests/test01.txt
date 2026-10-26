@@ -1,0 +1,5 @@
+INPUT:
+CREATE TABLE Transactions (id INT, transaction_date TEXT, amount INT);
+INSERT INTO Transactions VALUES (1, '2024-05-01', 50);
+EXPECTED:
+2024-05-01 50

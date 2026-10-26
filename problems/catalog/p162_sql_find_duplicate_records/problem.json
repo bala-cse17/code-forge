@@ -1,0 +1,43 @@
+{
+  "id": "p162_sql_find_duplicate_records",
+  "number": 162,
+  "slug": "find-duplicate-records",
+  "category_id": 17,
+  "category_name": "Database and SQL",
+  "title": "Find Duplicate Records",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Write an SQL query to report all the duplicate emails in a table `Person`.\n\nTable `Person`: `id (INT), email (TEXT)`",
+  "input_format": "Database contains table `Person` with records.",
+  "output_format": "Duplicate emails, one per line.",
+  "constraints": "Emails are lowercase.",
+  "sample_tests": [
+    {
+      "input": "CREATE TABLE Person (id INT, email TEXT);\nINSERT INTO Person VALUES (1, 'a@b.com'), (2, 'c@d.com'), (3, 'a@b.com');",
+      "output": "a@b.com",
+      "explanation": "a@b.com appears twice."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "CREATE TABLE Person (id INT, email TEXT);\nINSERT INTO Person VALUES (1, 'x@y.com'), (2, 'x@y.com'), (3, 'x@y.com');",
+      "output": "x@y.com"
+    }
+  ],
+  "hints": [
+    "Group rows by email using `GROUP BY email`.",
+    "Filter groups with more than 1 occurrence using `HAVING COUNT(email) > 1`.",
+    "Select the email column."
+  ],
+  "starter_code": {
+    "sql": "-- Find Duplicate Records\n-- Write your SQL query below\nSELECT ...\nFROM ...;\n",
+    "python": "# Find Duplicate Records (SQL Problem)\n# You can test via SQL query or Python\nimport sys\nprint('Run query in SQL tab')\n",
+    "c": "// SQL Problem: Find Duplicate Records\n",
+    "cpp": "// SQL Problem: Find Duplicate Records\n",
+    "java": "// SQL Problem: Find Duplicate Records\n",
+    "javascript": "// SQL Problem: Find Duplicate Records\n"
+  },
+  "reference_solution": "SELECT email FROM Person GROUP BY email HAVING COUNT(email) > 1;",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

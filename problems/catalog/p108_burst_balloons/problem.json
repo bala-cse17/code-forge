@@ -1,0 +1,55 @@
+{
+  "id": "p108_burst_balloons",
+  "number": 108,
+  "slug": "burst-balloons",
+  "category_id": 11,
+  "category_name": "Dynamic Programming",
+  "title": "Burst Balloons",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "You are given `n` balloons, indexed from 0 to `n - 1`. Each balloon has a painted number `nums[i]`. Bursting balloon `i` gives `nums[i-1] * nums[i] * nums[i+1]` coins. Return the maximum coins you can collect by bursting balloons wisely.",
+  "input_format": "First line contains integer `n`, followed by `n` integers.",
+  "output_format": "Maximum coins collected.",
+  "constraints": "1 <= n <= 300\n0 <= nums[i] <= 100",
+  "sample_tests": [
+    {
+      "input": "4\n3 1 5 8",
+      "output": "167",
+      "explanation": "Optimal burst order gives 167 coins."
+    },
+    {
+      "input": "2\n1 5",
+      "output": "10",
+      "explanation": "1*5*1 + 1*1*1 = 10."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1\n9",
+      "output": "9"
+    },
+    {
+      "input": "3\n1 2 3",
+      "output": "12"
+    },
+    {
+      "input": "4\n2 3 7 9",
+      "output": "252"
+    }
+  ],
+  "hints": [
+    "Think in reverse: instead of which balloon to burst first, choose which balloon bursts LAST in range [left, right].",
+    "The last balloon k is bordered by nums[left-1] and nums[right+1].",
+    "Subproblems become independent: `dp[left][k-1] + dp[k+1][right]`."
+  ],
+  "starter_code": {
+    "python": "# Burst Balloons\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Burst Balloons\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Burst Balloons\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Burst Balloons\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Burst Balloons\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    nums = [1] + [int(x) for x in data[1:1+n]] + [1]\n    dp = [[0]*(n+2) for _ in range(n+2)]\n    for length in range(1, n + 1):\n        for left in range(1, n - length + 2):\n            right = left + length - 1\n            for k in range(left, right + 1):\n                coins = nums[left-1] * nums[k] * nums[right+1] + dp[left][k-1] + dp[k+1][right]\n                dp[left][right] = max(dp[left][right], coins)\n    print(dp[1][n])\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

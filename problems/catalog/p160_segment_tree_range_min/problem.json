@@ -1,0 +1,51 @@
+{
+  "id": "p160_segment_tree_range_min",
+  "number": 160,
+  "slug": "range-minimum-query-using-a-segment-tree",
+  "category_id": 16,
+  "category_name": "Tries and Advanced Data Structures",
+  "title": "Range Minimum Query Using a Segment Tree",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Implement a Segment Tree supporting point updates and range minimum queries. Operations: `UPDATE index val` (sets element at 0-based index to val) and `QUERY l r` (minimum in range [l, r]).",
+  "input_format": "First line contains `n` and `m`. Second line contains `n` integers. Following `m` lines contain commands.",
+  "output_format": "Outputs of QUERY separated by space.",
+  "constraints": "1 <= n, m <= 10^5",
+  "sample_tests": [
+    {
+      "input": "5 3\n1 3 -2 8 -7\nQUERY 0 2\nUPDATE 2 5\nQUERY 0 2",
+      "output": "-2 1",
+      "explanation": "Min of [0, 2] is -2. After changing index 2 to 5, min becomes 1."
+    },
+    {
+      "input": "3 2\n4 2 6\nQUERY 0 1\nQUERY 1 2",
+      "output": "2 2",
+      "explanation": "Range minimums."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1 1\n10\nQUERY 0 0",
+      "output": "10"
+    },
+    {
+      "input": "4 2\n5 1 9 3\nQUERY 1 3\nUPDATE 1 10",
+      "output": "1"
+    }
+  ],
+  "hints": [
+    "Build Segment Tree with 4 * N nodes.",
+    "Each internal node stores `min(left_child, right_child)`.",
+    "Updates and Range Minimum Queries execute in O(log N) time."
+  ],
+  "starter_code": {
+    "python": "# Range Minimum Query Using a Segment Tree\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Range Minimum Query Using a Segment Tree\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Range Minimum Query Using a Segment Tree\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Range Minimum Query Using a Segment Tree\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Range Minimum Query Using a Segment Tree\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nout = []\nif lines:\n    parts = lines[0].split()\n    n, m = int(parts[0]), int(parts[1])\n    nums = [int(x) for x in lines[1].split()]\n    tree = [float('inf')] * (4 * n)\n    def build(node, l, r):\n        if l == r:\n            tree[node] = nums[l]; return\n        mid = (l + r) // 2\n        build(2*node, l, mid); build(2*node+1, mid+1, r)\n        tree[node] = min(tree[2*node], tree[2*node+1])\n    def update(node, l, r, idx, val):\n        if l == r:\n            tree[node] = val; return\n        mid = (l + r) // 2\n        if idx <= mid: update(2*node, l, mid, idx, val)\n        else: update(2*node+1, mid+1, r, idx, val)\n        tree[node] = min(tree[2*node], tree[2*node+1])\n    def query(node, l, r, ql, qr):\n        if ql <= l and r <= qr: return tree[node]\n        if r < ql or l > qr: return float('inf')\n        mid = (l + r) // 2\n        return min(query(2*node, l, mid, ql, qr), query(2*node+1, mid+1, r, ql, qr))\n    if n > 0:\n        build(1, 0, n - 1)\n        for line in lines[2:2+m]:\n            cmd = line.split()\n            if not cmd: continue\n            if cmd[0] == 'UPDATE':\n                idx, val = int(cmd[1]), int(cmd[2])\n                update(1, 0, n - 1, idx, val)\n            elif cmd[0] == 'QUERY':\n                ql, qr = int(cmd[1]), int(cmd[2])\n                out.append(str(query(1, 0, n - 1, ql, qr)))\nprint(' '.join(out))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

@@ -1,0 +1,43 @@
+{
+  "id": "p167_sql_customers_never_order",
+  "number": 167,
+  "slug": "customers-who-never-order",
+  "category_id": 17,
+  "category_name": "Database and SQL",
+  "title": "Customers Who Never Order",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Write an SQL query to report all customers who never order anything.\n\nTable `Customers`: `id (INT), name (TEXT)`\nTable `Orders`: `id (INT), customerId (INT)`",
+  "input_format": "Database contains `Customers` and `Orders` tables.",
+  "output_format": "Names of customers with no orders.",
+  "constraints": "customerId in Orders matches id in Customers.",
+  "sample_tests": [
+    {
+      "input": "CREATE TABLE Customers (id INT, name TEXT);\nCREATE TABLE Orders (id INT, customerId INT);\nINSERT INTO Customers VALUES (1, 'Joe'), (2, 'Henry'), (3, 'Sam'), (4, 'Max');\nINSERT INTO Orders VALUES (1, 3), (2, 1);",
+      "output": "Henry\nMax",
+      "explanation": "Henry and Max have placed 0 orders."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "CREATE TABLE Customers (id INT, name TEXT);\nCREATE TABLE Orders (id INT, customerId INT);\nINSERT INTO Customers VALUES (1, 'Alice');",
+      "output": "Alice"
+    }
+  ],
+  "hints": [
+    "Use `WHERE id NOT IN (SELECT customerId FROM Orders)`.",
+    "Alternatively, use a `LEFT JOIN` and check `WHERE Orders.id IS NULL`.",
+    "Returns all customer names with no corresponding order."
+  ],
+  "starter_code": {
+    "sql": "-- Customers Who Never Order\n-- Write your SQL query below\nSELECT ...\nFROM ...;\n",
+    "python": "# Customers Who Never Order (SQL Problem)\n# You can test via SQL query or Python\nimport sys\nprint('Run query in SQL tab')\n",
+    "c": "// SQL Problem: Customers Who Never Order\n",
+    "cpp": "// SQL Problem: Customers Who Never Order\n",
+    "java": "// SQL Problem: Customers Who Never Order\n",
+    "javascript": "// SQL Problem: Customers Who Never Order\n"
+  },
+  "reference_solution": "SELECT name FROM Customers WHERE id NOT IN (SELECT customerId FROM Orders WHERE customerId IS NOT NULL);",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

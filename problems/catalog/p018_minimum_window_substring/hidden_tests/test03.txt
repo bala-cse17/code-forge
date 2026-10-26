@@ -1,0 +1,5 @@
+INPUT:
+cabwefgewcwaefgcf
+cae
+EXPECTED:
+cwae

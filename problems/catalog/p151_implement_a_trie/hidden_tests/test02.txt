@@ -1,0 +1,6 @@
+INPUT:
+2
+SEARCH foo
+STARTSWITH foo
+EXPECTED:
+false false

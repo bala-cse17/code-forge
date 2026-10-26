@@ -1,0 +1,59 @@
+{
+  "id": "p044_squares_of_sorted_array",
+  "number": 44,
+  "slug": "squares-of-a-sorted-array",
+  "category_id": 5,
+  "category_name": "Two Pointers and Sliding Window",
+  "title": "Squares of a Sorted Array",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given an integer array `nums` sorted in non-decreasing order, return an array of the squares of each number sorted in non-decreasing order.",
+  "input_format": "First line contains integer `n`, followed by `n` sorted integers.",
+  "output_format": "Space-separated squared sorted integers.",
+  "constraints": "1 <= n <= 10^5\n-10^4 <= nums[i] <= 10^4",
+  "sample_tests": [
+    {
+      "input": "5\n-4 -1 0 3 10",
+      "output": "0 1 9 16 100",
+      "explanation": "After squaring, the array becomes [16,1,0,9,100]. Sorted: [0,1,9,16,100]."
+    },
+    {
+      "input": "5\n-7 -3 2 3 11",
+      "output": "4 9 9 49 121",
+      "explanation": "Squares sorted."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "3\n-3 -2 -1",
+      "output": "1 4 9"
+    },
+    {
+      "input": "3\n1 2 3",
+      "output": "1 4 9"
+    },
+    {
+      "input": "1\n0",
+      "output": "0"
+    },
+    {
+      "input": "4\n-5 0 2 5",
+      "output": "0 4 25 25"
+    }
+  ],
+  "hints": [
+    "Notice that the largest squares are at either end of the array due to negative values.",
+    "Use two pointers at start and end.",
+    "Compare squares and place the larger one from back to front in the result array."
+  ],
+  "starter_code": {
+    "python": "# Squares of a Sorted Array\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Squares of a Sorted Array\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Squares of a Sorted Array\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Squares of a Sorted Array\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Squares of a Sorted Array\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    nums = [int(x) for x in data[1:1+n]]\n    res = [0] * n\n    l, r = 0, n - 1\n    idx = n - 1\n    while l <= r:\n        sl = nums[l] * nums[l]\n        sr = nums[r] * nums[r]\n        if sl > sr: res[idx] = sl; l += 1\n        else: res[idx] = sr; r -= 1\n        idx -= 1\n    print(' '.join(map(str, res)))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

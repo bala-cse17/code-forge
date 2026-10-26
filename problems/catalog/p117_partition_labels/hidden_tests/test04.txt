@@ -1,0 +1,4 @@
+INPUT:
+abaccbdeffed
+EXPECTED:
+6 6

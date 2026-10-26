@@ -1,0 +1,6 @@
+INPUT:
+1
+c
+cat car copy
+EXPECTED:
+c c c

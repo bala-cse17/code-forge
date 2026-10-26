@@ -1,0 +1,60 @@
+{
+  "id": "p106_longest_common_subsequence",
+  "number": 106,
+  "slug": "longest-common-subsequence",
+  "category_id": 11,
+  "category_name": "Dynamic Programming",
+  "title": "Longest Common Subsequence",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given two strings `text1` and `text2`, return the length of their longest common subsequence. If there is no common subsequence, return 0.",
+  "input_format": "Two lines, each containing a string.",
+  "output_format": "Length of LCS.",
+  "constraints": "1 <= length(text1), length(text2) <= 1000",
+  "sample_tests": [
+    {
+      "input": "abcde\nace",
+      "output": "3",
+      "explanation": "LCS is 'ace' length 3."
+    },
+    {
+      "input": "abc\nabc",
+      "output": "3",
+      "explanation": "Identical strings."
+    },
+    {
+      "input": "abc\ndef",
+      "output": "0",
+      "explanation": "No characters in common."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "bsbininm\njmkrskk",
+      "output": "1"
+    },
+    {
+      "input": "oxcp\nqrsvwf",
+      "output": "0"
+    },
+    {
+      "input": "ezupkr\nubmkra",
+      "output": "2"
+    }
+  ],
+  "hints": [
+    "Define dp[i][j] as the LCS of prefixes text1[0..i-1] and text2[0..j-1].",
+    "If characters match, `dp[i][j] = 1 + dp[i-1][j-1]`.",
+    "Otherwise, `dp[i][j] = max(dp[i-1][j], dp[i][j-1])`."
+  ],
+  "starter_code": {
+    "python": "# Longest Common Subsequence\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Longest Common Subsequence\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Longest Common Subsequence\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Longest Common Subsequence\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Longest Common Subsequence\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().split()\nif len(lines) >= 2:\n    s1, s2 = lines[0], lines[1]\n    m, n = len(s1), len(s2)\n    dp = [[0]*(n+1) for _ in range(m+1)]\n    for i in range(1, m+1):\n        for j in range(1, n+1):\n            if s1[i-1] == s2[j-1]: dp[i][j] = dp[i-1][j-1] + 1\n            else: dp[i][j] = max(dp[i-1][j], dp[i][j-1])\n    print(dp[m][n])\nelse:\n    print(0)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

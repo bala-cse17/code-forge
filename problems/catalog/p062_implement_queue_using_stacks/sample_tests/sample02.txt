@@ -1,0 +1,7 @@
+INPUT:
+3
+PUSH 5
+POP
+EMPTY
+EXPECTED:
+5 true

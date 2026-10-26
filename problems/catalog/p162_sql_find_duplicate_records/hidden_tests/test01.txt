@@ -1,0 +1,5 @@
+INPUT:
+CREATE TABLE Person (id INT, email TEXT);
+INSERT INTO Person VALUES (1, 'x@y.com'), (2, 'x@y.com'), (3, 'x@y.com');
+EXPECTED:
+x@y.com

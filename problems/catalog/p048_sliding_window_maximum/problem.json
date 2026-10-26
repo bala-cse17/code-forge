@@ -1,0 +1,55 @@
+{
+  "id": "p048_sliding_window_maximum",
+  "number": 48,
+  "slug": "sliding-window-maximum",
+  "category_id": 5,
+  "category_name": "Two Pointers and Sliding Window",
+  "title": "Sliding Window Maximum",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an array of integers `nums` and a sliding window of size `k` moving from left to right, return the max element in each window.",
+  "input_format": "First line contains `n` and `k`. Second line contains `n` integers.",
+  "output_format": "Space-separated maximums for each window.",
+  "constraints": "1 <= k <= n <= 10^5\n-10^4 <= nums[i] <= 10^4",
+  "sample_tests": [
+    {
+      "input": "8 3\n1 3 -1 -3 5 3 6 7",
+      "output": "3 3 5 5 6 7",
+      "explanation": "Maximums for each 3-element window."
+    },
+    {
+      "input": "1 1\n1",
+      "output": "1",
+      "explanation": "Single element window."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "4 2\n9 11 8 5 7",
+      "output": "11 11 8 7"
+    },
+    {
+      "input": "3 3\n1 2 3",
+      "output": "3"
+    },
+    {
+      "input": "5 1\n5 4 3 2 1",
+      "output": "5 4 3 2 1"
+    }
+  ],
+  "hints": [
+    "Use a monotonic decreasing double-ended queue (deque) storing indices.",
+    "Remove indices that fall outside the current window from the front.",
+    "Remove smaller elements from the back before adding the current element."
+  ],
+  "starter_code": {
+    "python": "# Sliding Window Maximum\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Sliding Window Maximum\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Sliding Window Maximum\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Sliding Window Maximum\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Sliding Window Maximum\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, k = int(data[0]), int(data[1])\n    nums = [int(x) for x in data[2:2+n]]\n    from collections import deque\n    dq = deque()\n    res = []\n    for i in range(n):\n        if dq and dq[0] < i - k + 1: dq.popleft()\n        while dq and nums[dq[-1]] < nums[i]: dq.pop()\n        dq.append(i)\n        if i >= k - 1: res.append(str(nums[dq[0]]))\n    print(' '.join(res))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

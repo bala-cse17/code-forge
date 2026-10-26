@@ -1,0 +1,5 @@
+INPUT:
+night
+thing
+EXPECTED:
+true

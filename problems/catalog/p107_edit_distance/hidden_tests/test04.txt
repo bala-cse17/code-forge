@@ -1,0 +1,5 @@
+INPUT:
+plasma
+altitude
+EXPECTED:
+6

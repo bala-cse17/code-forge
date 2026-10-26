@@ -1,0 +1,6 @@
+INPUT:
+4 1
+2 4 6 8
+QUERY 2 4
+EXPECTED:
+18

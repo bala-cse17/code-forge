@@ -1,0 +1,5 @@
+INPUT:
+a
+ab*
+EXPECTED:
+true

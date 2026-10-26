@@ -1,0 +1,5 @@
+INPUT:
+babgbag
+bag
+EXPECTED:
+5

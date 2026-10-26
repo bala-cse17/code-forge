@@ -1,0 +1,4 @@
+INPUT:
+race a car
+EXPECTED:
+false

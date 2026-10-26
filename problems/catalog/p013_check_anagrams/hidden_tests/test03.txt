@@ -1,0 +1,5 @@
+INPUT:
+cinema
+iceman
+EXPECTED:
+true

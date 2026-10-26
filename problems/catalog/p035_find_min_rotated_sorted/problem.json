@@ -1,0 +1,64 @@
+{
+  "id": "p035_find_min_rotated_sorted",
+  "number": 35,
+  "slug": "find-minimum-in-a-rotated-sorted-array",
+  "category_id": 4,
+  "category_name": "Searching and Sorting",
+  "title": "Find Minimum in a Rotated Sorted Array",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given the sorted rotated array `nums` of unique elements, return the minimum element of this array in O(log n) time.",
+  "input_format": "First line contains integer `n`, followed by `n` integers.",
+  "output_format": "The minimum element.",
+  "constraints": "1 <= n <= 5000\n-10^4 <= nums[i] <= 10^4",
+  "sample_tests": [
+    {
+      "input": "5\n3 4 5 1 2",
+      "output": "1",
+      "explanation": "Original was [1,2,3,4,5] rotated 3 times."
+    },
+    {
+      "input": "7\n4 5 6 7 0 1 2",
+      "output": "0",
+      "explanation": "Minimum is 0."
+    },
+    {
+      "input": "4\n11 13 15 17",
+      "output": "11",
+      "explanation": "Array is not rotated (or rotated n times)."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1\n10",
+      "output": "10"
+    },
+    {
+      "input": "2\n2 1",
+      "output": "1"
+    },
+    {
+      "input": "3\n3 1 2",
+      "output": "1"
+    },
+    {
+      "input": "5\n2 3 4 5 1",
+      "output": "1"
+    }
+  ],
+  "hints": [
+    "Compare nums[mid] to nums[r].",
+    "If nums[mid] > nums[r], the minimum must be in the right half (mid + 1 to r).",
+    "Otherwise, the minimum is in the left half including mid."
+  ],
+  "starter_code": {
+    "python": "# Find Minimum in a Rotated Sorted Array\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Find Minimum in a Rotated Sorted Array\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Find Minimum in a Rotated Sorted Array\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Find Minimum in a Rotated Sorted Array\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Find Minimum in a Rotated Sorted Array\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    nums = [int(x) for x in data[1:1+n]]\n    l, r = 0, n - 1\n    while l < r:\n        mid = (l + r) // 2\n        if nums[mid] > nums[r]: l = mid + 1\n        else: r = mid\n    print(nums[l])\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

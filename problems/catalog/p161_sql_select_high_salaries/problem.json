@@ -1,0 +1,43 @@
+{
+  "id": "p161_sql_select_high_salaries",
+  "number": 161,
+  "slug": "select-employees-with-high-salaries",
+  "category_id": 17,
+  "category_name": "Database and SQL",
+  "title": "Select Employees With High Salaries",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Write an SQL query to report the names and salaries of all employees who have a salary strictly greater than 50,000, ordered by salary descending.\n\nTable `Employee`: `id (INT), name (TEXT), salary (INT), department (TEXT)`",
+  "input_format": "Database contains table `Employee` with seed records.",
+  "output_format": "Table rows `name salary`.",
+  "constraints": "Salaries are positive integers.",
+  "sample_tests": [
+    {
+      "input": "CREATE TABLE Employee (id INT, name TEXT, salary INT, department TEXT);\nINSERT INTO Employee VALUES (1, 'Alice', 60000, 'Eng'), (2, 'Bob', 45000, 'Mkt'), (3, 'Charlie', 75000, 'Eng');",
+      "output": "Charlie 75000\nAlice 60000",
+      "explanation": "Employees earning > 50,000 ordered by salary desc."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "CREATE TABLE Employee (id INT, name TEXT, salary INT, department TEXT);\nINSERT INTO Employee VALUES (1, 'Dan', 30000, 'HR'), (2, 'Eve', 90000, 'Sales');",
+      "output": "Eve 90000"
+    }
+  ],
+  "hints": [
+    "Use `WHERE salary > 50000` to filter employees.",
+    "Include columns `name` and `salary` in the SELECT clause.",
+    "Sort results descending using `ORDER BY salary DESC`."
+  ],
+  "starter_code": {
+    "sql": "-- Select Employees With High Salaries\n-- Write your SQL query below\nSELECT ...\nFROM ...;\n",
+    "python": "# Select Employees With High Salaries (SQL Problem)\n# You can test via SQL query or Python\nimport sys\nprint('Run query in SQL tab')\n",
+    "c": "// SQL Problem: Select Employees With High Salaries\n",
+    "cpp": "// SQL Problem: Select Employees With High Salaries\n",
+    "java": "// SQL Problem: Select Employees With High Salaries\n",
+    "javascript": "// SQL Problem: Select Employees With High Salaries\n"
+  },
+  "reference_solution": "SELECT name, salary FROM Employee WHERE salary > 50000 ORDER BY salary DESC;",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

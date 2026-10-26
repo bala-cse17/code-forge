@@ -1,0 +1,51 @@
+{
+  "id": "p151_implement_a_trie",
+  "number": 151,
+  "slug": "implement-a-trie",
+  "category_id": 16,
+  "category_name": "Tries and Advanced Data Structures",
+  "title": "Implement a Trie",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "A trie (pronounced as 'try') or prefix tree is a tree data structure used to store and retrieve keys in a string dataset. Operations: `INSERT word`, `SEARCH word`, `STARTSWITH prefix`.",
+  "input_format": "First line contains integer `m`. Following `m` lines contain operations.",
+  "output_format": "Space-separated outputs of SEARCH and STARTSWITH commands (true/false).",
+  "constraints": "1 <= m <= 1000",
+  "sample_tests": [
+    {
+      "input": "5\nINSERT apple\nSEARCH apple\nSEARCH app\nSTARTSWITH app\nINSERT app",
+      "output": "true false true",
+      "explanation": "apple found, app not yet inserted, startsWith app is true."
+    },
+    {
+      "input": "3\nINSERT cat\nSEARCH cat\nSTARTSWITH ca",
+      "output": "true true",
+      "explanation": "Exact and prefix match."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "4\nINSERT hello\nSEARCH he\nSTARTSWITH he\nSEARCH hello",
+      "output": "false true true"
+    },
+    {
+      "input": "2\nSEARCH foo\nSTARTSWITH foo",
+      "output": "false false"
+    }
+  ],
+  "hints": [
+    "Represent Trie nodes with nested hash maps or an array of 26 child pointers.",
+    "Mark the end of a word with a special sentinel key like '#'.",
+    "Searching traverses the word and checks for the end sentinel; startsWith only requires that the path exists."
+  ],
+  "starter_code": {
+    "python": "# Implement a Trie\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Implement a Trie\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Implement a Trie\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Implement a Trie\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Implement a Trie\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nout = []\ntrie = {}\nif lines:\n    m = int(lines[0])\n    for line in lines[1:1+m]:\n        cmd = line.split()\n        if not cmd: continue\n        op, w = cmd[0], cmd[1]\n        if op == 'INSERT':\n            node = trie\n            for c in w: node = node.setdefault(c, {})\n            node['#'] = True\n        elif op == 'SEARCH':\n            node = trie\n            ok = True\n            for c in w:\n                if c not in node: ok = False; break\n                node = node[c]\n            out.append('true' if ok and '#' in node else 'false')\n        elif op == 'STARTSWITH':\n            node = trie\n            ok = True\n            for c in w:\n                if c not in node: ok = False; break\n                node = node[c]\n            out.append('true' if ok else 'false')\nprint(' '.join(out))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

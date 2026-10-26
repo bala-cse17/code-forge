@@ -1,0 +1,5 @@
+INPUT:
+oxcp
+qrsvwf
+EXPECTED:
+0

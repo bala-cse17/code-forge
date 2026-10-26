@@ -1,0 +1,6 @@
+INPUT:
+3
+cat bat rat
+the cattle was rattled by the battery
+EXPECTED:
+the cat was rat by the bat

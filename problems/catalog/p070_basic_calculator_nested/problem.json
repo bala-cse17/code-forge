@@ -1,0 +1,64 @@
+{
+  "id": "p070_basic_calculator_nested",
+  "number": 70,
+  "slug": "basic-calculator-with-nested-expressions",
+  "category_id": 7,
+  "category_name": "Stacks and Queues",
+  "title": "Basic Calculator With Nested Expressions",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Given a string `s` representing a valid expression containing digits, '+', '-', '(', and ')', evaluate the expression and return the integer result.",
+  "input_format": "A single line containing the expression `s`.",
+  "output_format": "The evaluated integer result.",
+  "constraints": "1 <= length(s) <= 3 * 10^5",
+  "sample_tests": [
+    {
+      "input": "1 + 1",
+      "output": "2",
+      "explanation": "Simple addition."
+    },
+    {
+      "input": " 2-1 + 2 ",
+      "output": "3",
+      "explanation": "Addition and subtraction with spaces."
+    },
+    {
+      "input": "(1+(4+5+2)-3)+(6+8)",
+      "output": "23",
+      "explanation": "Nested parentheses evaluation."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "-(2 + 3)",
+      "output": "-5"
+    },
+    {
+      "input": "(5 - (2 + 1))",
+      "output": "2"
+    },
+    {
+      "input": "10 - (2 + (3 - 1))",
+      "output": "6"
+    },
+    {
+      "input": "- (3 + (4 + 5))",
+      "output": "-12"
+    }
+  ],
+  "hints": [
+    "Use a stack to save the running result and current sign before '('",
+    "When ')' is encountered, multiply by saved sign and add saved previous sum.",
+    "Keep track of the unary sign (+1 or -1) for each term."
+  ],
+  "starter_code": {
+    "python": "# Basic Calculator With Nested Expressions\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Basic Calculator With Nested Expressions\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Basic Calculator With Nested Expressions\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Basic Calculator With Nested Expressions\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Basic Calculator With Nested Expressions\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ns = sys.stdin.read().rstrip('\\r\\n')\nstk = []\nnum = 0\nsign = 1\nans = 0\nfor c in s:\n    if c.isdigit(): num = num * 10 + int(c)\n    elif c in '+-':\n        ans += sign * num\n        num = 0\n        sign = 1 if c == '+' else -1\n    elif c == '(':\n        stk.append(ans)\n        stk.append(sign)\n        ans = 0\n        sign = 1\n    elif c == ')':\n        ans += sign * num\n        num = 0\n        ans *= stk.pop()\n        ans += stk.pop()\nans += sign * num\nprint(ans)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

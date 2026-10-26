@@ -1,0 +1,60 @@
+{
+  "id": "p066_daily_temperatures",
+  "number": 66,
+  "slug": "daily-temperatures",
+  "category_id": 7,
+  "category_name": "Stacks and Queues",
+  "title": "Daily Temperatures",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an array of integers `temperatures` representing daily temperatures, return an array `answer` such that `answer[i]` is the number of days you have to wait after the `i`th day to get a warmer temperature. If no future day is warmer, answer[i] = 0.",
+  "input_format": "First line contains integer `n`, followed by `n` temperatures.",
+  "output_format": "Space-separated wait days.",
+  "constraints": "1 <= n <= 10^5\n30 <= temperatures[i] <= 100",
+  "sample_tests": [
+    {
+      "input": "8\n73 74 75 71 69 72 76 73",
+      "output": "1 1 4 2 1 1 0 0",
+      "explanation": "Wait days until warmer day."
+    },
+    {
+      "input": "4\n30 40 50 60",
+      "output": "1 1 1 0",
+      "explanation": "Consecutively warmer days."
+    },
+    {
+      "input": "3\n30 60 90",
+      "output": "1 1 0",
+      "explanation": "Warmer next day."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1\n50",
+      "output": "0"
+    },
+    {
+      "input": "5\n89 62 70 58 47",
+      "output": "0 1 0 0 0"
+    },
+    {
+      "input": "4\n70 70 70 70",
+      "output": "0 0 0 0"
+    }
+  ],
+  "hints": [
+    "Store indices in a stack maintaining decreasing temperature order.",
+    "When a warmer temperature is encountered, calculate distance `i - prev`.",
+    "Pop resolved indices and record their waiting days."
+  ],
+  "starter_code": {
+    "python": "# Daily Temperatures\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Daily Temperatures\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Daily Temperatures\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Daily Temperatures\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Daily Temperatures\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    temps = [int(x) for x in data[1:1+n]]\n    ans = [0] * n\n    stk = []\n    for i, t in enumerate(temps):\n        while stk and temps[stk[-1]] < t:\n            prev = stk.pop()\n            ans[prev] = i - prev\n        stk.append(i)\n    print(' '.join(map(str, ans)))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

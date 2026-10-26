@@ -1,0 +1,51 @@
+{
+  "id": "p077_construct_binary_tree_traversals",
+  "number": 77,
+  "slug": "construct-binary-tree-from-traversals",
+  "category_id": 8,
+  "category_name": "Trees and Binary Search Trees",
+  "title": "Construct Binary Tree From Traversals",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given two integer arrays `preorder` and `inorder`, construct the binary tree and output its postorder traversal.",
+  "input_format": "First line contains integer `n`. Second line has `preorder`. Third line has `inorder`.",
+  "output_format": "Space-separated postorder values.",
+  "constraints": "1 <= n <= 3000",
+  "sample_tests": [
+    {
+      "input": "5\n3 9 20 15 7\n9 3 15 20 7",
+      "output": "9 15 7 20 3",
+      "explanation": "Postorder: left, right, root."
+    },
+    {
+      "input": "1\n-1\n-1",
+      "output": "-1",
+      "explanation": "Single node tree."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "3\n1 2 3\n2 1 3",
+      "output": "2 3 1"
+    },
+    {
+      "input": "4\n1 2 4 3\n4 2 1 3",
+      "output": "4 2 3 1"
+    }
+  ],
+  "hints": [
+    "The first element in preorder traversal is always the root.",
+    "Locate root in inorder: elements to the left form left subtree, right form right subtree.",
+    "Recurse on subtrees and append root last for postorder."
+  ],
+  "starter_code": {
+    "python": "# Construct Binary Tree From Traversals\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Construct Binary Tree From Traversals\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Construct Binary Tree From Traversals\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Construct Binary Tree From Traversals\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Construct Binary Tree From Traversals\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    pre = [int(x) for x in data[1:1+n]]\n    ino = [int(x) for x in data[1+n:1+2*n]]\n    ino_map = {v: i for i, v in enumerate(ino)}\n    post = []\n    def build(pre_l, pre_r, in_l, in_r):\n        if pre_l > pre_r: return\n        root_val = pre[pre_l]\n        mid = ino_map[root_val]\n        left_size = mid - in_l\n        build(pre_l + 1, pre_l + left_size, in_l, mid - 1)\n        build(pre_l + left_size + 1, pre_r, mid + 1, in_r)\n        post.append(str(root_val))\n    build(0, n - 1, 0, n - 1)\n    print(' '.join(post))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

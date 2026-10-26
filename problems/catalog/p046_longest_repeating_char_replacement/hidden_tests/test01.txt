@@ -1,0 +1,5 @@
+INPUT:
+ABCDE
+1
+EXPECTED:
+2

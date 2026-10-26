@@ -1,0 +1,47 @@
+{
+  "id": "p122_subsets",
+  "number": 122,
+  "slug": "subsets",
+  "category_id": 13,
+  "category_name": "Backtracking and Recursion",
+  "title": "Subsets",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given an integer array `nums` of unique elements, return the number of total subsets (the power set), followed by each subset on a new line (elements sorted, empty set as empty line).",
+  "input_format": "First line contains integer `n`, followed by `n` integers.",
+  "output_format": "First line contains total count, following lines contain subsets.",
+  "constraints": "1 <= n <= 10\n-10 <= nums[i] <= 10",
+  "sample_tests": [
+    {
+      "input": "3\n1 2 3",
+      "output": "8\n\n1\n2\n1 2\n3\n1 3\n2 3\n1 2 3",
+      "explanation": "Total 2^3 = 8 subsets."
+    },
+    {
+      "input": "1\n0",
+      "output": "2\n\n0",
+      "explanation": "Two subsets: empty and [0]."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2\n4 5",
+      "output": "4\n\n4\n5\n4 5"
+    }
+  ],
+  "hints": [
+    "For each element, there are two choices: include it or exclude it.",
+    "Total number of subsets for n elements is 2^n.",
+    "Backtracking explores all subsets by picking elements in ascending order."
+  ],
+  "starter_code": {
+    "python": "# Subsets\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Subsets\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Subsets\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Subsets\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Subsets\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    nums = sorted([int(x) for x in data[1:1+n]])\n    res = []\n    def bt(idx, cur):\n        res.append(list(cur))\n        for i in range(idx, n):\n            cur.append(nums[i])\n            bt(i + 1, cur)\n            cur.pop()\n    bt(0, [])\n    print(len(res))\n    for s in res:\n        print(' '.join(map(str, s)))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

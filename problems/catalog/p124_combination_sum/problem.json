@@ -1,0 +1,60 @@
+{
+  "id": "p124_combination_sum",
+  "number": 124,
+  "slug": "combination-sum",
+  "category_id": 13,
+  "category_name": "Backtracking and Recursion",
+  "title": "Combination Sum",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given an array of distinct integers `candidates` and a target integer `target`, return the count of unique combinations of candidates where the chosen numbers sum to target. A candidate may be chosen unlimited times.",
+  "input_format": "First line contains `n` and `target`. Second line contains `n` integers.",
+  "output_format": "Number of valid combinations.",
+  "constraints": "1 <= n <= 30\n1 <= target <= 500",
+  "sample_tests": [
+    {
+      "input": "4 7\n2 3 6 7",
+      "output": "2",
+      "explanation": "Combinations are [2,2,3] and [7]."
+    },
+    {
+      "input": "3 8\n2 3 5",
+      "output": "3",
+      "explanation": "Combinations: [2,2,2,2], [2,3,3], [3,5]."
+    },
+    {
+      "input": "1 2\n2",
+      "output": "1",
+      "explanation": "[2]."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1 1\n2",
+      "output": "0"
+    },
+    {
+      "input": "3 5\n1 2 5",
+      "output": "4"
+    },
+    {
+      "input": "4 10\n2 3 5 7",
+      "output": "5"
+    }
+  ],
+  "hints": [
+    "This is the unbounded knapsack / coin change combination counting problem.",
+    "Outer loop over candidate numbers ensures combinations (not permutations) are counted.",
+    "`dp[x] += dp[x - candidate]`."
+  ],
+  "starter_code": {
+    "python": "# Combination Sum\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Combination Sum\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Combination Sum\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Combination Sum\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Combination Sum\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, target = int(data[0]), int(data[1])\n    cands = [int(x) for x in data[2:2+n]]\n    dp = [0] * (target + 1)\n    dp[0] = 1\n    for c in cands:\n        for x in range(c, target + 1):\n            dp[x] += dp[x - c]\n    print(dp[target])\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

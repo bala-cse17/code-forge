@@ -1,0 +1,4 @@
+INPUT:
+ababcbacadefegdehijhklij
+EXPECTED:
+9 7 8

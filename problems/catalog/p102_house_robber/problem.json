@@ -1,0 +1,60 @@
+{
+  "id": "p102_house_robber",
+  "number": 102,
+  "slug": "house-robber",
+  "category_id": 11,
+  "category_name": "Dynamic Programming",
+  "title": "House Robber",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "You are a robber planning to rob houses along a street. Each house has a certain amount of money stashed. Adjacent houses have security systems connected that trigger alarms if two adjacent houses are broken into. Return the maximum amount of money you can rob without alerting the police.",
+  "input_format": "First line contains integer `n`, followed by `n` integers.",
+  "output_format": "Maximum stolen amount.",
+  "constraints": "1 <= n <= 100\n0 <= nums[i] <= 400",
+  "sample_tests": [
+    {
+      "input": "4\n1 2 3 1",
+      "output": "4",
+      "explanation": "Rob house 1 (money = 1) and house 3 (money = 3), total = 4."
+    },
+    {
+      "input": "5\n2 7 9 3 1",
+      "output": "12",
+      "explanation": "Rob house 1 (2), house 3 (9), house 5 (1), total = 12."
+    },
+    {
+      "input": "1\n10",
+      "output": "10",
+      "explanation": "Single house."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2\n5 1",
+      "output": "5"
+    },
+    {
+      "input": "3\n2 1 1",
+      "output": "3"
+    },
+    {
+      "input": "4\n2 1 1 2",
+      "output": "4"
+    }
+  ],
+  "hints": [
+    "At each house, decide whether to rob it or skip it.",
+    "`max_money[i] = max(nums[i] + max_money[i-2], max_money[i-1])`.",
+    "Maintain only the previous two states in variables."
+  ],
+  "starter_code": {
+    "python": "# House Robber\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// House Robber\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// House Robber\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// House Robber\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// House Robber\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    nums = [int(x) for x in data[1:1+n]]\n    rob1, rob2 = 0, 0\n    for n in nums:\n        temp = max(n + rob1, rob2)\n        rob1 = rob2\n        rob2 = temp\n    print(rob2)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

@@ -1,0 +1,5 @@
+INPUT:
+hello
+ll
+EXPECTED:
+2

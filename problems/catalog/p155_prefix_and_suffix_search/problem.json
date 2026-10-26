@@ -1,0 +1,51 @@
+{
+  "id": "p155_prefix_and_suffix_search",
+  "number": 155,
+  "slug": "implement-a-prefix-and-suffix-search",
+  "category_id": 16,
+  "category_name": "Tries and Advanced Data Structures",
+  "title": "Implement a Prefix and Suffix Search",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Design a data structure that searches for words with a given prefix and suffix. Output the highest index of the matching word, or -1.",
+  "input_format": "First line contains `n` and `m` (queries). Following `n` lines contain words. Following `m` lines contain `pref` and `suff`.",
+  "output_format": "Space-separated query answers.",
+  "constraints": "1 <= n <= 10^4\n1 <= m <= 1000",
+  "sample_tests": [
+    {
+      "input": "1 1\napple\na e",
+      "output": "0",
+      "explanation": "apple has prefix 'a' and suffix 'e' at index 0."
+    },
+    {
+      "input": "2 2\napple\napp\na e\na p",
+      "output": "0 1",
+      "explanation": "Queries match apple (0) and app (1)."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2 1\ncat\ndog\nc t",
+      "output": "0"
+    },
+    {
+      "input": "2 1\ncat\ndog\nd g",
+      "output": "1"
+    }
+  ],
+  "hints": [
+    "Insert combinations of `suffix + '#' + prefix` into a Trie.",
+    "Alternatively, index all prefix-suffix pairs in a dictionary mapping to the highest index.",
+    "Search looks up the exact pair in O(1) or Trie in O(length)."
+  ],
+  "starter_code": {
+    "python": "# Implement a Prefix and Suffix Search\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Implement a Prefix and Suffix Search\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Implement a Prefix and Suffix Search\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Implement a Prefix and Suffix Search\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Implement a Prefix and Suffix Search\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nif lines:\n    parts = lines[0].split()\n    n, m = int(parts[0]), int(parts[1])\n    words = lines[1:1+n]\n    lookup = {}\n    for idx, w in enumerate(words):\n        l = len(w)\n        for p_len in range(l + 1):\n            for s_len in range(l + 1):\n                lookup[(w[:p_len], w[l-s_len:])] = idx\n    out = []\n    for line in lines[1+n:1+n+m]:\n        cmd = line.split()\n        if len(cmd) == 2:\n            out.append(str(lookup.get((cmd[0], cmd[1]), -1)))\n    print(' '.join(out))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

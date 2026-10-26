@@ -1,0 +1,55 @@
+{
+  "id": "p135_reverse_bits",
+  "number": 135,
+  "slug": "reverse-bits",
+  "category_id": 14,
+  "category_name": "Bit Manipulation",
+  "title": "Reverse Bits",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Reverse bits of a given 32 bits unsigned integer. Output the reversed integer as an unsigned decimal integer.",
+  "input_format": "A single line containing integer `n`.",
+  "output_format": "The integer after reversing 32 bits.",
+  "constraints": "0 <= n <= 2^32 - 1",
+  "sample_tests": [
+    {
+      "input": "43261596",
+      "output": "964176192",
+      "explanation": "Bits reversed."
+    },
+    {
+      "input": "1",
+      "output": "2147483648",
+      "explanation": "1 reversed in 32 bits."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "0",
+      "output": "0"
+    },
+    {
+      "input": "4294967295",
+      "output": "4294967295"
+    },
+    {
+      "input": "2",
+      "output": "1073741824"
+    }
+  ],
+  "hints": [
+    "Iterate 32 times: shift result left by 1 and OR with the i-th bit of n.",
+    "Extract bit with `(n >> i) & 1`.",
+    "Accumulate result in O(1) time."
+  ],
+  "starter_code": {
+    "python": "# Reverse Bits\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Reverse Bits\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Reverse Bits\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Reverse Bits\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Reverse Bits\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    ans = 0\n    for i in range(32):\n        ans = (ans << 1) | ((n >> i) & 1)\n    print(ans)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

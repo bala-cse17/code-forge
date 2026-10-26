@@ -1,0 +1,64 @@
+{
+  "id": "p032_search_insert_position",
+  "number": 32,
+  "slug": "search-insert-position",
+  "category_id": 4,
+  "category_name": "Searching and Sorting",
+  "title": "Search Insert Position",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given a sorted array of distinct integers `nums` and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.",
+  "input_format": "First line contains `n` and `target`. Second line contains `n` sorted integers.",
+  "output_format": "Index to insert target.",
+  "constraints": "1 <= n <= 10^5\n-10^4 <= target <= 10^4",
+  "sample_tests": [
+    {
+      "input": "4 5\n1 3 5 6",
+      "output": "2",
+      "explanation": "5 is found at index 2."
+    },
+    {
+      "input": "4 2\n1 3 5 6",
+      "output": "1",
+      "explanation": "2 should be inserted at index 1."
+    },
+    {
+      "input": "4 7\n1 3 5 6",
+      "output": "4",
+      "explanation": "7 should be inserted at index 4."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "4 0\n1 3 5 6",
+      "output": "0"
+    },
+    {
+      "input": "1 0\n0",
+      "output": "0"
+    },
+    {
+      "input": "1 2\n1",
+      "output": "1"
+    },
+    {
+      "input": "3 3\n1 2 4",
+      "output": "2"
+    }
+  ],
+  "hints": [
+    "Binary search for the first index where nums[mid] >= target.",
+    "When the loop terminates with low > high, `low` is the exact insertion index.",
+    "Standard `bisect_left` performs this in O(log n)."
+  ],
+  "starter_code": {
+    "python": "# Search Insert Position\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Search Insert Position\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Search Insert Position\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Search Insert Position\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Search Insert Position\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, target = int(data[0]), int(data[1])\n    nums = [int(x) for x in data[2:2+n]]\n    import bisect\n    print(bisect.bisect_left(nums, target))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

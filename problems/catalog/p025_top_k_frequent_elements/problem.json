@@ -1,0 +1,60 @@
+{
+  "id": "p025_top_k_frequent_elements",
+  "number": 25,
+  "slug": "top-k-frequent-elements",
+  "category_id": 3,
+  "category_name": "Hashing and Frequency Counting",
+  "title": "Top K Frequent Elements",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an integer array `nums` and an integer `k`, return the `k` most frequent elements sorted descending by frequency.",
+  "input_format": "First line contains `n` and `k`. Second line contains `n` integers.",
+  "output_format": "Space-separated k most frequent elements.",
+  "constraints": "1 <= n <= 10^5\n1 <= k <= distinct elements",
+  "sample_tests": [
+    {
+      "input": "6 2\n1 1 1 2 2 3",
+      "output": "1 2",
+      "explanation": "1 has frequency 3, 2 has frequency 2."
+    },
+    {
+      "input": "1 1\n1",
+      "output": "1",
+      "explanation": "Single element."
+    },
+    {
+      "input": "4 1\n4 4 4 2",
+      "output": "4",
+      "explanation": "4 is most frequent."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "5 2\n1 2 2 3 3",
+      "output": "2 3"
+    },
+    {
+      "input": "3 3\n1 2 3",
+      "output": "1 2 3"
+    },
+    {
+      "input": "7 2\n10 10 10 20 20 30 40",
+      "output": "10 20"
+    }
+  ],
+  "hints": [
+    "Count frequencies using a hash map.",
+    "Use bucket sort or a min-heap to keep the k highest frequencies.",
+    "Python `Counter.most_common(k)` computes this efficiently."
+  ],
+  "starter_code": {
+    "python": "# Top K Frequent Elements\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Top K Frequent Elements\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Top K Frequent Elements\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Top K Frequent Elements\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Top K Frequent Elements\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, k = int(data[0]), int(data[1])\n    nums = [int(x) for x in data[2:2+n]]\n    from collections import Counter\n    counts = Counter(nums)\n    top = [x[0] for x in counts.most_common(k)]\n    print(' '.join(map(str, top)))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

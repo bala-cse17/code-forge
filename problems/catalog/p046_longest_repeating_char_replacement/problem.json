@@ -1,0 +1,60 @@
+{
+  "id": "p046_longest_repeating_char_replacement",
+  "number": 46,
+  "slug": "longest-repeating-character-replacement",
+  "category_id": 5,
+  "category_name": "Two Pointers and Sliding Window",
+  "title": "Longest Repeating Character Replacement",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given a string `s` that consists of only uppercase English letters and an integer `k`, return the length of the longest substring containing the same letter you can get after changing at most `k` characters.",
+  "input_format": "First line contains string `s`. Second line contains integer `k`.",
+  "output_format": "Maximum length of substring.",
+  "constraints": "1 <= length(s) <= 10^5\n0 <= k <= length(s)",
+  "sample_tests": [
+    {
+      "input": "ABAB\n2",
+      "output": "4",
+      "explanation": "Replace the two 'A's with 'B's or vice versa."
+    },
+    {
+      "input": "AABABBA\n1",
+      "output": "4",
+      "explanation": "Replace middle 'A' to form 'BBBB' length 4."
+    },
+    {
+      "input": "AAAA\n2",
+      "output": "4",
+      "explanation": "All characters already same."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "ABCDE\n1",
+      "output": "2"
+    },
+    {
+      "input": "ABBB\n2",
+      "output": "4"
+    },
+    {
+      "input": "BAAA\n0",
+      "output": "3"
+    }
+  ],
+  "hints": [
+    "Use a sliding window where condition is: window length - max_count <= k.",
+    "max_count is the frequency of the most common character in the current window.",
+    "If window is invalid, increment left pointer to restore validity."
+  ],
+  "starter_code": {
+    "python": "# Longest Repeating Character Replacement\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Longest Repeating Character Replacement\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Longest Repeating Character Replacement\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Longest Repeating Character Replacement\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Longest Repeating Character Replacement\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().split()\nif len(lines) >= 2:\n    s, k = lines[0], int(lines[1])\n    from collections import defaultdict\n    counts = defaultdict(int)\n    l = mx_cnt = ans = 0\n    for r, c in enumerate(s):\n        counts[c] += 1\n        mx_cnt = max(mx_cnt, counts[c])\n        if (r - l + 1) - mx_cnt > k:\n            counts[s[l]] -= 1\n            l += 1\n        ans = max(ans, r - l + 1)\n    print(ans)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

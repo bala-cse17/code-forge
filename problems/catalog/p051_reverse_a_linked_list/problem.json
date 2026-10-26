@@ -1,0 +1,60 @@
+{
+  "id": "p051_reverse_a_linked_list",
+  "number": 51,
+  "slug": "reverse-a-linked-list",
+  "category_id": 6,
+  "category_name": "Linked Lists",
+  "title": "Reverse a Linked List",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given the head of a singly linked list represented as space-separated integers, reverse the list and output the reversed values.",
+  "input_format": "First line contains integer `n`, followed by `n` node values.",
+  "output_format": "Space-separated reversed node values.",
+  "constraints": "0 <= n <= 5000\n-5000 <= node.val <= 5000",
+  "sample_tests": [
+    {
+      "input": "5\n1 2 3 4 5",
+      "output": "5 4 3 2 1",
+      "explanation": "Reversed linked list."
+    },
+    {
+      "input": "2\n1 2",
+      "output": "2 1",
+      "explanation": "Two nodes reversed."
+    },
+    {
+      "input": "0\n",
+      "output": "",
+      "explanation": "Empty list."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1\n10",
+      "output": "10"
+    },
+    {
+      "input": "4\n9 8 7 6",
+      "output": "6 7 8 9"
+    },
+    {
+      "input": "3\n0 1 0",
+      "output": "0 1 0"
+    }
+  ],
+  "hints": [
+    "Iterative solution maintains `prev = None` and `curr = head`.",
+    "Save `nxt = curr.next`, then redirect `curr.next = prev`.",
+    "Advance `prev = curr` and `curr = nxt`."
+  ],
+  "starter_code": {
+    "python": "# Reverse a Linked List\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Reverse a Linked List\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Reverse a Linked List\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Reverse a Linked List\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Reverse a Linked List\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    vals = data[1:1+n]\n    print(' '.join(reversed(vals)))\nelse:\n    print('')\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

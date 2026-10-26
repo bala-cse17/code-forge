@@ -1,0 +1,64 @@
+{
+  "id": "p008_three_sum",
+  "number": 8,
+  "slug": "three-sum",
+  "category_id": 1,
+  "category_name": "Arrays",
+  "title": "Three Sum",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an integer array `nums`, return the number of distinct triplets `[nums[i], nums[j], nums[k]]` such that `i != j != k` and `nums[i] + nums[j] + nums[k] == 0`.",
+  "input_format": "First line contains integer `n`, followed by `n` integers.",
+  "output_format": "Count of unique zero-sum triplets.",
+  "constraints": "3 <= n <= 3000\n-10^5 <= nums[i] <= 10^5",
+  "sample_tests": [
+    {
+      "input": "6\n-1 0 1 2 -1 -4",
+      "output": "2",
+      "explanation": "Triplets: [-1,-1,2] and [-1,0,1]."
+    },
+    {
+      "input": "3\n0 1 1",
+      "output": "0",
+      "explanation": "No triplet sums to 0."
+    },
+    {
+      "input": "3\n0 0 0",
+      "output": "1",
+      "explanation": "Triplet [0,0,0] sums to 0."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "5\n-2 0 1 1 2",
+      "output": "2"
+    },
+    {
+      "input": "4\n-1 -1 0 2",
+      "output": "1"
+    },
+    {
+      "input": "6\n-4 -1 -1 0 1 2",
+      "output": "2"
+    },
+    {
+      "input": "4\n1 2 3 4",
+      "output": "0"
+    }
+  ],
+  "hints": [
+    "Sort the array first to make duplicate elimination easy.",
+    "Fix the first number nums[i], then use two pointers on the remainder.",
+    "Skip consecutive equal elements to count only unique triplets."
+  ],
+  "starter_code": {
+    "python": "# Three Sum\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Three Sum\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Three Sum\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Three Sum\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Three Sum\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    nums = sorted([int(x) for x in data[1:1+n]])\n    cnt = 0\n    for i in range(n - 2):\n        if i > 0 and nums[i] == nums[i-1]: continue\n        l, r = i + 1, n - 1\n        while l < r:\n            s = nums[i] + nums[l] + nums[r]\n            if s == 0:\n                cnt += 1\n                while l < r and nums[l] == nums[l+1]: l += 1\n                while l < r and nums[r] == nums[r-1]: r -= 1\n                l += 1; r -= 1\n            elif s < 0: l += 1\n            else: r -= 1\n    print(cnt)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

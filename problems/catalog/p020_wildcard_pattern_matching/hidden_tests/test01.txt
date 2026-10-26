@@ -1,0 +1,5 @@
+INPUT:
+adceb
+*a*b
+EXPECTED:
+true

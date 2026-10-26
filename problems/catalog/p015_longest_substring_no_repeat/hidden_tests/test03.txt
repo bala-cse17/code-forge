@@ -1,0 +1,4 @@
+INPUT:
+dvdf
+EXPECTED:
+3

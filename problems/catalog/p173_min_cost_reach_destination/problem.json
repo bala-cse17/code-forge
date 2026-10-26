@@ -1,0 +1,51 @@
+{
+  "id": "p173_min_cost_reach_destination",
+  "number": 173,
+  "slug": "minimum-cost-to-reach-destination",
+  "category_id": 18,
+  "category_name": "Mixed Advanced Problems",
+  "title": "Minimum Cost to Reach Destination",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "There is a country with `n` cities connected by directed roads with toll costs. Find the minimum cost to travel from city 0 to city `n - 1`. If destination is unreachable, return -1.",
+  "input_format": "First line contains `n` and `m` (roads). Following `m` lines contain `u`, `v`, and `cost`.",
+  "output_format": "Minimum travel cost or -1.",
+  "constraints": "1 <= n <= 1000\n0 <= m <= 10^4",
+  "sample_tests": [
+    {
+      "input": "4 4\n0 1 10\n1 2 20\n2 3 30\n0 3 100",
+      "output": "60",
+      "explanation": "Path 0 -> 1 -> 2 -> 3 costs 10 + 20 + 30 = 60."
+    },
+    {
+      "input": "3 1\n0 1 5",
+      "output": "-1",
+      "explanation": "City 2 unreachable."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1 0",
+      "output": "0"
+    },
+    {
+      "input": "2 1\n0 1 15",
+      "output": "15"
+    }
+  ],
+  "hints": [
+    "Use Dijkstra's algorithm with a priority queue for single-source shortest path.",
+    "Initialize distances with infinity, dist[0] = 0.",
+    "Relax edges greedily until destination is visited."
+  ],
+  "starter_code": {
+    "python": "# Minimum Cost to Reach Destination\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Minimum Cost to Reach Destination\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Minimum Cost to Reach Destination\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Minimum Cost to Reach Destination\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Minimum Cost to Reach Destination\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys, heapq\nlines = sys.stdin.read().splitlines()\nif lines:\n    parts = lines[0].split()\n    n, m = int(parts[0]), int(parts[1])\n    adj = [[] for _ in range(n)]\n    for line in lines[1:1+m]:\n        uvc = [int(x) for x in line.split()]\n        if len(uvc) == 3: adj[uvc[0]].append((uvc[1], uvc[2]))\n    dist = [float('inf')] * n\n    dist[0] = 0\n    pq = [(0, 0)]\n    while pq:\n        d, u = heapq.heappop(pq)\n        if d > dist[u]: continue\n        for v, w in adj[u]:\n            if dist[u] + w < dist[v]:\n                dist[v] = dist[u] + w\n                heapq.heappush(pq, (dist[v], v))\n    print(dist[n-1] if dist[n-1] != float('inf') else -1)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

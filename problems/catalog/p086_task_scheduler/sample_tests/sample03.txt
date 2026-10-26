@@ -1,0 +1,5 @@
+INPUT:
+6 2
+A A A A A B
+EXPECTED:
+13

@@ -1,0 +1,5 @@
+INPUT:
+mississippi
+mis*is*p*.
+EXPECTED:
+false

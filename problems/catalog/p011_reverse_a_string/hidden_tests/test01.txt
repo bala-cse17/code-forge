@@ -1,0 +1,4 @@
+INPUT:
+OpenAI
+EXPECTED:
+IAnepO

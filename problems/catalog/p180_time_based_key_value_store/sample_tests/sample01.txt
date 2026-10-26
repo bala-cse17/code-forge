@@ -1,0 +1,8 @@
+INPUT:
+4
+SET foo bar 1
+GET foo 1
+GET foo 3
+SET foo bar2 4
+EXPECTED:
+bar bar

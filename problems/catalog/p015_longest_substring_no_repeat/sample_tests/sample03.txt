@@ -1,0 +1,4 @@
+INPUT:
+pwwkew
+EXPECTED:
+3

@@ -1,0 +1,51 @@
+{
+  "id": "p175_shortest_path_with_restrictions",
+  "number": 175,
+  "slug": "shortest-path-with-restrictions",
+  "category_id": 18,
+  "category_name": "Mixed Advanced Problems",
+  "title": "Shortest Path With Restrictions",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "There is an undirected graph with `n` nodes. Some nodes are restricted and cannot be visited. Return the number of reachable nodes starting from node 0 without visiting any restricted node.",
+  "input_format": "First line contains `n`, `m` (edges), and `k` (restricted count). Following `m` lines contain edges. Next line contains restricted nodes.",
+  "output_format": "Count of reachable nodes.",
+  "constraints": "1 <= n <= 10^5\n0 <= k < n",
+  "sample_tests": [
+    {
+      "input": "7 6 2\n0 1\n1 2\n3 1\n4 0\n0 5\n5 6\n4 5",
+      "output": "4",
+      "explanation": "Restricted nodes are 4 and 5. Reachable from 0: {0, 1, 2, 3} (total 4)."
+    },
+    {
+      "input": "4 3 1\n2 1\n1 0\n0 3\n1",
+      "output": "2",
+      "explanation": "Restricted node is 1. Reachable from 0: {0, 3} (total 2)."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2 1 0\n0 1\n",
+      "output": "2"
+    },
+    {
+      "input": "3 1 1\n0 1\n1",
+      "output": "1"
+    }
+  ],
+  "hints": [
+    "Store restricted nodes in a hash set for O(1) checks.",
+    "Run BFS or DFS starting from node 0.",
+    "Only traverse edges leading to unvisited, non-restricted nodes."
+  ],
+  "starter_code": {
+    "python": "# Shortest Path With Restrictions\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Shortest Path With Restrictions\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Shortest Path With Restrictions\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Shortest Path With Restrictions\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Shortest Path With Restrictions\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nif lines:\n    parts = lines[0].split()\n    n, m, k = int(parts[0]), int(parts[1]), int(parts[2])\n    adj = [[] for _ in range(n)]\n    for line in lines[1:1+m]:\n        uv = [int(x) for x in line.split()]\n        if len(uv) == 2:\n            adj[uv[0]].append(uv[1]); adj[uv[1]].append(uv[0])\n    restr = set([int(x) for x in lines[1+m].split()]) if k > 0 and len(lines) > 1+m else set()\n    from collections import deque\n    q = deque([0])\n    visited = {0}\n    while q:\n        u = q.popleft()\n        for v in adj[u]:\n            if v not in visited and v not in restr:\n                visited.add(v)\n                q.append(v)\n    print(len(visited))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

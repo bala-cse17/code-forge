@@ -1,0 +1,4 @@
+INPUT:
+5
+EXPECTED:
+1 2 Fizz 4 Buzz

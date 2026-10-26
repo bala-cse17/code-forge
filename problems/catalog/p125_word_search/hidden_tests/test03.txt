@@ -1,0 +1,6 @@
+INPUT:
+2 2 ABBA
+A B
+B A
+EXPECTED:
+true

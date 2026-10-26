@@ -1,0 +1,43 @@
+{
+  "id": "p165_sql_department_highest_salary",
+  "number": 165,
+  "slug": "department-highest-salary",
+  "category_id": 17,
+  "category_name": "Database and SQL",
+  "title": "Department Highest Salary",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Write an SQL query to find employees who have the highest salary in each of the departments.\n\nTable `Employee`: `id (INT), name (TEXT), salary (INT), departmentId (INT)`\nTable `Department`: `id (INT), name (TEXT)`",
+  "input_format": "Database contains tables `Employee` and `Department`.",
+  "output_format": "Rows formatted as `Department Employee Salary`.",
+  "constraints": "Ties for highest salary should all be included.",
+  "sample_tests": [
+    {
+      "input": "CREATE TABLE Department (id INT, name TEXT);\nCREATE TABLE Employee (id INT, name TEXT, salary INT, departmentId INT);\nINSERT INTO Department VALUES (1, 'IT'), (2, 'Sales');\nINSERT INTO Employee VALUES (1, 'Joe', 85000, 1), (2, 'Henry', 80000, 2), (3, 'Sam', 60000, 2), (4, 'Max', 90000, 1);",
+      "output": "IT Max 90000\nSales Henry 80000",
+      "explanation": "Department top earners."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "CREATE TABLE Department (id INT, name TEXT);\nCREATE TABLE Employee (id INT, name TEXT, salary INT, departmentId INT);\nINSERT INTO Department VALUES (1, 'IT');\nINSERT INTO Employee VALUES (1, 'Jim', 90000, 1), (2, 'Kim', 90000, 1);",
+      "output": "IT Jim 90000\nIT Kim 90000"
+    }
+  ],
+  "hints": [
+    "Join `Employee` and `Department`.",
+    "Filter with subquery `(departmentId, salary) IN (SELECT departmentId, MAX(salary) FROM Employee GROUP BY departmentId)`.",
+    "Select Department name, Employee name, and Salary."
+  ],
+  "starter_code": {
+    "sql": "-- Department Highest Salary\n-- Write your SQL query below\nSELECT ...\nFROM ...;\n",
+    "python": "# Department Highest Salary (SQL Problem)\n# You can test via SQL query or Python\nimport sys\nprint('Run query in SQL tab')\n",
+    "c": "// SQL Problem: Department Highest Salary\n",
+    "cpp": "// SQL Problem: Department Highest Salary\n",
+    "java": "// SQL Problem: Department Highest Salary\n",
+    "javascript": "// SQL Problem: Department Highest Salary\n"
+  },
+  "reference_solution": "SELECT d.name, e.name, e.salary FROM Employee e JOIN Department d ON e.departmentId = d.id WHERE (e.departmentId, e.salary) IN (SELECT departmentId, MAX(salary) FROM Employee GROUP BY departmentId);",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

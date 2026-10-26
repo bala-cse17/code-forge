@@ -1,0 +1,60 @@
+{
+  "id": "p055_remove_nth_node_from_end",
+  "number": 55,
+  "slug": "remove-nth-node-from-end",
+  "category_id": 6,
+  "category_name": "Linked Lists",
+  "title": "Remove Nth Node From End",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given the head of a linked list, remove the `n`th node from the end of the list and return its elements.",
+  "input_format": "First line contains total nodes `len` and `n`. Second line contains the node values.",
+  "output_format": "Space-separated remaining node values.",
+  "constraints": "1 <= len <= 30\n1 <= n <= len",
+  "sample_tests": [
+    {
+      "input": "5 2\n1 2 3 4 5",
+      "output": "1 2 3 5",
+      "explanation": "The 2nd node from end (4) is removed."
+    },
+    {
+      "input": "1 1\n1",
+      "output": "",
+      "explanation": "Removing the only node leaves empty list."
+    },
+    {
+      "input": "2 1\n1 2",
+      "output": "1",
+      "explanation": "Last node removed."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2 2\n1 2",
+      "output": "2"
+    },
+    {
+      "input": "4 3\n10 20 30 40",
+      "output": "10 30 40"
+    },
+    {
+      "input": "3 1\n1 2 3",
+      "output": "1 2"
+    }
+  ],
+  "hints": [
+    "Use two pointers fast and slow separated by n nodes.",
+    "Advance fast n steps ahead first.",
+    "Then advance both together until fast reaches the end; slow is right before the target node."
+  ],
+  "starter_code": {
+    "python": "# Remove Nth Node From End\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Remove Nth Node From End\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Remove Nth Node From End\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Remove Nth Node From End\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Remove Nth Node From End\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    length, n = int(data[0]), int(data[1])\n    vals = data[2:2+length]\n    del vals[length - n]\n    print(' '.join(vals))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

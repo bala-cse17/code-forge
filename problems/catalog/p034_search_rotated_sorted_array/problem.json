@@ -1,0 +1,64 @@
+{
+  "id": "p034_search_rotated_sorted_array",
+  "number": 34,
+  "slug": "search-in-a-rotated-sorted-array",
+  "category_id": 4,
+  "category_name": "Searching and Sorting",
+  "title": "Search in a Rotated Sorted Array",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given an integer array `nums` sorted in ascending order (with distinct values) that was rotated at an unknown pivot, find the index of `target` or -1.",
+  "input_format": "First line contains `n` and `target`. Second line contains `n` integers.",
+  "output_format": "Index of target or -1.",
+  "constraints": "1 <= n <= 5000\n-10^4 <= nums[i] <= 10^4",
+  "sample_tests": [
+    {
+      "input": "7 0\n4 5 6 7 0 1 2",
+      "output": "4",
+      "explanation": "0 is at index 4."
+    },
+    {
+      "input": "7 3\n4 5 6 7 0 1 2",
+      "output": "-1",
+      "explanation": "3 does not exist."
+    },
+    {
+      "input": "1 0\n0",
+      "output": "0",
+      "explanation": "Single element match."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "3 1\n3 1 2",
+      "output": "1"
+    },
+    {
+      "input": "5 4\n5 1 2 3 4",
+      "output": "4"
+    },
+    {
+      "input": "2 3\n3 1",
+      "output": "0"
+    },
+    {
+      "input": "4 2\n2 4 6 8",
+      "output": "0"
+    }
+  ],
+  "hints": [
+    "In a rotated sorted array, one half is always sorted.",
+    "Check whether nums[l] <= nums[mid] to determine if left half is sorted.",
+    "Decide whether the target lies within the sorted half to adjust search boundaries."
+  ],
+  "starter_code": {
+    "python": "# Search in a Rotated Sorted Array\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Search in a Rotated Sorted Array\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Search in a Rotated Sorted Array\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Search in a Rotated Sorted Array\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Search in a Rotated Sorted Array\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, target = int(data[0]), int(data[1])\n    nums = [int(x) for x in data[2:2+n]]\n    l, r = 0, n - 1\n    ans = -1\n    while l <= r:\n        mid = (l + r) // 2\n        if nums[mid] == target: ans = mid; break\n        if nums[l] <= nums[mid]:\n            if nums[l] <= target < nums[mid]: r = mid - 1\n            else: l = mid + 1\n        else:\n            if nums[mid] < target <= nums[r]: l = mid + 1\n            else: r = mid - 1\n    print(ans)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

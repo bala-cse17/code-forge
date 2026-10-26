@@ -1,0 +1,7 @@
+INPUT:
+3 worldabcefghijkmnpqstuvxyz
+word
+world
+row
+EXPECTED:
+false

@@ -1,0 +1,5 @@
+INPUT:
+BAAA
+0
+EXPECTED:
+3

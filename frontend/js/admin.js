@@ -67,6 +67,9 @@ const Admin = {
       this.loadSets();
       this.loadTierLocks();
       this.loadProctorLogs();
+      this.loadAnalytics();
+      this.loadParticipants();
+      this.loadAuditLogs();
       this.checkHealth();
     } else {
       if (gateEl) gateEl.style.display = 'block';
@@ -585,6 +588,238 @@ const Admin = {
       }
     } catch (e) {
       console.warn('Error loading proctor logs:', e);
+    }
+  },
+
+  async loadAnalytics() {
+    try {
+      const res = await fetch('/api/admin/analytics', { headers: this.getAuthHeaders() });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data.analytics) return;
+      const an = data.analytics;
+
+      const pEl = document.getElementById('admin-stat-participants');
+      const sEl = document.getElementById('admin-stat-submissions');
+      const aEl = document.getElementById('admin-stat-accepted');
+      const rEl = document.getElementById('admin-stat-rate');
+      const langEl = document.getElementById('admin-lang-breakdown');
+      const diffEl = document.getElementById('admin-diff-breakdown');
+
+      if (pEl) pEl.textContent = an.total_participants ?? 0;
+      if (sEl) sEl.textContent = an.total_submissions ?? 0;
+      if (aEl) aEl.textContent = an.accepted_submissions ?? 0;
+      if (rEl) rEl.textContent = `${an.acceptance_rate ?? 0}%`;
+
+      if (langEl) {
+        const langs = Object.entries(an.languages || {});
+        if (langs.length === 0) {
+          langEl.innerHTML = '<span style="color:var(--text-muted);">No submissions recorded yet.</span>';
+        } else {
+          langEl.innerHTML = langs.map(([l, c]) => `
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
+              <span style="text-transform:capitalize; color:#fff;">${l}</span>
+              <strong style="color:var(--accent-cyan);">${c}</strong>
+            </div>
+          `).join('');
+        }
+      }
+
+      if (diffEl) {
+        const diffs = Object.entries(an.difficulty_solves || {});
+        if (diffs.length === 0) {
+          diffEl.innerHTML = '<span style="color:var(--text-muted);">No accepted solves yet.</span>';
+        } else {
+          diffEl.innerHTML = diffs.map(([d, c]) => `
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem;">
+              <span style="text-transform:capitalize; color:#fff;">${d}</span>
+              <strong style="color:var(--accent-green);">${c}</strong>
+            </div>
+          `).join('');
+        }
+      }
+    } catch (e) {
+      console.warn('Error loading analytics:', e);
+    }
+  },
+
+  async loadParticipants() {
+    try {
+      const res = await fetch('/api/participants', { headers: this.getAuthHeaders() });
+      if (!res.ok) return;
+      const data = await res.json();
+      const parts = data.participants || [];
+      const tbody = document.getElementById('admin-participants-table-body');
+      if (!tbody) return;
+
+      if (parts.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:1.5rem;">No participants registered yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = parts.map(p => `
+        <tr>
+          <td><strong style="color:#fff;">${p.name}</strong></td>
+          <td><code style="font-family:var(--font-mono); color:var(--accent-cyan); font-size:0.8rem;">${p.reg_no}</code></td>
+          <td style="color:var(--text-secondary);">${p.college || '-'}</td>
+          <td><span style="font-weight:700; color:var(--accent-cyan);">${p.score || 0} pts</span></td>
+          <td>
+            <div style="display:flex; gap:0.4rem;">
+              <button class="btn btn-secondary" style="font-size:0.75rem; padding:0.2rem 0.5rem;" onclick="Admin.resetParticipantScore('${p.id}')" title="Reset score to 0">🔄 Reset</button>
+              <button class="btn btn-danger" style="font-size:0.75rem; padding:0.2rem 0.5rem; color:var(--accent-red); border-color:var(--accent-red); background:transparent;" onclick="Admin.deleteParticipant('${p.id}')" title="Delete participant">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      console.warn('Error loading participants:', e);
+    }
+  },
+
+  async resetParticipantScore(pid) {
+    if (!confirm('Are you sure you want to reset this participant’s score and solved problems to 0?')) return;
+    try {
+      const res = await fetch('/api/admin/participant/reset-score', {
+        method: 'POST',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify({ token: this.getToken(), participant_id: pid })
+      });
+      const data = await res.json();
+      if (data.success) {
+        App.showToast('Participant score reset to 0.', 'success');
+        this.loadParticipants();
+        App.loadLeaderboard();
+      } else {
+        App.showToast(data.error || 'Failed to reset score', 'error');
+      }
+    } catch (e) {
+      App.showToast('Network error: ' + e.message, 'error');
+    }
+  },
+
+  async deleteParticipant(pid) {
+    if (!confirm('Permanently delete this participant and all associated submissions?')) return;
+    try {
+      const res = await fetch('/api/admin/participant/delete', {
+        method: 'POST',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify({ token: this.getToken(), participant_id: pid })
+      });
+      const data = await res.json();
+      if (data.success) {
+        App.showToast('Participant removed successfully.', 'success');
+        this.loadParticipants();
+        App.loadLeaderboard();
+      } else {
+        App.showToast(data.error || 'Failed to delete participant', 'error');
+      }
+    } catch (e) {
+      App.showToast('Network error: ' + e.message, 'error');
+    }
+  },
+
+  async loadAuditLogs() {
+    try {
+      const res = await fetch('/api/admin/audit-logs', { headers: this.getAuthHeaders() });
+      if (!res.ok) return;
+      const data = await res.json();
+      const logs = data.logs || [];
+      const tbody = document.getElementById('admin-audit-table-body');
+      if (!tbody) return;
+
+      if (logs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding:1rem;">No audit logs recorded yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = logs.map(l => `
+        <tr>
+          <td style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">${(l.timestamp || '').replace('T', ' ').slice(0, 19)}</td>
+          <td><span class="badge badge-easy" style="font-size:0.7rem;">${l.action}</span></td>
+          <td style="color:var(--text-secondary); font-size:0.8rem;">${l.details}</td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      console.warn('Error loading audit logs:', e);
+    }
+  },
+
+  async createContest(e) {
+    if (e) e.preventDefault();
+    const title = document.getElementById('admin-contest-title')?.value.trim();
+    const desc = document.getElementById('admin-contest-desc')?.value.trim();
+    const status = document.getElementById('admin-contest-status')?.value || 'upcoming';
+
+    if (!title) {
+      App.showToast('Contest title is required.', 'warning');
+      return;
+    }
+
+    const cid = 'contest_' + Date.now().toString(36);
+    try {
+      const res = await fetch('/api/admin/contest/create', {
+        method: 'POST',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify({
+          token: this.getToken(),
+          id: cid,
+          title: title,
+          description: desc,
+          status: status
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        App.showToast(`Contest "${title}" created successfully!`, 'success');
+        document.getElementById('admin-contest-title').value = '';
+        document.getElementById('admin-contest-desc').value = '';
+        this.loadAuditLogs();
+      } else {
+        App.showToast(data.error || 'Failed to create contest', 'error');
+      }
+    } catch (err) {
+      App.showToast('Network error: ' + err.message, 'error');
+    }
+  },
+
+  async saveProblem(e) {
+    if (e) e.preventDefault();
+    const pid = document.getElementById('admin-prob-id')?.value.trim();
+    const title = document.getElementById('admin-prob-title')?.value.trim();
+    const diff = document.getElementById('admin-prob-diff')?.value || 'Easy';
+    const pts = parseInt(document.getElementById('admin-prob-pts')?.value || '100', 10);
+    const desc = document.getElementById('admin-prob-desc')?.value.trim();
+    const constraints = document.getElementById('admin-prob-constraints')?.value.trim();
+
+    if (!pid || !title || !desc) {
+      App.showToast('Problem ID, Title, and Description are required.', 'warning');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/admin/problem/save', {
+        method: 'POST',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify({
+          token: this.getToken(),
+          id: pid,
+          title: title,
+          difficulty: diff,
+          points: pts,
+          description: desc,
+          constraints: constraints
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        App.showToast(`Problem "${title}" saved successfully!`, 'success');
+        this.loadAuditLogs();
+        App.loadProblems();
+      } else {
+        App.showToast(data.error || 'Failed to save problem', 'error');
+      }
+    } catch (err) {
+      App.showToast('Network error: ' + err.message, 'error');
     }
   }
 };

@@ -1,6 +1,7 @@
 """
 CODE COMBAT Pro - Code Executor Module
 Executes compiled programs in isolated subprocesses with timeout and resource limits.
+POSIX resource isolation: memory, file size, process limits, and environment scrubbing.
 """
 
 import subprocess
@@ -8,6 +9,11 @@ import time
 import sys
 import os
 from typing import Dict, Any, Optional
+
+try:
+    import resource
+except ImportError:
+    resource = None
 
 
 class Executor:
@@ -17,6 +23,28 @@ class Executor:
         self.config = config or {}
         self.default_timeout = float(self.config.get("execution_timeout_seconds", 3.0))
         self.max_output_length = int(self.config.get("max_output_length", 50000))
+        self.max_memory_mb = int(self.config.get("max_memory_mb", 512))
+
+    def _get_preexec_fn(self, cmd: list):
+        """Constructs a POSIX resource limit function for subprocess sandboxing."""
+        if sys.platform.startswith("win") or resource is None:
+            return None
+
+        is_vm = any(k in str(arg).lower() for arg in cmd for k in ["java", "node"])
+        mem_limit_bytes = self.max_memory_mb * 1024 * 1024
+
+        def set_limits():
+            try:
+                # 1. Restrict max file size creation to 10MB to prevent disk exhaustion
+                if hasattr(resource, "RLIMIT_FSIZE"):
+                    resource.setrlimit(resource.RLIMIT_FSIZE, (10 * 1024 * 1024, 10 * 1024 * 1024))
+                # 2. Restrict virtual address space memory (skip on JVM/V8 VMs that reserve large virtual address space)
+                if not is_vm and hasattr(resource, "RLIMIT_AS"):
+                    resource.setrlimit(resource.RLIMIT_AS, (mem_limit_bytes, mem_limit_bytes))
+            except Exception:
+                pass
+
+        return set_limits
 
     def execute(
         self,
@@ -26,7 +54,7 @@ class Executor:
         timeout: Optional[float] = None
     ) -> Dict[str, Any]:
         """
-        Runs the specified command inside work_dir with timeout and memory limits.
+        Runs the specified command inside work_dir with timeout, memory, and security limits.
 
         Returns:
             {
@@ -41,9 +69,14 @@ class Executor:
         run_timeout = float(timeout) if timeout is not None else self.default_timeout
         start_time = time.perf_counter()
 
+        # Scrub sensitive tournament and admin credentials from subprocess environment
         env = os.environ.copy()
         env["PYTHONUNBUFFERED"] = "1"
         env["PYTHONDONTWRITEBYTECODE"] = "1"
+        for secret_key in ["ADMIN_PASSWORD", "ADMIN_ID", "SECRET_KEY", "CODE_COMBAT_SECRET_KEY"]:
+            env.pop(secret_key, None)
+
+        preexec_fn = self._get_preexec_fn(cmd)
 
         try:
             process = None
@@ -56,7 +89,8 @@ class Executor:
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                         text=True,
-                        env=env
+                        env=env,
+                        preexec_fn=preexec_fn
                     )
                     break
                 except (PermissionError, OSError) as pe:

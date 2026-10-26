@@ -1,0 +1,5 @@
+INPUT:
+hello
+*l?*
+EXPECTED:
+true

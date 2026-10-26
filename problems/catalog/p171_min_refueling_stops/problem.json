@@ -1,0 +1,56 @@
+{
+  "id": "p171_min_refueling_stops",
+  "number": 171,
+  "slug": "minimum-number-of-refueling-stops",
+  "category_id": 18,
+  "category_name": "Mixed Advanced Problems",
+  "title": "Minimum Number of Refueling Stops",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "A car travels from position 0 to `target`. Given initial fuel `startFuel` and gas stations `[position, fuel]`, return minimum refueling stops to reach target, or -1.",
+  "input_format": "First line contains `target`, `startFuel`, and `k` (stations). Following `k` lines contain `pos` and `fuel`.",
+  "output_format": "Minimum stops or -1.",
+  "constraints": "1 <= target, startFuel <= 10^9\n0 <= k <= 500",
+  "sample_tests": [
+    {
+      "input": "100 10 4\n10 60\n20 30\n30 30\n60 40",
+      "output": "2",
+      "explanation": "Stop at position 10 and 60, total 2 stops."
+    },
+    {
+      "input": "1 1 0",
+      "output": "0",
+      "explanation": "0 stops needed."
+    },
+    {
+      "input": "100 1 1\n10 100",
+      "output": "-1",
+      "explanation": "Cannot reach first station."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "50 25 1\n25 25",
+      "output": "1"
+    },
+    {
+      "input": "100 50 1\n25 10",
+      "output": "1"
+    }
+  ],
+  "hints": [
+    "Greedy choice: drive as far as possible with current fuel.",
+    "Add fuel of passed stations into a max-heap.",
+    "When fuel runs out, refuel from the station with the largest fuel capacity seen so far."
+  ],
+  "starter_code": {
+    "python": "# Minimum Number of Refueling Stops\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Minimum Number of Refueling Stops\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Minimum Number of Refueling Stops\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Minimum Number of Refueling Stops\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Minimum Number of Refueling Stops\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys, heapq\nlines = sys.stdin.read().splitlines()\nif lines:\n    parts = lines[0].split()\n    target, cur_fuel, k = int(parts[0]), int(parts[1]), int(parts[2])\n    stations = []\n    for line in lines[1:1+k]:\n        pf = [int(x) for x in line.split()]\n        if len(pf) == 2: stations.append(pf)\n    stations.append([target, 0])\n    pq = []\n    stops = prev_pos = 0\n    for pos, fuel in stations:\n        cur_fuel -= (pos - prev_pos)\n        while cur_fuel < 0 and pq:\n            cur_fuel += -heapq.heappop(pq)\n            stops += 1\n        if cur_fuel < 0: print(-1); sys.exit(0)\n        heapq.heappush(pq, -fuel)\n        prev_pos = pos\n    print(stops)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

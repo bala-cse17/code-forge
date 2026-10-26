@@ -1,0 +1,4 @@
+INPUT:
+au
+EXPECTED:
+2

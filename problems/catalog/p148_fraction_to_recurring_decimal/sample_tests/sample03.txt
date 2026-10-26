@@ -1,0 +1,4 @@
+INPUT:
+4 333
+EXPECTED:
+0.(012)

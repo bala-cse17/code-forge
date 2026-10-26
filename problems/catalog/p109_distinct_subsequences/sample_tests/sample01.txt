@@ -1,0 +1,5 @@
+INPUT:
+rabbbit
+rabbit
+EXPECTED:
+3

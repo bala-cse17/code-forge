@@ -1,0 +1,68 @@
+{
+  "id": "p127_n_queens",
+  "number": 127,
+  "slug": "n-queens",
+  "category_id": 13,
+  "category_name": "Backtracking and Recursion",
+  "title": "N-Queens",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "The n-queens puzzle is the problem of placing `n` queens on an `n x n` chessboard such that no two queens attack each other. Return the number of distinct solutions.",
+  "input_format": "A single line containing integer `n`.",
+  "output_format": "Number of distinct solutions.",
+  "constraints": "1 <= n <= 12",
+  "sample_tests": [
+    {
+      "input": "4",
+      "output": "2",
+      "explanation": "2 distinct solutions for 4-queens."
+    },
+    {
+      "input": "1",
+      "output": "1",
+      "explanation": "1 solution for 1-queen."
+    },
+    {
+      "input": "8",
+      "output": "92",
+      "explanation": "92 solutions for standard 8-queens."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2",
+      "output": "0"
+    },
+    {
+      "input": "3",
+      "output": "0"
+    },
+    {
+      "input": "5",
+      "output": "10"
+    },
+    {
+      "input": "6",
+      "output": "4"
+    },
+    {
+      "input": "7",
+      "output": "40"
+    }
+  ],
+  "hints": [
+    "Place queens row by row.",
+    "Track attacked columns (`cols`), major diagonals (`r - c`), and minor diagonals (`r + c`).",
+    "Recurse on row `r + 1` and backtrack sets upon return."
+  ],
+  "starter_code": {
+    "python": "# N-Queens\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// N-Queens\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// N-Queens\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// N-Queens\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// N-Queens\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    cols = set(); diag1 = set(); diag2 = set()\n    ans = 0\n    def bt(r):\n        nonlocal ans\n        if r == n: ans += 1; return\n        for c in range(n):\n            if c in cols or (r - c) in diag1 or (r + c) in diag2: continue\n            cols.add(c); diag1.add(r - c); diag2.add(r + c)\n            bt(r + 1)\n            cols.remove(c); diag1.remove(r - c); diag2.remove(r + c)\n    bt(0)\n    print(ans)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

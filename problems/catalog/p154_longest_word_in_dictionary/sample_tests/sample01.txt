@@ -1,0 +1,5 @@
+INPUT:
+5
+w wo wor worl world
+EXPECTED:
+world

@@ -1,0 +1,51 @@
+{
+  "id": "p090_maximum_performance_of_team",
+  "number": 90,
+  "slug": "maximum-performance-of-a-team",
+  "category_id": 9,
+  "category_name": "Heaps and Priority Queues",
+  "title": "Maximum Performance of a Team",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "You are given two integers `n` and `k` and two integer arrays `speed` and `efficiency` of length `n`. There are `n` engineers with speeds and efficiencies. Choose at most `k` engineers to maximize total speed multiplied by minimum efficiency. Return answer modulo 10^9 + 7.",
+  "input_format": "First line contains `n` and `k`. Second line contains `speed`. Third line contains `efficiency`.",
+  "output_format": "Maximum performance modulo 10^9 + 7.",
+  "constraints": "1 <= k <= n <= 10^5",
+  "sample_tests": [
+    {
+      "input": "6 2\n2 10 3 1 5 8\n5 4 3 9 7 2",
+      "output": "60",
+      "explanation": "Engineers with efficiency 5 and 7: (2 + 5) * 5 or (10 + 5) * 4 = 60."
+    },
+    {
+      "input": "6 3\n2 10 3 1 5 8\n5 4 3 9 7 2",
+      "output": "68",
+      "explanation": "Performance is 68."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "3 1\n1 2 3\n3 2 1",
+      "output": "4"
+    },
+    {
+      "input": "4 2\n1 2 3 4\n4 3 2 1",
+      "output": "12"
+    }
+  ],
+  "hints": [
+    "Sort engineers in descending order of efficiency.",
+    "For each engineer, consider them as the minimum efficiency in the team.",
+    "Maintain a min-heap of at most k speeds to maximize total speed sum."
+  ],
+  "starter_code": {
+    "python": "# Maximum Performance of a Team\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Maximum Performance of a Team\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Maximum Performance of a Team\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Maximum Performance of a Team\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Maximum Performance of a Team\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys, heapq\ndata = sys.stdin.read().split()\nif data:\n    n, k = int(data[0]), int(data[1])\n    speeds = [int(x) for x in data[2:2+n]]\n    effs = [int(x) for x in data[2+n:2+2*n]]\n    engineers = sorted(zip(effs, speeds), reverse=True)\n    pq = []\n    speed_sum = 0\n    best = 0\n    for e, s in engineers:\n        heapq.heappush(pq, s)\n        speed_sum += s\n        if len(pq) > k:\n            speed_sum -= heapq.heappop(pq)\n        best = max(best, speed_sum * e)\n    print(best % (10**9 + 7))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

@@ -1,0 +1,4 @@
+INPUT:
+dddccdbba
+EXPECTED:
+8

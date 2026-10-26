@@ -1,0 +1,4 @@
+INPUT:
+tab a bat
+EXPECTED:
+true

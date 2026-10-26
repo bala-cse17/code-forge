@@ -1,0 +1,64 @@
+{
+  "id": "p007_product_except_self",
+  "number": 7,
+  "slug": "product-of-array-except-self",
+  "category_id": 1,
+  "category_name": "Arrays",
+  "title": "Product of Array Except Self",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an integer array `nums`, return an array `answer` such that `answer[i]` is equal to the product of all elements of `nums` except `nums[i]`, without division in O(n).",
+  "input_format": "First line contains integer `n`, followed by `n` integers.",
+  "output_format": "Space-separated product array.",
+  "constraints": "2 <= n <= 10^5\n-30 <= nums[i] <= 30",
+  "sample_tests": [
+    {
+      "input": "4\n1 2 3 4",
+      "output": "24 12 8 6",
+      "explanation": "For 0: 2*3*4=24, for 1: 1*3*4=12, for 2: 1*2*4=8, for 3: 1*2*3=6."
+    },
+    {
+      "input": "5\n-1 1 0 -3 3",
+      "output": "0 0 9 0 0",
+      "explanation": "Contains zero."
+    },
+    {
+      "input": "2\n2 3",
+      "output": "3 2",
+      "explanation": "Two elements."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "3\n1 1 1",
+      "output": "1 1 1"
+    },
+    {
+      "input": "4\n2 4 0 8",
+      "output": "0 0 64 0"
+    },
+    {
+      "input": "3\n-2 -3 -4",
+      "output": "12 8 6"
+    },
+    {
+      "input": "4\n1 -1 1 -1",
+      "output": "-1 1 -1 1"
+    }
+  ],
+  "hints": [
+    "Break down the product into prefix products and suffix products.",
+    "First compute prefix products up to i - 1 in the result array.",
+    "Then sweep from right to left, multiplying by suffix products."
+  ],
+  "starter_code": {
+    "python": "# Product of Array Except Self\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Product of Array Except Self\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Product of Array Except Self\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Product of Array Except Self\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Product of Array Except Self\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    nums = [int(x) for x in data[1:1+n]]\n    res = [1] * n\n    pref = 1\n    for i in range(n):\n        res[i] = pref\n        pref *= nums[i]\n    suff = 1\n    for i in range(n - 1, -1, -1):\n        res[i] *= suff\n        suff *= nums[i]\n    print(' '.join(map(str, res)))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

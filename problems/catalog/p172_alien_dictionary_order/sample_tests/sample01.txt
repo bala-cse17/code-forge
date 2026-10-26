@@ -1,0 +1,6 @@
+INPUT:
+2 hlabcdefgijkmnopqrstuvwxyz
+hello
+leetcode
+EXPECTED:
+true

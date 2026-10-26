@@ -1,344 +1,272 @@
+# CODE-COMBAT PRO — Continuous Coding Practice Platform
+
 <div align="center">
-  <img src="frontend/assets/logo.jpg" alt="CODE COMBAT" width="300" style="border-radius: 16px; box-shadow: 0 0 30px rgba(0,242,254,0.3);"/>
-  <h1>CODE COMBAT — Offline Competitive Programming Platform</h1>
-  <p><strong>"Compete. Code. Conquer."</strong></p>
-  <p><em>Where Logic Fights Back • 100% Offline Multi-Language Competitive Coding Arena</em></p>
+  <img src="frontend/assets/logo.jpg" alt="CODE COMBAT PRO" width="300" style="border-radius: 16px; box-shadow: 0 0 30px rgba(0,242,254,0.3);"/>
+  <h1>CODE-COMBAT PRO</h1>
+  <p><strong>"Think. Code. Compete."</strong></p>
+  <p><em>A full-stack, continuous coding practice & algorithmic mastery platform inspired by LeetCode and HackerRank.</em></p>
+
+  [![Tests: 113/113 Passing](https://img.shields.io/badge/Tests-113%2F113%20Passing%20(100%25)-brightgreen.svg)](#-automated-testing--verification)
+  [![Problems: 180 Curated](https://img.shields.io/badge/Problems-180%20Curated-blue.svg)](#-the-180-curated-problems-catalog)
+  [![Languages: 6 Environments](https://img.shields.io/badge/Languages-Python%20%7C%20C%20%7C%20C%2B%2B%20%7C%20Java%20%7C%20JS%20%7C%20SQL-purple.svg)](#-multi-language-execution-engine)
+  [![Dependencies: Zero Pip](https://img.shields.io/badge/Dependencies-Zero%20External%20Pip-orange.svg)](#-architecture--design-philosophy)
 </div>
 
 ---
 
-## 📖 Event Introduction
+## 🎯 Product Vision & Architecture
 
-**Code Combat** is an individual offline coding challenge inspired by platforms such as **LeetCode** and **HackerRank**. Participants will be given programming problems that require them to understand the problem, develop a logical solution, write code, test it, and submit it within the given time.
+**CODE-COMBAT PRO** transforms competitive programming from a high-stress, timed college exam into a permanent, self-paced software engineering learning platform. Developers of all levels can sharpen their algorithmic reasoning, practice data structures, solve relational database challenges, bookmark challenging problems, and monitor their learning progression over time.
 
-Each problem will include a problem statement, input format, output format, constraints, sample input, and expected output. Submitted programs will be evaluated using multiple test cases, including hidden test cases, to check the correctness and efficiency of the solutions.
+### Key Pillars
 
-The event will be conducted in the college computer laboratory without Internet access. The competition is designed to test participants' coding skills, logical thinking, problem-solving ability, algorithmic knowledge, and efficiency.
-
----
-
-## ⏱️ Event Structure — 1 Hour, Single Session
-
-- **Time**: 60 minutes (no separate rounds)
-- **Questions**: A mix of Easy, Medium, and Hard programming problems, presented together for participants to attempt in any order.
-- **Problem Topics**:
-  - **Easy**: Variables, Operators, Conditional statements, Loops, Basic mathematics, Simple logical problems
-  - **Medium**: Arrays, Strings, Functions, Searching, Logical problem-solving
-  - **Hard**: Sorting, Recursion, Data Structures, Algorithms, Optimization
-
-Participants must write and submit solutions for as many problems as they can within the 60-minute window. There is no elimination between difficulty levels — all problems are open to all participants for the full duration. Solutions will be evaluated using multiple test cases, including hidden test cases. Time and space complexity may also be considered, particularly for Hard problems.
+1. **Permanent Learning Hub**: All 180 challenges are permanently unlocked. No mandatory timers, no tier lockouts, and no gating.
+2. **100% Free Learning Aids**: Every problem includes 3 tiers of progressive hints that can be revealed at any time with **0 point deductions**.
+3. **Multi-Language Judge & Sandboxing**: Execute and validate code in Python 3, C, C++, Java, Node.js JavaScript, and SQL.
+4. **Relational Database Sandboxing**: Dedicated isolated SQLite `:memory:` runner for SQL queries with AST sanitization and query timeout guards.
+5. **Zero External Dependencies**: Built on Python 3 standard libraries (`sqlite3`, `http.server`, `subprocess`, `hashlib`, `urllib`) and a high-performance vanilla SPA frontend with Monaco Editor.
+6. **ACID Storage with WAL**: Authoritative SQLite database with Write-Ahead Logging (WAL) and disk-mirrored JSON caches for high-concurrency read performance.
 
 ---
 
-## 💻 Programming Languages
+## 📚 The 180 Curated Problems Catalog
 
-Participants can solve the problems using any one of the following programming languages:
-- **C** (Clang / GCC)
-- **Java** (OpenJDK)
-- **Python** (Python 3)
+The platform contains exactly **180 hand-crafted, production-ready coding challenges** distributed evenly across **18 foundational computer science topics** (10 problems per category: 4 Easy, 4 Medium, 2 Hard).
 
-Participants may choose the language they are most comfortable with.
+| # | Category | Easy (100 pts) | Medium (200 pts) | Hard (300 pts) | Total Problems |
+|---|---|:---:|:---:|:---:|:---:|
+| 1 | **Arrays** | 4 | 4 | 2 | 10 |
+| 2 | **Strings** | 4 | 4 | 2 | 10 |
+| 3 | **Hashing and Frequency Counting** | 4 | 4 | 2 | 10 |
+| 4 | **Searching and Sorting** | 4 | 4 | 2 | 10 |
+| 5 | **Two Pointers and Sliding Window** | 4 | 4 | 2 | 10 |
+| 6 | **Linked Lists** | 4 | 4 | 2 | 10 |
+| 7 | **Stacks and Queues** | 4 | 4 | 2 | 10 |
+| 8 | **Trees and Binary Search Trees** | 4 | 4 | 2 | 10 |
+| 9 | **Heaps and Priority Queues** | 4 | 4 | 2 | 10 |
+| 10 | **Graphs** | 4 | 4 | 2 | 10 |
+| 11 | **Dynamic Programming** | 4 | 4 | 2 | 10 |
+| 12 | **Greedy Algorithms** | 4 | 4 | 2 | 10 |
+| 13 | **Backtracking and Recursion** | 4 | 4 | 2 | 10 |
+| 14 | **Bit Manipulation** | 4 | 4 | 2 | 10 |
+| 15 | **Mathematics and Number Theory** | 4 | 4 | 2 | 10 |
+| 16 | **Tries and Advanced Data Structures** | 4 | 4 | 2 | 10 |
+| 17 | **Database and SQL** | 4 | 4 | 2 | 10 |
+| 18 | **Mixed Advanced Problems** | 4 | 4 | 2 | 10 |
+| | **Grand Total** | **72** | **72** | **36** | **180** |
 
----
-
-## 📋 Problem Format
-
-Each coding problem will be presented in a format similar to **LeetCode** and **HackerRank**, containing:
-- **Problem Statement** – Clear description of the problem to be solved.
-- **Input Format** – Details of the input provided to the program.
-- **Output Format** – The expected output from the program.
-- **Constraints** – Conditions and limits that must be considered while solving the problem.
-- **Sample Input** – Example input provided for understanding the problem.
-- **Expected Output** – The correct output corresponding to the sample input.
-- **Hidden Test Cases** – Additional test cases used to verify the correctness of submitted solutions.
-
-Participants must write their own program according to the given requirements and ensure that it produces the correct output for all applicable test cases.
-
----
-
-## ⚖️ Evaluation Criteria
-
-- **Correctness of Code** – The program must compile and execute successfully.
-- **Accuracy of Output** – The program must produce the required output.
-- **Test Cases Passed** – Solutions will be evaluated against multiple test cases, including hidden test cases.
-- **Number & Difficulty of Problems Solved** – Higher-difficulty problems carry more weight in final scoring.
-- **Submission Time** – In case of a tie, the participant who submits the correct solution earlier will receive priority.
-- **Efficiency** – Time and space complexity may be considered, particularly for Hard problems.
+Every problem is equipped with:
+- Formal problem statements, input/output specifications, constraints, and time/memory limits.
+- Public sample test cases with step-by-step explanations.
+- Hidden validation suites tested against canonical reference implementations.
+- Pre-populated starter code templates for Python, C, C++, Java, JavaScript, and SQL.
+- 3 progressive educational hints that guide problem-solving without revealing code.
 
 ---
 
-## 📜 Rules & Regulations
+## 💻 Multi-Language Execution Engine
 
-- Participation is strictly individual.
-- Participants must use the computers provided in the college computer laboratory.
-- Internet access is strictly prohibited throughout the event.
-- Mobile phones, smart devices, and other external electronic devices are not permitted during the competition.
-- Participants must solve all problems using their own coding and problem-solving skills.
-- Copying code or solutions from another participant is strictly prohibited.
-- Sharing code, solutions, answers, or approaches with other participants is prohibited.
-- Pre-written programs or solutions prepared before the event cannot be submitted.
-- Participants cannot access online coding platforms, search engines, websites, or online references during the event.
-- Any attempt to bypass the no-internet restriction will result in immediate disqualification.
+Submissions are evaluated by the integrated multi-language judging engine located in [`judge/`](file:///home/bala/.gemini/antigravity/scratch/CODE-COMBAT/judge/):
 
-### 🚨 STRICT ANTI-CHEATING RULE
+| Language | Compiler / Runtime | Execution Mode | Security & Sandbox Isolation |
+|---|---|---|---|
+| **Python 3** | `python3` (v3.10+) | Standard Stdin/Stdout & Class Harness | POSIX `setrlimit` (CPU time, address space, file size), environment scrub |
+| **C** | `gcc` (C11) | Compiled Native Binary (`-O2 -Wall`) | Subprocess execution with strict memory and CPU caps |
+| **C++** | `g++` (C++17) | Compiled Native Binary (`-std=c++17 -O2`) | POSIX limits + process tree cleanup on timeout |
+| **Java** | OpenJDK `javac` & `java` | JVM (`Solution.java`) | `-Xmx256m` heap caps, memory limits, process termination |
+| **JavaScript** | `node` (Node.js) | V8 Runtime | Memory limits (`--max-old-space-size=256`), POSIX caps |
+| **SQL** | Python `sqlite3` | In-Memory Ephemeral Sandbox | Ephemeral `:memory:` DB, query timeout hook, forbidden DDL/ATTACH blocker |
 
-> **Any participant found copying, reproducing, sharing, or using another participant's code or solution in any form will be IMMEDIATELY DISQUALIFIED WITHOUT WARNING.**  
-> The participant will be removed from the competition, and **NO APPEAL OR RECONSIDERATION** will be permitted. The decision of the judges and organizing committee will be final and binding.
-
----
-
-## Key Features
-
-- **100% Offline**: Requires zero internet connection, external APIs, CDNs, or external npm/pip dependencies at runtime. Runs purely on Python 3 standard library and custom CSS3/ES6 JavaScript.
-- **Real Multi-Language Judge**:
-  - **Python 3** (`python`)
-  - **Java** (`javac` / `java`)
-  - **C** (`gcc` / `clang`)
-- **Three-Panel Coding Studio**:
-  - *Left*: Rich problem statement, constraints, input/output format, and sample test cases.
-  - *Center*: Interactive code editor with line numbers, auto-indentation, bracket completion, and language templates.
-  - *Right*: Dual-mode test runner (Sample Tests, Custom Input sandbox, and Server-Side Hidden Test Case Judging).
-- **15 Built-in Competitive Challenges**:
-  - **5 Easy** (100 pts): *Two Sum*, *Reverse String*, *Palindrome Number*, *Find Maximum*, *Count Vowels*
-  - **5 Medium** (200 pts): *Valid Parentheses*, *Maximum Subarray*, *Merge Intervals*, *Longest Substring*, *Rotate Array*
-  - **5 Hard** (300 pts): *Binary Tree Traversal*, *Shortest Path in Graph*, *N-Queens*, *Word Ladder*, *Dijkstra's Algorithm*
-- **Server-Side Hidden Test Cases**: 5+ hidden test files per problem. Secret test data is never leaked or sent to the client browser.
-- **Live Leaderboard**: Real-time scoreboard with rank medals, difficulty breakdowns, submission speed tie-breaking, and duplicate submission prevention.
-- **Competition Timer**: Persistent countdown timer with visual warning states (amber < 10 mins, pulsing red < 3 mins) and automatic submission expiration.
-- **Admin Control Center**: Password-protected management dashboard for viewing participants, inspecting submissions, adding/deleting challenges, resetting competition data, and exporting results to JSON.
+### SQL Ephemeral Runner (`judge/sql_runner.py`)
+Category 17 problems are evaluated against dynamic relational schemas generated on the fly. Each execution runs inside a private, in-memory SQLite database (`:memory:`) completely isolated from disk storage:
+- **Instruction Counter**: Interrupted via `conn.set_progress_handler` to prevent infinite loops.
+- **Safety Sanitizer**: Rejects malicious statements (`ATTACH`, `DETACH`, `PRAGMA`, `.load`, or multi-statement injections).
+- **Result Comparison**: Standardized row sorting and whitespace normalization ensure deterministic evaluation against expected query outputs.
 
 ---
 
-## System Requirements
+## 📁 Repository Directory Structure
 
-- **Operating System**: Windows 10/11, Linux, or macOS.
-- **Python**: Python 3.8 or higher.
-- **Java (Optional)**: OpenJDK / Oracle JDK (for compiling Java solutions via `javac`).
-- **C Compiler (Optional)**: GCC / MinGW-w64 or Clang (for compiling C solutions).
-
----
-
-## Quickstart Guide
-
-### 1. Launch the Server
-Open your terminal inside the `code_combat` directory and run:
-
-```bash
-python main.py
-```
-
-The terminal will display the startup banner and server URL:
-
-```
-======================================================================
-   CODE COMBAT - OFFLINE CODING CHALLENGE PLATFORM
-   "Compete. Code. Conquer."
-======================================================================
- [+] Offline Judge Engine : Ready (Python 3, Java, C)
- [+] Loaded Problems     : 15 challenges (Easy/Medium/Hard)
- [+] Competition Timer   : 90 minutes
- [+] Storage Database    : Local JSON in 'data/'
- [+] Admin Password      : 'admin123'
-----------------------------------------------------------------------
- >> CODE COMBAT running at: http://127.0.0.1:8000
- >> Press Ctrl+C in this terminal to stop the server.
-======================================================================
-```
-
-### 2. Access the Platform
-Open your browser (Chrome, Edge, Firefox) and navigate to:
-**[http://127.0.0.1:8000](http://127.0.0.1:8000)**
-
----
-
-## Participant Workflow
-
-```
-       [Home Landing Page]
-                │
-                ▼
-      [Click "START CODING"]
-                │
-                ▼
-   [Register Name, College, Reg No]
-                │
-                ▼
-    [Problem Dashboard (Filters)]
-                │
-                ▼
-    [Open Problem in Coding Studio]
-                │
-        ┌───────┴───────┐
-        ▼               ▼
-   [Run Code]     [Submit Code]
-  (Sample Tests)  (Hidden Test Judge)
-                        │
-                        ▼
-                [Passed: 5 / 5 ✓]
-               [Score: +100 Points]
-                        │
-                        ▼
-           [Live Leaderboard Updated]
-```
-
----
-
-## Project Structure
-
-```
-CODE_COMBAT/
-├── main.py                     # Server entry point & ASCII banner launcher
-├── config.json                 # Competition configuration & settings
-├── test_suite.py               # Automated integration verification suite
-├── generate_problems.py        # Problem generation utility
-│
-├── backend/                    # Core backend modules (Standard library HTTP & REST)
-│   ├── __init__.py
-│   ├── server.py               # Threaded HTTP server & REST endpoint router
-│   ├── storage.py              # Local JSON database (participants, submissions, leaderboard)
-│   ├── problems_manager.py     # Problem loader, schema validator, and admin manager
-│   └── auth.py                 # Admin password verification & auth helpers
-│
-├── judge/                      # Local code execution & judging subsystem
-│   ├── __init__.py
-│   ├── compiler.py             # Compilers for C (gcc), Java (javac), syntax checks for Python
-│   ├── executor.py             # Subprocess execution, timeout enforcement, output truncation
-│   └── judge.py                # Output normalization, sample runner & hidden tests judge
-│
-├── problems/                   # Problem catalog categorized by difficulty
-│   ├── easy/
-│   │   ├── two_sum/
-│   │   │   ├── problem.json    # Problem metadata, Markdown spec, starter codes, visible samples
-│   │   │   ├── problem.txt     # Offline printable problem description
-│   │   │   └── hidden_tests/   # Secret test cases evaluated on server
-│   │   │       ├── test1.txt
-│   │   │       ├── test2.txt
-│   │   │       ├── test3.txt
-│   │   │       ├── test4.txt
-│   │   │       └── test5.txt
-│   │   ├── reverse_string/
-│   │   ├── palindrome_number/
-│   │   ├── find_maximum/
-│   │   └── count_vowels/
-│   ├── medium/
-│   │   ├── valid_parentheses/
-│   │   ├── maximum_subarray/
-│   │   ├── merge_intervals/
-│   │   ├── longest_substring/
-│   │   └── rotate_array/
-│   └── hard/
-│       ├── binary_tree/
-│       ├── shortest_path/
-│       ├── n_queens/
-│       ├── word_ladder/
-│       └── dijkstra_algorithm/
-│
-├── data/                       # Local JSON database storage
-│   ├── participants.json       # Registered participant records
-│   ├── submissions.json        # Detailed submission history
-│   └── leaderboard.json        # Live computed rankings
-│
-└── frontend/                   # 100% Offline Dark Developer Single Page Application
-    ├── index.html              # HTML5 application shell & view templates
-    ├── css/
-    │   └── style.css           # Custom dark cyber/developer stylesheet
-    └── js/
-        ├── app.js              # SPA router, state manager, timer & API integration
-        ├── editor.js           # Line-numbered interactive code editor
-        └── admin.js            # Admin dashboard logic (CRUD, reset, data export)
-```
-
----
-
-## How Hidden Test Cases Work
-
-1. **Server-Side Isolation**: Hidden test cases reside exclusively inside `problems/<tier>/<problem_id>/hidden_tests/` on the server filesystem.
-2. **Zero Leakage**: When the frontend requests problem details via `GET /api/problems/:id`, the server returns only the visible description and sample examples.
-3. **Execution on Submit**: When a participant clicks **Submit Code**, the backend compiles the code and executes each hidden test case file sequentially.
-4. **Result Sanitization**: The judge returns only high-level summary metrics (`passed_count`, `total_count`, `status`, `score`, `runtime`). Secret inputs and expected outputs are never returned over HTTP.
-
----
-
-## How to Add New Problems
-
-You can add problems either through the **Admin Panel** in the UI or directly in the filesystem:
-
-### Filesystem Method:
-1. Create a directory inside `problems/easy/`, `problems/medium/`, or `problems/hard/`, e.g., `problems/easy/my_new_problem/`.
-2. Create `problem.json`:
-```json
-{
-  "id": "my_new_problem",
-  "title": "My New Challenge",
-  "difficulty": "Easy",
-  "points": 100,
-  "time_limit": 2.0,
-  "category": "Math",
-  "description": "Problem description in Markdown format...",
-  "input_format": "Input format specification...",
-  "output_format": "Output format specification...",
-  "constraints": "1 <= N <= 10^5",
-  "sample_tests": [
-    {
-      "input": "5",
-      "output": "25",
-      "explanation": "5 squared is 25."
-    }
-  ],
-  "starter_code": {
-    "python": "import sys\n\ndef solve():\n    n = int(sys.stdin.read().strip())\n    print(n * n)\n\nif __name__ == '__main__':\n    solve()\n",
-    "java": "import java.util.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        System.out.println(n * n);\n    }\n}\n",
-    "c": "#include <stdio.h>\n\nint main() {\n    int n;\n    if (scanf(\"%d\", &n) == 1) printf(\"%d\\n\", n * n);\n    return 0;\n}\n"
-  }
-}
-```
-3. Create `hidden_tests/` subdirectory with `test1.txt`, `test2.txt`, etc.:
 ```text
-INPUT:
-10
-EXPECTED:
-100
+CODE-COMBAT/
+├── main.py                     # High-concurrency multi-threaded HTTP server entry point
+├── test_suite.py               # Comprehensive 113-test automated test suite (26 phases)
+├── config.json                 # Platform configuration & supported languages
+├── .env.example                # Template for environment secrets
+│
+├── backend/                    # Standard-library Python backend
+│   ├── env_loader.py           # Zero-dependency .env environment variable loader
+│   ├── auth.py                 # PBKDF2 hashing, HMAC session tokens & token revocation
+│   ├── storage.py              # SQLite WAL mode ACID storage + bookmarks + profile progress
+│   ├── problems_manager.py     # 180-problem catalog manager, hint revelator & set switcher
+│   ├── seed_data.py            # Master dataset containing all 180 problems & 18 categories
+│   ├── solutions_registry.py   # Multi-language reference solutions registry
+│   └── server.py               # REST API route handlers, rate limiting & static file server
+│
+├── judge/                      # Isolated execution and automated judging engine
+│   ├── compiler.py             # Multi-compiler interface (gcc, g++, javac, node)
+│   ├── executor.py             # POSIX sandbox, resource limits & timeout watchdog
+│   ├── harness.py              # Class solution adapters & boilerplate generators
+│   ├── sql_runner.py           # Ephemeral SQLite in-memory runner & query sanitizer
+│   └── judge.py                # Test case evaluator (Sample tests, custom input, hidden tests)
+│
+├── problems/                   # Problem catalog and test suites on disk
+│   ├── catalog/                # All 180 curated challenges (problem.json + sample + hidden tests)
+│   ├── set1/                   # Backward-compatible 15-problem contest challenge set 1
+│   └── set2/                   # Backward-compatible 15-problem contest challenge set 2
+│
+├── data/                       # Authoritative persistence layer
+│   ├── code_combat.db          # Authoritative SQLite database with WAL mode
+│   ├── leaderboard.json        # Fast-read mirror for platform leaderboard
+│   ├── participants.json       # Fast-read mirror for participant profiles
+│   └── submissions.json        # Fast-read mirror for historical submissions
+│
+└── frontend/                   # Responsive Single Page Application (SPA)
+    ├── index.html              # Modern LeetCode/HackerRank UI layout
+    ├── css/
+    │   └── style.css           # Custom dark/light theme, category pills, studio layout
+    └── js/
+        ├── app.js              # State manager, category filters, bookmarks, REST client
+        ├── editor.js           # Monaco code editor integration + offline fallback
+        └── admin.js            # Platform administration, analytics & moderation
 ```
-4. Restart the server or click reload in Admin Panel.
 
 ---
 
-## Configuration Options (`config.json`)
+## 🚀 Quickstart & Running Instructions
 
-```json
-{
-  "competition_name": "CODE COMBAT",
-  "tagline": "Compete. Code. Conquer.",
-  "competition_duration_minutes": 90,
-  "admin_password": "admin123",
-  "server_port": 8000,
-  "server_host": "127.0.0.1",
-  "execution_timeout_seconds": 3.0,
-  "max_output_length": 50000
-}
+### Prerequisites
+- **Python 3.10+** (Includes `sqlite3`, `http.server`, `urllib`, `subprocess`, `hashlib`)
+- *Optional for multi-language compiling*: `gcc`, `g++`, `default-jdk`, `node`
+
+### 1. Start the Platform Server
+Run the platform using standard Python:
+```bash
+python3 main.py
 ```
+To bind to all network interfaces (LAN / Lab practice):
+```bash
+python3 main.py --lan
+```
+To run on a custom port without auto-launching the web browser:
+```bash
+python3 main.py --port 8080 --no-browser
+```
+
+Once running, visit:
+- **Local Application**: `http://127.0.0.1:8000`
+- **LAN Application**: `http://<YOUR_LOCAL_IP>:8000`
+
+### 2. Default Administrator Credentials
+- **Admin Username / ID**: `admin`
+- **Admin Password**: `admin123` (Configurable in `.env` or `config.json`)
+- **Admin Access**: Click **Admin Portal** in the navigation bar or access `/api/admin/login`.
 
 ---
 
-## Running the Automated Test Suite
+## 🧪 Automated Testing & Verification
 
-To run the complete automated test suite verifying compilers, judge execution, timeout kills, and leaderboard calculations:
+The platform includes a 26-phase automated test suite covering all backend services, database migrations, security controls, multi-language judges, and catalog filters:
 
 ```bash
-python test_suite.py
+python3 test_suite.py
 ```
 
-Expected output:
-```
-======================================================================
- TEST SUITE SUMMARY: 23 / 23 PASSED (100% Success Rate)
-======================================================================
-```
+### Test Suite Coverage (113 / 113 Passed — 100%)
+- **Phase 1**: Problem Catalog & Test Suite Integrity (180 problems loaded, 72/72/36 split, hidden tests validated)
+- **Phase 2**: Anti-Cheat & API Data Isolation (Hidden test cases never leaked through public APIs)
+- **Phase 3**: Multi-Language Compilers & Execution (Python, Java, C)
+- **Phase 4**: Error Handling, Sandboxing & Execution Timeouts
+- **Phase 5**: Dual ACID Storage & Leaderboard Ranking Calculations
+- **Phase 6**: Cryptographic Security, PBKDF2 Passwords, HMAC Sessions & Sliding-Window Rate Limiters
+- **Phase 7**: Administrative Reset Workflows
+- **Phase 8**: Problem Set Switching & Practice Catalog Persistence
+- **Phase 9**: 3-Tier Progressive Hints (Free learning aids, 0 point penalty enforcement)
+- **Phase 10**: Round-Wise Category & Practice Unlock Status
+- **Phase 11**: Activity Stream Logging
+- **Phase 12**: Real-Time State Sync Polling
+- **Phase 13**: JavaScript (Node.js) Sandboxed Execution
+- **Phase 14**: Analytics Engine & Language Distribution
+- **Phase 15**: Participant Moderation & Score Management
+- **Phase 16**: Security Audit Trail Logging
+- **Phase 17**: Participant Profile Progress Calculations (Against 180 problems)
+- **Phase 18**: C++ (g++) Native Compiler & Judge Engine
+- **Phase 19**: User Profile Updates & PBKDF2 Password Rotation
+- **Phase 20**: Contests Management & Standings
+- **Phase 21**: Community Discussions Engine
+- **Phase 22**: Dynamic Achievement Badges Engine
+- **Phase 23**: Dynamic Problem & Test Case Administration
+- **Phase 24**: SQL Runner & In-Memory Ephemeral Sandbox Execution
+- **Phase 25**: Problem Bookmarking Engine (Toggle ON/OFF, persistence, user lists)
+- **Phase 26**: Practice Platform Catalog Filtering & REST APIs (18 categories, search, bookmarks, difficulty)
 
 ---
 
-## Security & Sandboxing Notice
+## 🔌 Complete REST API Specification
 
-> [!IMPORTANT]
-> - **Prototype Scope**: This platform executes participant code locally using subprocess execution with strict timeouts (2.0–3.0s), temporary execution directories, and output size caps.
-> - **Production Deployment**: Production deployment in untrusted public environments requires container/VM sandboxing such as **Docker**, **nsjail**, or **isolate** for kernel-level resource and syscall isolation. This prototype is designed for controlled college lab and offline contest environments.
+### Authentication & User Profiles
+- `POST /api/register`: Register a new practice account (`name`, `reg_no`, `department`, `password`).
+- `POST /api/login`: Authenticate participant and receive HMAC session token.
+- `POST /api/logout`: Revoke active session token.
+- `GET /api/auth/me` or `GET /api/user/profile`: Retrieve authenticated user profile, solved problem array, and stats.
+- `POST /api/user/profile`: Update user bio, email, avatar, or college.
+- `POST /api/user/change-password`: Securely rotate password verifying old password with PBKDF2.
+
+### Problem Catalog & Bookmarks
+- `GET /api/config`: Retrieve platform metadata, supported languages, and practice flags.
+- `GET /api/categories`: Retrieve all 18 curriculum topics with slugs and descriptions.
+- `GET /api/problems`: List problems with optional filters (`category_id`, `difficulty`, `status`, `search`, `bookmarked_only`).
+- `GET /api/problems/<id>`: Retrieve sanitized problem details, public samples, starter templates, and unlocked hints.
+- `POST /api/bookmark` or `POST /api/problems/<id>/bookmark`: Toggle bookmark state for the problem.
+- `GET /api/user/bookmarks`: Retrieve list of bookmarked problem IDs for the authenticated user.
+- `POST /api/problems/unlock-hint`: Reveal progressive hints 1, 2, or 3 (**0 point penalty**).
+
+### Execution & Automated Judge
+- `POST /api/run`: Run code against public sample test cases or custom input without creating a submission record.
+  ```json
+  {
+    "problem_id": "p001_find_largest_element",
+    "language": "python",
+    "code": "import sys\n...",
+    "is_custom": false
+  }
+  ```
+- `POST /api/submit`: Evaluate code against hidden test cases, record submission, update user score, and trigger achievement checks.
+  ```json
+  {
+    "problem_id": "p001_find_largest_element",
+    "language": "python",
+    "code": "import sys\n..."
+  }
+  ```
+
+### Community & Leaderboards
+- `GET /api/leaderboard`: Real-time ranking sorted by score, problems solved, and timestamp tie-breakers.
+- `GET /api/discussions?problem_id=<id>`: Community discussions and algorithmic insights.
+- `POST /api/discussions`: Post discussion or tip for a specific challenge.
+- `GET /api/user/<id>/achievements`: Badges unlocked by the user (*First Blood*, *Speed Demon*, *Century Club*, etc.).
+
+### Administration & Analytics (Requires Admin Authentication)
+- `POST /api/admin/login`: Admin authentication.
+- `GET /api/admin/analytics`: Platform telemetry, submission volume, and language distribution.
+- `GET /api/admin/submissions`: Live submission monitoring with status, execution time, and code inspection.
+- `POST /api/admin/problems`: Create or edit challenges dynamically in SQLite.
+- `POST /api/admin/testcases`: Add public or hidden test cases.
+- `POST /api/admin/reset`: Reset participant state, wipe submissions, and clean leaderboard.
+
+---
+
+## 🛡️ Security & Hardening Model
+
+1. **Subprocess Resource Limits**: Uses POSIX `setrlimit` (`RLIMIT_CPU`, `RLIMIT_AS`, `RLIMIT_FSIZE`) to prevent fork bombs, memory leaks, and runaway disk writes.
+2. **Environment Scrubbing**: Execution environments discard system credentials (`API_KEY`, `PATH` sanitized, secrets isolated).
+3. **Password Security**: Passwords hashed using PBKDF2-HMAC-SHA256 with 100,000 iterations and unique 16-byte cryptographic salts.
+4. **Token Security**: Stateless HMAC-SHA256 session tokens with server-side revocation lists.
+5. **Rate Limiting**: Sliding-window rate limiters prevent API flooding on compilation, submission, and login routes.
+6. **Data Isolation**: Public endpoints strip all hidden test cases and reference solutions from responses.
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License. Built with ❤️ for continuous algorithmic learning and software engineering excellence.

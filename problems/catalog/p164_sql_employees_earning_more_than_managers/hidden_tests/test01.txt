@@ -1,0 +1,5 @@
+INPUT:
+CREATE TABLE Employee (id INT, name TEXT, salary INT, managerId INT);
+INSERT INTO Employee VALUES (1, 'A', 50000, 2), (2, 'B', 40000, NULL);
+EXPECTED:
+A

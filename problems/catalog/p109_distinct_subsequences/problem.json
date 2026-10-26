@@ -1,0 +1,59 @@
+{
+  "id": "p109_distinct_subsequences",
+  "number": 109,
+  "slug": "distinct-subsequences",
+  "category_id": 11,
+  "category_name": "Dynamic Programming",
+  "title": "Distinct Subsequences",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Given two strings `s` and `t`, return the number of distinct subsequences of `s` which equals `t`.",
+  "input_format": "Two lines, first is `s`, second is `t`.",
+  "output_format": "Number of distinct subsequences.",
+  "constraints": "1 <= length(s), length(t) <= 1000",
+  "sample_tests": [
+    {
+      "input": "rabbbit\nrabbit",
+      "output": "3",
+      "explanation": "Three distinct ways to form 'rabbit' from 'rabbbit'."
+    },
+    {
+      "input": "babgbag\nbag",
+      "output": "5",
+      "explanation": "5 distinct subsequences."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "a\na",
+      "output": "1"
+    },
+    {
+      "input": "a\nb",
+      "output": "0"
+    },
+    {
+      "input": "aaa\naa",
+      "output": "3"
+    },
+    {
+      "input": "abc\nd",
+      "output": "0"
+    }
+  ],
+  "hints": [
+    "Let dp[j] be the number of ways to form prefix t[0..j-1].",
+    "If current s character matches t[j-1], add dp[j-1] to dp[j].",
+    "Traverse backwards to avoid reusing current character in the same state."
+  ],
+  "starter_code": {
+    "python": "# Distinct Subsequences\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Distinct Subsequences\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Distinct Subsequences\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Distinct Subsequences\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Distinct Subsequences\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().split()\nif len(lines) >= 2:\n    s, t = lines[0], lines[1]\n    m, n = len(s), len(t)\n    dp = [0] * (n + 1)\n    dp[0] = 1\n    for char_s in s:\n        for j in range(n, 0, -1):\n            if char_s == t[j-1]:\n                dp[j] += dp[j-1]\n    print(dp[n])\nelse:\n    print(0)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

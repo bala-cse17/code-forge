@@ -1,0 +1,5 @@
+INPUT:
+horse
+ros
+EXPECTED:
+3

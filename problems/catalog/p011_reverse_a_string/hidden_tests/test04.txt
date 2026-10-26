@@ -1,0 +1,4 @@
+INPUT:
+Competitive Programming
+EXPECTED:
+gnimmargorP evititepmoC

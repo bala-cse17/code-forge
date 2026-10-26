@@ -1,0 +1,5 @@
+INPUT:
+4
+aab aba baa xyz
+EXPECTED:
+3 1

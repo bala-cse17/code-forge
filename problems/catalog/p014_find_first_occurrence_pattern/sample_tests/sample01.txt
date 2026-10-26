@@ -1,0 +1,5 @@
+INPUT:
+sadbutsad
+sad
+EXPECTED:
+0

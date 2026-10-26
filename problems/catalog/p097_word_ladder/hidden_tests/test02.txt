@@ -1,0 +1,9 @@
+INPUT:
+lead gold
+4
+load
+goad
+gold
+head
+EXPECTED:
+4

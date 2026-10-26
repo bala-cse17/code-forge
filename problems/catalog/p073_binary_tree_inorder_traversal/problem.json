@@ -1,0 +1,56 @@
+{
+  "id": "p073_binary_tree_inorder_traversal",
+  "number": 73,
+  "slug": "binary-tree-inorder-traversal",
+  "category_id": 8,
+  "category_name": "Trees and Binary Search Trees",
+  "title": "Binary Tree Inorder Traversal",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given the root of a binary tree in level order, return the inorder traversal of its nodes' values.",
+  "input_format": "First line contains `n`. Second line contains level-order tokens.",
+  "output_format": "Space-separated inorder values.",
+  "constraints": "0 <= n <= 100",
+  "sample_tests": [
+    {
+      "input": "3\n1 null 2 3",
+      "output": "1 3 2",
+      "explanation": "Inorder traversal."
+    },
+    {
+      "input": "1\n1",
+      "output": "1",
+      "explanation": "Single node."
+    },
+    {
+      "input": "0\n",
+      "output": "",
+      "explanation": "Empty tree."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "3\n1 2 3",
+      "output": "2 1 3"
+    },
+    {
+      "input": "5\n4 2 5 1 3",
+      "output": "1 2 3 4 5"
+    }
+  ],
+  "hints": [
+    "Inorder traversal visits: Left subtree -> Current Node -> Right subtree.",
+    "Recursively traverse `inorder(node.left)`, record `node.val`, then `inorder(node.right)`.",
+    "Can also be done iteratively with an explicit stack."
+  ],
+  "starter_code": {
+    "python": "# Binary Tree Inorder Traversal\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Binary Tree Inorder Traversal\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Binary Tree Inorder Traversal\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Binary Tree Inorder Traversal\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Binary Tree Inorder Traversal\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    tokens = data[1:1+n]\n    if not tokens or tokens[0] == 'null': print(''); sys.exit(0)\n    class Node:\n        def __init__(self, v): self.v = v; self.left = None; self.right = None\n    from collections import deque\n    root = Node(tokens[0])\n    q = deque([root])\n    idx = 1\n    while q and idx < len(tokens):\n        curr = q.popleft()\n        if idx < len(tokens) and tokens[idx] != 'null':\n            curr.left = Node(tokens[idx]); q.append(curr.left)\n        idx += 1\n        if idx < len(tokens) and tokens[idx] != 'null':\n            curr.right = Node(tokens[idx]); q.append(curr.right)\n        idx += 1\n    ans = []\n    def inorder(node):\n        if not node: return\n        inorder(node.left)\n        ans.append(str(node.v))\n        inorder(node.right)\n    inorder(root)\n    print(' '.join(ans))\nelse:\n    print('')\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

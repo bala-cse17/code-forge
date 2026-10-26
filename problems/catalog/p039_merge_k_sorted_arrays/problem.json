@@ -1,0 +1,55 @@
+{
+  "id": "p039_merge_k_sorted_arrays",
+  "number": 39,
+  "slug": "merge-k-sorted-arrays",
+  "category_id": 4,
+  "category_name": "Searching and Sorting",
+  "title": "Merge K Sorted Arrays",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Given `k` sorted arrays each of size `n`, merge them into a single sorted array.",
+  "input_format": "First line contains `k` and `n`. Following `k` lines contain `n` integers each.",
+  "output_format": "Space-separated merged sorted array.",
+  "constraints": "1 <= k, n <= 500",
+  "sample_tests": [
+    {
+      "input": "3 3\n1 3 5\n2 4 6\n0 7 8",
+      "output": "0 1 2 3 4 5 6 7 8",
+      "explanation": "Merged 3 sorted arrays."
+    },
+    {
+      "input": "2 2\n1 4\n2 3",
+      "output": "1 2 3 4",
+      "explanation": "Merged 2 arrays."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1 4\n1 2 3 4",
+      "output": "1 2 3 4"
+    },
+    {
+      "input": "3 1\n5\n2\n8",
+      "output": "2 5 8"
+    },
+    {
+      "input": "2 3\n1 5 9\n2 6 10",
+      "output": "1 2 5 6 9 10"
+    }
+  ],
+  "hints": [
+    "Use a min-heap storing the smallest element of each array along with its source index.",
+    "Extract min and push the next element from that array into heap.",
+    "Achieves O(N log k) time where N = k * n."
+  ],
+  "starter_code": {
+    "python": "# Merge K Sorted Arrays\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Merge K Sorted Arrays\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Merge K Sorted Arrays\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Merge K Sorted Arrays\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Merge K Sorted Arrays\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    k, n = int(data[0]), int(data[1])\n    all_nums = [int(x) for x in data[2:2+k*n]]\n    all_nums.sort()\n    print(' '.join(map(str, all_nums)))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

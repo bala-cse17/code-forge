@@ -1,0 +1,55 @@
+{
+  "id": "p085_kth_smallest_sorted_matrix",
+  "number": 85,
+  "slug": "kth-smallest-element-in-a-sorted-matrix",
+  "category_id": 9,
+  "category_name": "Heaps and Priority Queues",
+  "title": "Kth Smallest Element in a Sorted Matrix",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an `n x n` matrix where each of the rows and columns is sorted in ascending order, return the `k`th smallest element in the matrix.",
+  "input_format": "First line contains `n` and `k`. Following `n` lines contain `n` integers.",
+  "output_format": "The kth smallest element.",
+  "constraints": "1 <= n <= 300\n1 <= k <= n^2",
+  "sample_tests": [
+    {
+      "input": "3 8\n1 5 9\n10 11 13\n12 13 15",
+      "output": "13",
+      "explanation": "The 8th smallest element is 13."
+    },
+    {
+      "input": "1 1\n-5",
+      "output": "-5",
+      "explanation": "Single element matrix."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2 1\n1 2\n1 3",
+      "output": "1"
+    },
+    {
+      "input": "2 4\n1 2\n3 4",
+      "output": "4"
+    },
+    {
+      "input": "3 5\n1 2 3\n4 5 6\n7 8 9",
+      "output": "5"
+    }
+  ],
+  "hints": [
+    "Push the first element of each row into a min-heap.",
+    "Pop the minimum element k times.",
+    "Whenever popping (val, r, c), push the next column element in the same row `(matrix[r][c+1], r, c+1)`."
+  ],
+  "starter_code": {
+    "python": "# Kth Smallest Element in a Sorted Matrix\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Kth Smallest Element in a Sorted Matrix\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Kth Smallest Element in a Sorted Matrix\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Kth Smallest Element in a Sorted Matrix\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Kth Smallest Element in a Sorted Matrix\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys, heapq\ndata = sys.stdin.read().split()\nif data:\n    n, k = int(data[0]), int(data[1])\n    matrix = []\n    idx = 2\n    for _ in range(n):\n        matrix.append([int(x) for x in data[idx:idx+n]])\n        idx += n\n    pq = [(matrix[i][0], i, 0) for i in range(min(n, k))]\n    heapq.heapify(pq)\n    ans = 0\n    for _ in range(k):\n        ans, r, c = heapq.heappop(pq)\n        if c + 1 < n: heapq.heappush(pq, (matrix[r][c+1], r, c+1))\n    print(ans)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

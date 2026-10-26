@@ -1,0 +1,68 @@
+{
+  "id": "p015_longest_substring_no_repeat",
+  "number": 15,
+  "slug": "longest-substring-without-repeating-characters",
+  "category_id": 2,
+  "category_name": "Strings",
+  "title": "Longest Substring Without Repeating Characters",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given a string `s`, find the length of the longest substring without repeating characters.",
+  "input_format": "A single line containing string `s`.",
+  "output_format": "Length of the longest substring without repeating characters.",
+  "constraints": "0 <= length(s) <= 5 * 10^4",
+  "sample_tests": [
+    {
+      "input": "abcabcbb",
+      "output": "3",
+      "explanation": "The answer is 'abc', length 3."
+    },
+    {
+      "input": "bbbbb",
+      "output": "1",
+      "explanation": "The answer is 'b', length 1."
+    },
+    {
+      "input": "pwwkew",
+      "output": "3",
+      "explanation": "The answer is 'wke', length 3."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": " ",
+      "output": "1"
+    },
+    {
+      "input": "au",
+      "output": "2"
+    },
+    {
+      "input": "dvdf",
+      "output": "3"
+    },
+    {
+      "input": "abba",
+      "output": "2"
+    },
+    {
+      "input": "",
+      "output": "0"
+    }
+  ],
+  "hints": [
+    "Use a sliding window with two pointers left and right.",
+    "Maintain a hash map storing the most recent index of each character.",
+    "When a duplicate character is seen, move left pointer past its previous index."
+  ],
+  "starter_code": {
+    "python": "# Longest Substring Without Repeating Characters\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Longest Substring Without Repeating Characters\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Longest Substring Without Repeating Characters\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Longest Substring Without Repeating Characters\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Longest Substring Without Repeating Characters\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ns = sys.stdin.read().rstrip('\\r\\n')\nseen = {}\nleft = ans = 0\nfor right, c in enumerate(s):\n    if c in seen and seen[c] >= left:\n        left = seen[c] + 1\n    seen[c] = right\n    ans = max(ans, right - left + 1)\nprint(ans)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

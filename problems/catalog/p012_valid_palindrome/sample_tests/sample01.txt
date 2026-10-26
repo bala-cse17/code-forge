@@ -1,0 +1,4 @@
+INPUT:
+A man, a plan, a canal: Panama
+EXPECTED:
+true

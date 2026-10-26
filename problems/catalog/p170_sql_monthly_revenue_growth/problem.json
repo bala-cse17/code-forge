@@ -1,0 +1,43 @@
+{
+  "id": "p170_sql_monthly_revenue_growth",
+  "number": 170,
+  "slug": "calculate-monthly-revenue-growth",
+  "category_id": 17,
+  "category_name": "Database and SQL",
+  "title": "Calculate Monthly Revenue Growth",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Write an SQL query to calculate month-over-month revenue growth percentage rounded to 2 decimal places.\n\nTable `MonthlyRevenue`: `month (TEXT), revenue (INT)`",
+  "input_format": "Database contains table `MonthlyRevenue`.",
+  "output_format": "Month and Growth Percentage formatted to 2 decimals.",
+  "constraints": "Revenue is a positive integer.",
+  "sample_tests": [
+    {
+      "input": "CREATE TABLE MonthlyRevenue (month TEXT, revenue INT);\nINSERT INTO MonthlyRevenue VALUES ('2024-01', 1000), ('2024-02', 1200), ('2024-03', 1500);",
+      "output": "2024-02 20.00\n2024-03 25.00",
+      "explanation": "MoM growth percentages."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "CREATE TABLE MonthlyRevenue (month TEXT, revenue INT);\nINSERT INTO MonthlyRevenue VALUES ('2024-01', 500), ('2024-02', 500);",
+      "output": "2024-02 0.00"
+    }
+  ],
+  "hints": [
+    "Use the window function `LAG(revenue) OVER (ORDER BY month)` to get the previous month's revenue.",
+    "Calculate percentage change: `(current - previous) / previous * 100`.",
+    "Format to 2 decimal places."
+  ],
+  "starter_code": {
+    "sql": "-- Calculate Monthly Revenue Growth\n-- Write your SQL query below\nSELECT ...\nFROM ...;\n",
+    "python": "# Calculate Monthly Revenue Growth (SQL Problem)\n# You can test via SQL query or Python\nimport sys\nprint('Run query in SQL tab')\n",
+    "c": "// SQL Problem: Calculate Monthly Revenue Growth\n",
+    "cpp": "// SQL Problem: Calculate Monthly Revenue Growth\n",
+    "java": "// SQL Problem: Calculate Monthly Revenue Growth\n",
+    "javascript": "// SQL Problem: Calculate Monthly Revenue Growth\n"
+  },
+  "reference_solution": "SELECT month, printf('%.2f', (CAST(revenue AS REAL) - LAG(revenue) OVER (ORDER BY month)) / LAG(revenue) OVER (ORDER BY month) * 100.0) AS growth FROM MonthlyRevenue WHERE LAG(revenue) OVER (ORDER BY month) IS NOT NULL;",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

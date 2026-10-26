@@ -1,0 +1,5 @@
+INPUT:
+5 8
+8 8 8 8 8
+EXPECTED:
+0 4

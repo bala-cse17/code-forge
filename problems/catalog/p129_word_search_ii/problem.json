@@ -1,0 +1,51 @@
+{
+  "id": "p129_word_search_ii",
+  "number": 129,
+  "slug": "word-search-ii",
+  "category_id": 13,
+  "category_name": "Backtracking and Recursion",
+  "title": "Word Search II",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Given an `m x n` board of characters and a list of strings `words`, return all words that can be formed on the board. Output the matching words in alphabetical order separated by space.",
+  "input_format": "First line contains `m`, `n`, and `k` (words). Following `m` lines contain board. Next line contains `k` words.",
+  "output_format": "Space-separated matching words in alphabetical order.",
+  "constraints": "1 <= m, n <= 12\n1 <= k <= 100",
+  "sample_tests": [
+    {
+      "input": "4 4 4\no a a n\ne t a e\ni h k r\ni f l v\noath pea eat rain",
+      "output": "eat oath",
+      "explanation": "Only 'eat' and 'oath' exist on the board."
+    },
+    {
+      "input": "2 2 1\na b\nc d\nabcd",
+      "output": "",
+      "explanation": "No single word."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1 1 1\na\na",
+      "output": "a"
+    },
+    {
+      "input": "2 2 2\na b\na a\na aba",
+      "output": "a aba"
+    }
+  ],
+  "hints": [
+    "Build a Trie containing all dictionary words.",
+    "Traverse the board with DFS, pruning paths that do not match any Trie prefix.",
+    "Mark visited cells in-place to avoid duplicate visits during recursion."
+  ],
+  "starter_code": {
+    "python": "# Word Search II\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Word Search II\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Word Search II\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Word Search II\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Word Search II\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nif lines:\n    parts = lines[0].split()\n    m, n, k = int(parts[0]), int(parts[1]), int(parts[2])\n    board = [lines[1+i].split() for i in range(m)]\n    words = lines[1+m].split()\n    trie = {}\n    for w in words:\n        node = trie\n        for c in w:\n            node = node.setdefault(c, {})\n        node['$'] = w\n    found = set()\n    def dfs(r, c, parent):\n        ch = board[r][c]\n        if ch not in parent: return\n        curr = parent[ch]\n        if '$' in curr: found.add(curr['$'])\n        board[r][c] = '#'\n        for dr, dc in [(1,0),(-1,0),(0,1),(0,-1)]:\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < m and 0 <= nc < n and board[nr][nc] != '#':\n                dfs(nr, nc, curr)\n        board[r][c] = ch\n    for r in range(m):\n        for c in range(n):\n            dfs(r, c, trie)\n    print(' '.join(sorted(list(found))))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

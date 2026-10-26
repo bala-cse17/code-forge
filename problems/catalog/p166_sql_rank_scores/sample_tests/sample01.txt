@@ -1,0 +1,10 @@
+INPUT:
+CREATE TABLE Scores (id INT, score REAL);
+INSERT INTO Scores VALUES (1, 3.50), (2, 3.65), (3, 4.00), (4, 3.85), (5, 4.00), (6, 3.65);
+EXPECTED:
+4.0 1
+4.0 1
+3.85 2
+3.65 3
+3.65 3
+3.5 4

@@ -1,0 +1,7 @@
+INPUT:
+3
+ADD ab
+SEARCH a.
+SEARCH .b
+EXPECTED:
+true true

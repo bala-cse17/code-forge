@@ -1,0 +1,60 @@
+{
+  "id": "p130_expression_add_operators",
+  "number": 130,
+  "slug": "expression-add-operators",
+  "category_id": 13,
+  "category_name": "Backtracking and Recursion",
+  "title": "Expression Add Operators",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Given a string `num` that contains only digits and an integer `target`, return the number of valid expressions formed by inserting binary operators '+', '-', and/or '*' between the digits of `num` that evaluate to `target`.",
+  "input_format": "First line contains `num` and `target`.",
+  "output_format": "Total count of valid expressions.",
+  "constraints": "1 <= length(num) <= 10\n-2^31 <= target <= 2^31 - 1",
+  "sample_tests": [
+    {
+      "input": "123 6",
+      "output": "2",
+      "explanation": "1+2+3 and 1*2*3 both evaluate to 6."
+    },
+    {
+      "input": "232 8",
+      "output": "2",
+      "explanation": "2*3+2 and 2+3*2 evaluate to 8."
+    },
+    {
+      "input": "3456237490 9191",
+      "output": "0",
+      "explanation": "No expression equals 9191."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "105 5",
+      "output": "2"
+    },
+    {
+      "input": "00 0",
+      "output": "3"
+    },
+    {
+      "input": "12 3",
+      "output": "1"
+    }
+  ],
+  "hints": [
+    "Use backtracking to try all candidate numbers starting at index.",
+    "Handle multiplication precedence by tracking `prev_operand`.",
+    "For multiplication: subtract `prev` and add `prev * current_val`."
+  ],
+  "starter_code": {
+    "python": "# Expression Add Operators\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Expression Add Operators\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Expression Add Operators\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Expression Add Operators\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Expression Add Operators\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    num, target = data[0], int(data[1])\n    n = len(num)\n    ans = 0\n    def bt(idx, prev, cur, val):\n        nonlocal ans\n        if idx == n:\n            if val == target: ans += 1\n            return\n        for i in range(idx + 1, n + 1):\n            s = num[idx:i]\n            if len(s) > 1 and s[0] == '0': break\n            v = int(s)\n            if idx == 0:\n                bt(i, v, v, v)\n            else:\n                bt(i, v, v, val + v)\n                bt(i, -v, v, val - v)\n                bt(i, prev * v, v, val - prev + prev * v)\n    bt(0, 0, 0, 0)\n    print(ans)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

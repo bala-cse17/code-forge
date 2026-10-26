@@ -1,0 +1,60 @@
+{
+  "id": "p028_count_distinct_elements_window",
+  "number": 28,
+  "slug": "count-distinct-elements-in-every-window",
+  "category_id": 3,
+  "category_name": "Hashing and Frequency Counting",
+  "title": "Count Distinct Elements in Every Window",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an array of integers `nums` and a window size `k`, return the count of distinct elements in every window of size `k` as the window slides from left to right.",
+  "input_format": "First line contains `n` and `k`. Second line contains `n` integers.",
+  "output_format": "Space-separated distinct counts for each window.",
+  "constraints": "1 <= k <= n <= 10^5\n-10^9 <= nums[i] <= 10^9",
+  "sample_tests": [
+    {
+      "input": "7 4\n1 2 1 3 4 2 3",
+      "output": "3 4 4 3",
+      "explanation": "Window distinct counts."
+    },
+    {
+      "input": "5 2\n4 1 1 2 3",
+      "output": "2 1 2 2",
+      "explanation": "Distinct counts per window."
+    },
+    {
+      "input": "3 3\n1 2 3",
+      "output": "3",
+      "explanation": "Entire array."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "4 1\n1 1 1 1",
+      "output": "1 1 1 1"
+    },
+    {
+      "input": "6 3\n1 2 1 2 1 2",
+      "output": "2 2 2 2"
+    },
+    {
+      "input": "5 3\n1 2 3 4 5",
+      "output": "3 3 3"
+    }
+  ],
+  "hints": [
+    "Use a frequency map for the first k elements.",
+    "Slide the window by decrementing the count of the leaving element and adding the new element.",
+    "Remove elements from the map when their count drops to 0 so `len(map)` gives distinct count."
+  ],
+  "starter_code": {
+    "python": "# Count Distinct Elements in Every Window\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Count Distinct Elements in Every Window\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Count Distinct Elements in Every Window\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Count Distinct Elements in Every Window\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Count Distinct Elements in Every Window\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, k = int(data[0]), int(data[1])\n    nums = [int(x) for x in data[2:2+n]]\n    from collections import defaultdict\n    counts = defaultdict(int)\n    for i in range(k):\n        counts[nums[i]] += 1\n    res = [str(len(counts))]\n    for i in range(k, n):\n        out_elem = nums[i - k]\n        counts[out_elem] -= 1\n        if counts[out_elem] == 0: del counts[out_elem]\n        in_elem = nums[i]\n        counts[in_elem] += 1\n        res.append(str(len(counts)))\n    print(' '.join(res))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

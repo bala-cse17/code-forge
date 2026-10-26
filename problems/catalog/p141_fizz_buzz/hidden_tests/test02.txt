@@ -1,0 +1,4 @@
+INPUT:
+4
+EXPECTED:
+1 2 Fizz 4

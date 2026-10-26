@@ -1,0 +1,51 @@
+{
+  "id": "p158_design_an_lru_cache",
+  "number": 158,
+  "slug": "design-an-lru-cache",
+  "category_id": 16,
+  "category_name": "Tries and Advanced Data Structures",
+  "title": "Design an LRU Cache",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Design a data structure that follows the constraints of a Least Recently Used (LRU) cache. Operations: `PUT key val`, `GET key`.",
+  "input_format": "First line contains capacity `c` and number of operations `m`. Following `m` lines contain commands.",
+  "output_format": "Outputs of GET commands separated by space.",
+  "constraints": "1 <= c <= 3000\n1 <= m <= 10^4",
+  "sample_tests": [
+    {
+      "input": "2 5\nPUT 1 1\nPUT 2 2\nGET 1\nPUT 3 3\nGET 2",
+      "output": "1 -1",
+      "explanation": "GET 1 returns 1. PUT 3 evicts key 2 (least recently used). GET 2 returns -1."
+    },
+    {
+      "input": "1 3\nPUT 1 10\nGET 1\nGET 2",
+      "output": "10 -1",
+      "explanation": "GET 1 gives 10, GET 2 gives -1."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2 4\nPUT 1 5\nPUT 2 10\nGET 1\nGET 2",
+      "output": "5 10"
+    },
+    {
+      "input": "2 6\nPUT 1 1\nPUT 2 2\nGET 1\nPUT 3 3\nGET 2\nGET 3",
+      "output": "1 -1 3"
+    }
+  ],
+  "hints": [
+    "Use a doubly linked list combined with a hash map, or Python's `OrderedDict`.",
+    "When accessing a key via GET or PUT, move it to the most recently used end.",
+    "When capacity is exceeded, evict the item from the front."
+  ],
+  "starter_code": {
+    "python": "# Design an LRU Cache\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Design an LRU Cache\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Design an LRU Cache\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Design an LRU Cache\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Design an LRU Cache\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nfrom collections import OrderedDict\nlines = sys.stdin.read().splitlines()\nout = []\nif lines:\n    parts = lines[0].split()\n    cap, m = int(parts[0]), int(parts[1])\n    cache = OrderedDict()\n    for line in lines[1:1+m]:\n        cmd = line.split()\n        if not cmd: continue\n        if cmd[0] == 'PUT':\n            k, v = int(cmd[1]), int(cmd[2])\n            if k in cache: cache.move_to_end(k)\n            cache[k] = v\n            if len(cache) > cap: cache.popitem(last=False)\n        elif cmd[0] == 'GET':\n            k = int(cmd[1])\n            if k in cache:\n                cache.move_to_end(k)\n                out.append(str(cache[k]))\n            else: out.append('-1')\nprint(' '.join(out))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

@@ -1,0 +1,59 @@
+{
+  "id": "p107_edit_distance",
+  "number": 107,
+  "slug": "edit-distance",
+  "category_id": 11,
+  "category_name": "Dynamic Programming",
+  "title": "Edit Distance",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given two strings `word1` and `word2`, return the minimum number of operations required to convert `word1` to `word2`. Operations permitted: insert, delete, or replace a character.",
+  "input_format": "Two lines, first is `word1`, second is `word2`.",
+  "output_format": "Minimum operations integer.",
+  "constraints": "0 <= length(word1), length(word2) <= 500",
+  "sample_tests": [
+    {
+      "input": "horse\nros",
+      "output": "3",
+      "explanation": "horse -> rorse -> rose -> ros (3 operations)."
+    },
+    {
+      "input": "intention\nexecution",
+      "output": "5",
+      "explanation": "5 operations."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "a\nb",
+      "output": "1"
+    },
+    {
+      "input": "\na",
+      "output": "1"
+    },
+    {
+      "input": "abc\nabc",
+      "output": "0"
+    },
+    {
+      "input": "plasma\naltitude",
+      "output": "6"
+    }
+  ],
+  "hints": [
+    "Classic Levenshtein distance dynamic programming.",
+    "Base cases: converting to/from empty string costs the length of the string.",
+    "Transitions: delete `dp[i-1][j]`, insert `dp[i][j-1]`, replace `dp[i-1][j-1]`."
+  ],
+  "starter_code": {
+    "python": "# Edit Distance\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Edit Distance\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Edit Distance\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Edit Distance\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Edit Distance\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().split()\nw1 = lines[0] if len(lines) > 0 else ''\nw2 = lines[1] if len(lines) > 1 else ''\nm, n = len(w1), len(w2)\ndp = [[0]*(n+1) for _ in range(m+1)]\nfor i in range(m+1): dp[i][0] = i\nfor j in range(n+1): dp[0][j] = j\nfor i in range(1, m+1):\n    for j in range(1, n+1):\n        if w1[i-1] == w2[j-1]: dp[i][j] = dp[i-1][j-1]\n        else: dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])\nprint(dp[m][n])\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

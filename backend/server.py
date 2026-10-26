@@ -58,6 +58,11 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
     frontend_dir: str = ""
     start_time: float = time.time()
     rate_limiter = RateLimiter(max_requests=240, window_seconds=60)
+    # Dedicated stricter rate limiters for sensitive endpoints
+    register_limiter = RateLimiter(max_requests=10, window_seconds=60)
+    login_limiter = RateLimiter(max_requests=10, window_seconds=60)
+    submit_limiter = RateLimiter(max_requests=30, window_seconds=60)
+    run_limiter = RateLimiter(max_requests=60, window_seconds=60)
     broadcast_message: Dict[str, Any] = {"text": "", "severity": "info", "timestamp": "", "id": 0}
     is_frozen: bool = False
 
@@ -194,14 +199,26 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
 
     # ------------------- API Handlers -------------------
 
-    def is_admin_authenticated(self, body: Dict[str, Any] = None) -> bool:
-        """Checks admin authorization via Authorization header token, body token, or password/id."""
+    def is_admin_authenticated(self, body: Dict[str, Any] = None, query: Dict[str, list] = None) -> bool:
+        """Checks admin authorization via Authorization header token, body token, query parameters, or password/id."""
         auth_header = self.headers.get("Authorization", "")
         if auth_header.startswith("Bearer "):
             token = auth_header.replace("Bearer ", "").strip()
             verified = self.auth.verify_session_token(token)
             if verified and verified.get("pid") == self.auth.admin_id:
                 return True
+
+        if query:
+            q_token = query.get("token") or query.get("admin_token")
+            if q_token:
+                verified = self.auth.verify_session_token(q_token[0])
+                if verified and verified.get("pid") == self.auth.admin_id:
+                    return True
+            q_pass = query.get("password") or query.get("admin_password")
+            if q_pass:
+                q_id = query.get("admin_id") or query.get("username")
+                admin_id = q_id[0] if q_id else None
+                return self.auth.verify_admin_credentials(admin_id, q_pass[0])
 
         if body:
             token = body.get("token")
@@ -217,6 +234,28 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
                     return self.auth.verify_admin_credentials(admin_id, password)
                 return self.auth.verify_admin_password(password)
         return False
+
+    def get_participant_from_request(self, body: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Validates participant session token from Authorization header or body.
+        Returns the verified payload dict with 'pid', 'name', 'role', or None if unauthorized.
+        """
+        # 1. Check Authorization header
+        auth_header = self.headers.get("Authorization", "")
+        if auth_header.startswith("Bearer "):
+            token = auth_header.replace("Bearer ", "").strip()
+            verified = self.auth.verify_session_token(token)
+            if verified and verified.get("pid"):
+                return verified
+
+        # 2. Check body token
+        token = body.get("token") if body else None
+        if token:
+            verified = self.auth.verify_session_token(token)
+            if verified and verified.get("pid"):
+                return verified
+
+        return None
 
     def handle_api_get(self, path: str, query: Dict[str, list]):
         # GET /api/health
@@ -264,6 +303,9 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
 
         # GET /api/admin/proctor-logs
         if path in ["/api/admin/proctor-logs", "/api/proctor-logs"]:
+            if not self.is_admin_authenticated(query=query):
+                self.send_error_json("Unauthorized. Admin authentication required to access proctor logs.", 401)
+                return
             self.send_json({
                 "success": True,
                 "tab_switches": self.storage.get_tab_switches(limit=200),
@@ -273,42 +315,129 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
 
         # GET /api/config
         if path == "/api/config":
-            tier_locks = self.config.get("tier_locks", {"easy": True, "medium": True, "hard": True})
             public_config = {
-                "competition_name": self.config.get("competition_name", "CODE COMBAT Pro"),
-                "tagline": self.config.get("tagline", "Compete. Code. Conquer."),
-                "description": self.config.get("description", "An offline competitive programming platform."),
-                "competition_duration_minutes": self.config.get("competition_duration_minutes", 60),
-                "tier_locks": tier_locks,
-                "supported_languages": self.config.get("supported_languages", [
-                    {"id": "python", "name": "Python 3 (Normal / Script)", "extension": "py"},
-                    {"id": "python_class", "name": "Python 3 (Class / LeetCode)", "extension": "py"},
-                    {"id": "java", "name": "Java (Solution.java)", "extension": "java"},
-                    {"id": "c", "name": "C (solution.c)", "extension": "c"}
-                ])
+                "competition_name": self.config.get("competition_name", "CODE COMBAT PRO"),
+                "platform_name": "CODE-COMBAT",
+                "tagline": "Think. Code. Compete.",
+                "description": "Continuous algorithmic practice and competitive programming platform.",
+                "is_practice_mode": True,
+                "tier_locks": {"easy": False, "medium": False, "hard": False},
+                "supported_languages": [
+                    {"id": "python", "name": "Python 3", "extension": "py"},
+                    {"id": "javascript", "name": "JavaScript (Node.js)", "extension": "js"},
+                    {"id": "cpp", "name": "C++ (g++)", "extension": "cpp"},
+                    {"id": "c", "name": "C (gcc)", "extension": "c"},
+                    {"id": "java", "name": "Java (OpenJDK)", "extension": "java"},
+                    {"id": "sql", "name": "SQL (Database)", "extension": "sql"}
+                ]
             }
             self.send_json(public_config)
             return
 
+        # GET /api/categories
+        if path == "/api/categories":
+            try:
+                from backend.seed_data import CATEGORIES
+            except Exception:
+                CATEGORIES = []
+            self.send_json({"success": True, "categories": CATEGORIES})
+            return
+
+        # GET /api/user/bookmarks
+        if path == "/api/user/bookmarks":
+            session = self.get_participant_from_request({})
+            uid = session.get("pid", "").strip() if session else query.get("user_id", [""])[0].strip()
+            if not uid:
+                self.send_json({"success": True, "bookmarks": []})
+                return
+            bms = self.storage.get_user_bookmarks(uid)
+            self.send_json({"success": True, "bookmarks": bms})
+            return
+
         # GET /api/problems
         if path == "/api/problems":
-            participant_id = query.get("participant_id", [None])[0]
-            solved_set = self.storage.get_solved_problems(participant_id) if participant_id else set()
-            tier_locks = self.config.get("tier_locks", {"easy": True, "medium": True, "hard": True})
-            problems = self.problems_manager.get_problem_list(solved_set, tier_locks=tier_locks)
+            session = self.get_participant_from_request({})
+            participant_id = session.get("pid") if session else query.get("participant_id", [None])[0]
+
+            cat_id_raw = query.get("category_id", [None])[0]
+            cat_id = int(cat_id_raw) if cat_id_raw and cat_id_raw.isdigit() else None
+            difficulty = query.get("difficulty", [None])[0]
+            status = query.get("status", [None])[0]
+            search = query.get("search", [None])[0]
+            bookmarked_raw = query.get("bookmarked", ["false"])[0]
+            bookmarked_only = (bookmarked_raw.lower() in ["true", "1", "yes"])
+            sort_by = query.get("sort_by", ["number"])[0]
+            sort_order = query.get("sort_order", ["asc"])[0]
+
+            page_raw = query.get("page", ["1"])[0]
+            limit_raw = query.get("limit", ["180"])[0]
+            try:
+                page = max(1, int(page_raw))
+            except Exception:
+                page = 1
+            try:
+                limit = max(0, int(limit_raw))
+            except Exception:
+                limit = 180
+
+            catalog = self.storage.get_problems_catalog(
+                user_id=participant_id,
+                category_id=cat_id,
+                difficulty=difficulty,
+                status=status,
+                search=search,
+                bookmarked_only=bookmarked_only,
+                sort_by=sort_by,
+                sort_order=sort_order,
+                page=page,
+                limit=limit
+            )
+
+            try:
+                from backend.seed_data import CATEGORIES
+            except Exception:
+                CATEGORIES = []
+
+            tier_locks = {"easy": False, "medium": False, "hard": False}
+            user_bms = self.storage.get_user_bookmarks(participant_id) if participant_id else []
+
             self.send_json({
-                "problems": problems,
-                "tier_locks": tier_locks
+                "problems": catalog["problems"],
+                "total": catalog["total"],
+                "stats": catalog["stats"],
+                "page": catalog["page"],
+                "limit": catalog["limit"],
+                "categories": CATEGORIES,
+                "tier_locks": tier_locks,
+                "bookmarks": user_bms
             })
+            return
+
+        # GET /api/problems/<id>/discussions
+        if path.startswith("/api/problems/") and path.endswith("/discussions"):
+            prob_id = path.replace("/api/problems/", "").replace("/discussions", "").strip()
+            discussions = self.storage.get_discussions(prob_id)
+            self.send_json({"success": True, "discussions": discussions})
             return
 
         # GET /api/problems/<id>
         if path.startswith("/api/problems/"):
             prob_id = path.replace("/api/problems/", "").strip()
-            participant_id = query.get("participant_id", [None])[0]
-            tier_locks = self.config.get("tier_locks", {"easy": True, "medium": True, "hard": True})
+            session = self.get_participant_from_request({})
+            participant_id = session.get("pid") if session else query.get("participant_id", [None])[0]
+            tier_locks = {"easy": False, "medium": False, "hard": False}
             detail = self.problems_manager.get_problem_detail(prob_id, participant_id=participant_id, storage=self.storage, tier_locks=tier_locks)
             if detail:
+                pid = detail.get("id", prob_id)
+                if participant_id:
+                    att = self.storage.get_problem_attempts(participant_id, pid)
+                    detail["attempts"] = att.get("attempts", 0)
+                    detail["best_score"] = att.get("best_score", 0)
+                    detail["bookmarked"] = self.storage.is_problem_bookmarked(participant_id, pid)
+                else:
+                    detail["attempts"] = 0
+                    detail["best_score"] = 0
+                    detail["bookmarked"] = False
                 self.send_json(detail)
             else:
                 self.send_error_json("Problem not found", 404)
@@ -332,9 +461,41 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
         # GET /api/submissions
         if path == "/api/submissions":
             participant_id = query.get("participant_id", [None])[0]
+            problem_id = query.get("problem_id", [None])[0]
+            status = query.get("status", [None])[0]
+            language = query.get("language", [None])[0]
             limit = int(query.get("limit", [100])[0])
-            subs = self.storage.get_submissions(participant_id=participant_id, limit=limit)
-            self.send_json({"submissions": subs})
+            offset = int(query.get("offset", [0])[0])
+
+            is_admin = self.is_admin_authenticated(query=query)
+            session = self.get_participant_from_request({})
+            auth_pid = session.get("pid") if session else None
+
+            subs = self.storage.get_submissions(
+                participant_id=participant_id,
+                problem_id=problem_id,
+                status=status,
+                language=language,
+                limit=limit,
+                offset=offset
+            )
+
+            # Source code privacy: hide full source unless admin or own submission
+            for s in subs:
+                if not is_admin and s.get("participant_id") != auth_pid:
+                    s["code"] = "// Source code hidden (only visible to author or tournament admin)"
+
+            self.send_json({"success": True, "submissions": subs})
+            return
+
+        # GET /api/participant/<id>/stats
+        if path.startswith("/api/participant/") and path.endswith("/stats"):
+            pid = path.replace("/api/participant/", "").replace("/stats", "").strip()
+            stats = self.storage.get_participant_stats(pid)
+            if stats:
+                self.send_json({"success": True, "stats": stats})
+            else:
+                self.send_error_json("Participant stats not found", 404)
             return
 
         # GET /api/participants
@@ -364,12 +525,18 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
 
         # GET /api/admin/export
         if path == "/api/admin/export":
+            if not self.is_admin_authenticated(query=query):
+                self.send_error_json("Unauthorized. Admin authentication required to export data.", 401)
+                return
             data = self.storage.export_all_data()
             self.send_json(data)
             return
 
         # GET /api/admin/export/csv
         if path == "/api/admin/export/csv":
+            if not self.is_admin_authenticated(query=query):
+                self.send_error_json("Unauthorized. Admin authentication required to export CSV.", 401)
+                return
             leaderboard = self.storage.get_leaderboard()
             lines = ["Rank,Participant Name,Register No,College,Score,Problems Solved,Easy,Medium,Hard,Total Runtime (s),Last Submission"]
             for row in leaderboard:
@@ -385,8 +552,13 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
             self.send_header("Content-Length", str(len(csv_content)))
             self.end_headers()
             self.wfile.write(csv_content)
+            return
+
         # GET /api/admin/export/pdf or /api/admin/solutions-pdf or /api/solutions.pdf
         if path in ["/api/admin/export/pdf", "/api/admin/solutions-pdf", "/api/solutions.pdf", "/api/solutions-pdf"]:
+            if not self.is_admin_authenticated(query=query):
+                self.send_error_json("Unauthorized. Admin authentication required to download solutions.", 401)
+                return
             base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             pdf_path = os.path.join(base_dir, "CODE_COMBAT_MASTER_SOLUTIONS.pdf")
             if not os.path.exists(pdf_path):
@@ -415,33 +587,182 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
             self.wfile.write(pdf_bytes)
             return
 
+        # GET /api/admin/audit-logs
+        if path == "/api/admin/audit-logs":
+            if not self.is_admin_authenticated(query=query):
+                self.send_error_json("Unauthorized. Admin authentication required.", 401)
+                return
+            limit = int(query.get("limit", [100])[0])
+            logs = self.storage.get_audit_logs(limit=limit)
+            self.send_json({"success": True, "logs": logs})
+            return
+
+        # GET /api/admin/analytics
+        if path == "/api/admin/analytics":
+            if not self.is_admin_authenticated(query=query):
+                self.send_error_json("Unauthorized. Admin authentication required.", 401)
+                return
+            analytics = self.storage.get_analytics()
+            self.send_json({"success": True, "analytics": analytics})
+            return
+
+        # GET /api/contest
+        if path == "/api/contest":
+            self.send_json({
+                "success": True,
+                "contest": {
+                    "name": self.config.get("competition_name", "CODE COMBAT PRO"),
+                    "tagline": self.config.get("tagline", "Think. Code. Compete."),
+                    "description": self.config.get("description", ""),
+                    "duration_minutes": self.config.get("competition_duration_minutes", 60),
+                    "active_set": self.problems_manager.active_set,
+                    "tier_locks": self.config.get("tier_locks", {}),
+                    "start_time": self.config.get("start_time")
+                }
+            })
+            return
+
+        # GET /api/auth/me or /api/user/profile
+        if path in ("/api/auth/me", "/api/user/profile"):
+            session = self.get_participant_from_request({})
+            if not session or not session.get("pid"):
+                self.send_error_json("Unauthorized. Invalid or expired session token.", 401)
+                return
+            profile = self.storage.get_user_profile(session["pid"])
+            if not profile:
+                self.send_error_json("Participant not found.", 404)
+                return
+            self.send_json({"success": True, "user": profile, "profile": profile})
+            return
+
+        # GET /api/user/<id>/achievements
+        if path.startswith("/api/user/") and path.endswith("/achievements"):
+            uid = path.replace("/api/user/", "").replace("/achievements", "").strip()
+            achievements = self.storage.get_user_achievements(uid)
+            self.send_json({"success": True, "achievements": achievements})
+            return
+
+        # GET /api/achievements
+        if path == "/api/achievements":
+            achievements = self.storage.get_user_achievements("")
+            self.send_json({"success": True, "achievements": achievements})
+            return
+
+        # GET /api/contests
+        if path == "/api/contests":
+            contests = self.storage.get_contests()
+            self.send_json({"success": True, "contests": contests})
+            return
+
+        # GET /api/contest/<id>/standings
+        if path.startswith("/api/contest/") and path.endswith("/standings"):
+            cid = path.replace("/api/contest/", "").replace("/standings", "").strip()
+            standings = self.storage.get_contest_standings(cid)
+            self.send_json({"success": True, "standings": standings})
+            return
+
+        # GET /api/contest/<id>
+        if path.startswith("/api/contest/"):
+            cid = path.replace("/api/contest/", "").strip()
+            contest = self.storage.get_contest(cid)
+            if contest:
+                self.send_json({"success": True, "contest": contest})
+            else:
+                self.send_error_json("Contest not found", 404)
+            return
+
+        # GET /api/admin/test-cases
+        if path == "/api/admin/test-cases":
+            if not self.is_admin_authenticated(query=query):
+                self.send_error_json("Unauthorized. Admin authentication required.", 401)
+                return
+            prob_id = query.get("problem_id", [""])[0].strip()
+            test_cases = self.storage.get_test_cases(prob_id) if prob_id else []
+            self.send_json({"success": True, "test_cases": test_cases})
+            return
+
         self.send_error_json("API route not found", 404)
 
     def handle_api_post(self, path: str):
         body = self.parse_json_body()
+        client_ip = self.client_address[0]
 
         # POST /api/register
         if path == "/api/register":
+            if not self.register_limiter.is_allowed(client_ip):
+                self.send_error_json("Too many registration attempts. Try again later.", 429)
+                return
+
             name = (body.get("name") or "").strip()
             college = (body.get("college") or body.get("institution") or "").strip()
             reg_no = (body.get("reg_no") or body.get("registration_number") or body.get("reg_number") or "").strip()
+            password = (body.get("password") or "").strip()
 
             if not name:
                 self.send_error_json("Participant name is required.", 400)
                 return
+            if not reg_no:
+                self.send_error_json("Registration number is required.", 400)
+                return
 
-            participant = self.storage.register_participant(name, college, reg_no)
+            participant = self.storage.register_participant(name, college, reg_no, password or None)
+            already = participant.pop("already_registered", False)
             session_token = self.auth.create_session_token(participant["id"], participant["name"])
             self.send_json({
                 "success": True,
-                "participant": participant,
+                "participant": {k: v for k, v in participant.items() if k not in ("password_hash", "password_salt")},
                 "token": session_token,
-                "message": "Registration successful"
+                "message": "Welcome back! Existing session restored." if already else "Registration successful"
             })
             return
 
-        # POST /api/run (Sample tests or custom input)
+        # POST /api/login (Participant login with reg_no + optional password)
+        if path == "/api/login":
+            if not self.login_limiter.is_allowed(client_ip):
+                self.send_error_json("Too many login attempts. Try again in a minute.", 429)
+                return
+
+            reg_no = (body.get("reg_no") or body.get("registration_number") or "").strip()
+            password = (body.get("password") or "").strip()
+
+            if not reg_no:
+                self.send_error_json("Registration number is required.", 400)
+                return
+
+            participant = self.storage.authenticate_participant(reg_no, password)
+            if not participant:
+                self.send_error_json("Invalid registration number or password.", 401)
+                return
+
+            session_token = self.auth.create_session_token(participant["id"], participant["name"])
+            self.send_json({
+                "success": True,
+                "participant": {k: v for k, v in participant.items() if k not in ("password_hash", "password_salt")},
+                "token": session_token,
+                "message": "Login successful"
+            })
+            return
+
+        # POST /api/logout (Revoke participant session token)
+        if path == "/api/logout":
+            auth_header = self.headers.get("Authorization", "")
+            token = None
+            if auth_header.startswith("Bearer "):
+                token = auth_header.replace("Bearer ", "").strip()
+            elif body.get("token"):
+                token = body["token"]
+
+            if token:
+                self.auth.revoke_token(token)
+            self.send_json({"success": True, "message": "Logged out successfully."})
+            return
+
+        # POST /api/run (Sample tests or custom input) — requires valid session
         if path == "/api/run":
+            if not self.run_limiter.is_allowed(client_ip):
+                self.send_error_json("Rate limit exceeded. Please wait before running again.", 429)
+                return
+
             problem_id = body.get("problem_id", "").strip()
             language = body.get("language", "python").strip()
             code = body.get("code", "").strip()
@@ -473,13 +794,6 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
                 self.send_error_json(f"Problem '{problem_id}' not found.", 404)
                 return
 
-            diff_key = prob_detail.get("difficulty", "Easy").lower()
-            tier_locks = self.config.get("tier_locks", {})
-            if tier_locks.get(diff_key, False) and not self.is_admin_authenticated(body):
-                round_name = prob_detail.get("round_name", f"Round ({diff_key.capitalize()})")
-                self.send_error_json(f"Access Denied: {round_name} is currently locked by the event administrator.", 403)
-                return
-
             pid = prob_detail.get("id", problem_id)
             sample_tests = prob_detail.get("sample_tests", [])
             timeout = float(prob_detail.get("time_limit", self.config.get("execution_timeout_seconds", 3.0)))
@@ -497,9 +811,15 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
             })
             return
 
-        # POST /api/problems/unlock-hint
+        # POST /api/problems/unlock-hint — free learning aid (0 penalty)
         if path == "/api/problems/unlock-hint":
-            participant_id = body.get("participant_id", "").strip()
+            # Validate participant session server-side
+            session = self.get_participant_from_request(body)
+            if not session:
+                self.send_error_json("Authentication required. Please log in to unlock hints.", 401)
+                return
+
+            participant_id = session.get("pid", "").strip()
             problem_id = body.get("problem_id", "").strip()
             try:
                 hint_index = int(body.get("hint_index", 1))
@@ -523,14 +843,10 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
                 return
 
             pid = prob_detail["id"]
-            difficulty = prob_detail.get("difficulty", "Easy")
             base_points = int(prob_detail.get("points", 100))
-            penalty = self.problems_manager.get_hint_penalty(difficulty, hint_index)
 
-            # Record unlock in database and recalculate live score
-            unlock_res = self.storage.unlock_hint(participant_id, pid, hint_index, penalty)
-            total_penalty = self.storage.get_total_hint_penalty(participant_id, pid)
-            max_score = max(int(base_points * 0.25), base_points - total_penalty)
+            # Record unlock in database with 0 penalty
+            unlock_res = self.storage.unlock_hint(participant_id, pid, hint_index, penalty=0)
             hint_text = self.problems_manager.get_hint_text(pid, hint_index)
 
             self.send_json({
@@ -539,18 +855,51 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
                 "problem_id": pid,
                 "hint_index": hint_index,
                 "hint_text": hint_text,
-                "penalty": penalty,
-                "total_hint_penalty": total_penalty,
-                "max_score": max_score,
+                "penalty": 0,
+                "total_hint_penalty": 0,
+                "max_score": base_points,
                 "participant_score": unlock_res.get("participant_score", 0),
-                "message": f"Hint {hint_index} unlocked (-{penalty} pts penalty applied)."
+                "message": f"Hint {hint_index} unlocked (Free learning aid)."
             })
             return
 
-        # POST /api/submit (Evaluate against hidden tests)
+        # POST /api/problems/<id>/bookmark or /api/bookmark
+        if (path.startswith("/api/problems/") and path.endswith("/bookmark")) or path == "/api/bookmark":
+            session = self.get_participant_from_request(body)
+            uid = session.get("pid", "").strip() if session else body.get("user_id", "").strip()
+            if not uid:
+                self.send_error_json("Authentication required to bookmark problems.", 401)
+                return
+            if path == "/api/bookmark":
+                prob_id = body.get("problem_id", "").strip()
+            else:
+                prob_id = path.replace("/api/problems/", "").replace("/bookmark", "").strip()
+            if not prob_id:
+                self.send_error_json("Problem ID is required.", 400)
+                return
+            is_bookmarked = self.storage.toggle_bookmark(uid, prob_id)
+            self.send_json({
+                "success": True,
+                "problem_id": prob_id,
+                "bookmarked": is_bookmarked,
+                "message": "Problem bookmarked." if is_bookmarked else "Bookmark removed."
+            })
+            return
+
+        # POST /api/submit (Evaluate against hidden tests) — requires valid participant session
         if path == "/api/submit":
-            participant_id = body.get("participant_id", "").strip()
-            participant_name = body.get("participant_name", "Anonymous").strip()
+            if not self.submit_limiter.is_allowed(client_ip):
+                self.send_error_json("Submission rate limit exceeded. Wait before resubmitting.", 429)
+                return
+
+            # Validate participant session server-side — reject client-provided participant_id as proof
+            session = self.get_participant_from_request(body)
+            if not session:
+                self.send_error_json("Authentication required. Please log in before submitting.", 401)
+                return
+
+            participant_id = session.get("pid", "").strip()
+            participant_name = session.get("name", "Anonymous").strip()
             problem_id = body.get("problem_id", "").strip()
             language = body.get("language", "python").strip()
             code = body.get("code", "").strip()
@@ -568,23 +917,17 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
                 self.send_error_json(f"Problem '{problem_id}' not found.", 404)
                 return
 
-            diff_key = prob_detail.get("difficulty", "Easy").lower()
-            tier_locks = self.config.get("tier_locks", {})
-            if tier_locks.get(diff_key, False) and not self.is_admin_authenticated(body):
-                round_name = prob_detail.get("round_name", f"Round ({diff_key.capitalize()})")
-                self.send_error_json(f"Submission Rejected: {round_name} is currently locked by the event administrator.", 403)
-                return
-
-            hidden_dir = self.problems_manager.get_hidden_tests_dir(problem_id)
-            if not hidden_dir or not os.path.exists(hidden_dir):
-                self.send_error_json("Hidden tests not configured for this problem.", 500)
-                return
-
             pid = prob_detail.get("id", problem_id)
             base_points = int(prob_detail.get("points", 100))
-            hint_penalty = self.storage.get_total_hint_penalty(participant_id, pid)
-            effective_max_points = max(int(base_points * 0.25), base_points - hint_penalty)
+            effective_max_points = base_points
+            hint_penalty = 0
             timeout = float(prob_detail.get("time_limit", self.config.get("execution_timeout_seconds", 3.0)))
+
+            hidden_dir = self.problems_manager.get_hidden_tests_dir(problem_id)
+            hidden_tests = prob_detail.get("hidden_tests", [])
+            if (not hidden_dir or not os.path.exists(hidden_dir)) and not hidden_tests:
+                self.send_error_json("Hidden tests not configured for this problem.", 500)
+                return
 
             judge_res = self.judge.run_hidden_tests(
                 language=language,
@@ -592,7 +935,8 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
                 hidden_tests_dir=hidden_dir,
                 problem_points=effective_max_points,
                 problem_id=pid,
-                timeout=timeout
+                timeout=timeout,
+                hidden_tests=hidden_tests
             )
 
             solved_problems = self.storage.get_solved_problems(participant_id)
@@ -908,6 +1252,194 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
             })
             return
 
+        # POST /api/admin/participant/reset-score
+        if path == "/api/admin/participant/reset-score":
+            if not self.is_admin_authenticated(body):
+                self.send_error_json("Unauthorized. Admin authentication required.", 401)
+                return
+            pid = body.get("participant_id", "").strip()
+            if not pid:
+                self.send_error_json("Participant ID is required.", 400)
+                return
+            success = self.storage.reset_participant_score(pid)
+            if success:
+                self.send_json({"success": True, "message": f"Score reset for participant {pid}."})
+            else:
+                self.send_error_json("Failed to reset score.", 500)
+            return
+
+        # POST /api/admin/participant/delete
+        if path == "/api/admin/participant/delete":
+            if not self.is_admin_authenticated(body):
+                self.send_error_json("Unauthorized. Admin authentication required.", 401)
+                return
+            pid = body.get("participant_id", "").strip()
+            if not pid:
+                self.send_error_json("Participant ID is required.", 400)
+                return
+            success = self.storage.delete_participant(pid)
+            if success:
+                self.send_json({"success": True, "message": f"Participant {pid} deleted."})
+            else:
+                self.send_error_json("Failed to delete participant.", 500)
+            return
+
+        # POST /api/admin/contest
+        if path == "/api/admin/contest":
+            if not self.is_admin_authenticated(body):
+                self.send_error_json("Unauthorized. Admin authentication required.", 401)
+                return
+            if "name" in body:
+                self.config["competition_name"] = str(body["name"]).strip()
+            if "duration_minutes" in body:
+                try:
+                    self.config["competition_duration_minutes"] = int(body["duration_minutes"])
+                except (ValueError, TypeError):
+                    pass
+            if "tagline" in body:
+                self.config["tagline"] = str(body["tagline"]).strip()
+
+            config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "config.json")
+            try:
+                with open(config_path, "w", encoding="utf-8") as f:
+                    json.dump(self.config, f, indent=2)
+            except Exception as e:
+                print(f"[Server] Error saving config: {e}")
+
+            self.send_json({"success": True, "message": "Contest settings updated.", "config": self.config})
+            return
+
+        # POST /api/user/profile
+        if path == "/api/user/profile":
+            session = self.get_participant_from_request(body)
+            if not session or not session.get("pid"):
+                self.send_error_json("Unauthorized. Please log in first.", 401)
+                return
+            uid = session["pid"]
+            bio = body.get("bio")
+            email = body.get("email")
+            avatar_url = body.get("avatar_url")
+            college = body.get("college")
+            success = self.storage.update_user_profile(uid, bio=bio, email=email, avatar_url=avatar_url, college=college)
+            if success:
+                updated = self.storage.get_user_profile(uid)
+                self.send_json({"success": True, "message": "Profile updated successfully.", "user": updated})
+            else:
+                self.send_error_json("Failed to update profile.", 500)
+            return
+
+        # POST /api/user/change-password
+        if path == "/api/user/change-password":
+            session = self.get_participant_from_request(body)
+            if not session or not session.get("pid"):
+                self.send_error_json("Unauthorized. Please log in first.", 401)
+                return
+            uid = session["pid"]
+            old_pass = body.get("old_password", "")
+            new_pass = body.get("new_password", "")
+            ok, msg = self.storage.change_user_password(uid, old_pass, new_pass)
+            if ok:
+                self.send_json({"success": True, "message": msg})
+            else:
+                self.send_error_json(msg, 400)
+            return
+
+        # POST /api/contest/register
+        if path == "/api/contest/register":
+            session = self.get_participant_from_request(body)
+            if not session or not session.get("pid"):
+                self.send_error_json("Unauthorized. Please log in first.", 401)
+                return
+            contest_id = body.get("contest_id", "").strip()
+            if not contest_id:
+                self.send_error_json("Contest ID is required.", 400)
+                return
+            ok = self.storage.register_contest_participant(contest_id, session["pid"])
+            if ok:
+                self.send_json({"success": True, "message": "Successfully registered for contest."})
+            else:
+                self.send_error_json("Failed to register for contest.", 500)
+            return
+
+        # POST /api/admin/contest/create
+        if path == "/api/admin/contest/create":
+            if not self.is_admin_authenticated(body):
+                self.send_error_json("Unauthorized. Admin authentication required.", 401)
+                return
+            cid = body.get("id") or f"contest_{int(time.time())}"
+            title = body.get("title", "New Contest")
+            desc = body.get("description", "")
+            start = body.get("start_time", "")
+            end = body.get("end_time", "")
+            status = body.get("status", "upcoming")
+            c = self.storage.create_contest(cid, title, desc, start, end, status)
+            self.send_json({"success": True, "contest": c, "message": "Contest created successfully."})
+            return
+
+        # POST /api/problems/<id>/discussions
+        if path.startswith("/api/problems/") and path.endswith("/discussions"):
+            prob_id = path.replace("/api/problems/", "").replace("/discussions", "").strip()
+            session = self.get_participant_from_request(body)
+            if not session or not session.get("pid"):
+                self.send_error_json("Unauthorized. Please log in to post discussions.", 401)
+                return
+            title = (body.get("title") or "").strip()
+            content = (body.get("content") or "").strip()
+            if not title or not content:
+                self.send_error_json("Title and content are required.", 400)
+                return
+            disc = self.storage.add_discussion(prob_id, session["pid"], session.get("name", "Anonymous"), title, content)
+            self.send_json({"success": True, "discussion": disc, "message": "Discussion posted."})
+            return
+
+        # POST /api/admin/problem/save
+        if path == "/api/admin/problem/save":
+            if not self.is_admin_authenticated(body):
+                self.send_error_json("Unauthorized. Admin authentication required.", 401)
+                return
+            prob_data = body.get("problem", body)
+            if not prob_data.get("id"):
+                self.send_error_json("Problem ID is required.", 400)
+                return
+            ok = self.storage.save_problem(prob_data)
+            if ok:
+                self.send_json({"success": True, "message": "Problem saved successfully."})
+            else:
+                self.send_error_json("Failed to save problem.", 500)
+            return
+
+        # POST /api/admin/problem/delete
+        if path == "/api/admin/problem/delete":
+            if not self.is_admin_authenticated(body):
+                self.send_error_json("Unauthorized. Admin authentication required.", 401)
+                return
+            prob_id = body.get("id") or body.get("problem_id", "")
+            if not prob_id:
+                self.send_error_json("Problem ID is required.", 400)
+                return
+            ok = self.storage.delete_problem(prob_id)
+            if ok:
+                self.send_json({"success": True, "message": f"Problem {prob_id} deleted."})
+            else:
+                self.send_error_json("Failed to delete problem.", 500)
+            return
+
+        # POST /api/admin/test-case/save
+        if path == "/api/admin/test-case/save":
+            if not self.is_admin_authenticated(body):
+                self.send_error_json("Unauthorized. Admin authentication required.", 401)
+                return
+            prob_id = body.get("problem_id", "").strip()
+            input_data = body.get("input_data", "")
+            expected_output = body.get("expected_output", "")
+            is_sample = int(body.get("is_sample", 0))
+            if not prob_id:
+                self.send_error_json("Problem ID is required.", 400)
+                return
+            tc = self.storage.add_test_case(prob_id, input_data, expected_output, is_sample)
+            self.send_json({"success": True, "test_case": tc, "message": "Test case saved."})
+            return
+
         self.send_error_json("API route not found", 404)
 
     def handle_api_delete(self, path: str):
@@ -915,5 +1447,21 @@ class CodeCombatHandler(BaseHTTPRequestHandler):
             self.storage.reset_competition()
             self.send_json({"success": True, "message": "Competition data reset."})
             return
+
+        if path.startswith("/api/discussions/"):
+            disc_id = path.replace("/api/discussions/", "").strip()
+            session = self.get_participant_from_request({})
+            is_admin = self.is_admin_authenticated()
+            user_id = session.get("pid") if session else ""
+            if not is_admin and not user_id:
+                self.send_error_json("Unauthorized.", 401)
+                return
+            ok = self.storage.delete_discussion(disc_id, user_id=user_id, is_admin=is_admin)
+            if ok:
+                self.send_json({"success": True, "message": "Discussion deleted."})
+            else:
+                self.send_error_json("Failed to delete discussion.", 403)
+            return
+
         self.send_error_json("Invalid DELETE route", 404)
 

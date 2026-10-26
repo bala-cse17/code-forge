@@ -1,0 +1,7 @@
+INPUT:
+2 1
+cat
+dog
+d g
+EXPECTED:
+1

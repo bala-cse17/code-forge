@@ -1,0 +1,60 @@
+{
+  "id": "p027_subarray_sum_equals_k",
+  "number": 27,
+  "slug": "subarray-sum-equals-k",
+  "category_id": 3,
+  "category_name": "Hashing and Frequency Counting",
+  "title": "Subarray Sum Equals K",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an array of integers `nums` and an integer `k`, return the total number of continuous subarrays whose sum equals `k`.",
+  "input_format": "First line contains `n` and `k`. Second line contains `n` integers.",
+  "output_format": "Total number of subarrays summing to k.",
+  "constraints": "1 <= n <= 2 * 10^4\n-1000 <= nums[i] <= 1000",
+  "sample_tests": [
+    {
+      "input": "3 2\n1 1 1",
+      "output": "2",
+      "explanation": "Subarrays [1,1] at index 0-1 and index 1-2."
+    },
+    {
+      "input": "3 3\n1 2 3",
+      "output": "2",
+      "explanation": "Subarrays [1,2] and [3]."
+    },
+    {
+      "input": "4 0\n0 0 0 0",
+      "output": "10",
+      "explanation": "Subarrays of all lengths."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "3 -1\n1 -1 0",
+      "output": "2"
+    },
+    {
+      "input": "5 5\n2 3 5 1 4",
+      "output": "3"
+    },
+    {
+      "input": "1 0\n0",
+      "output": "1"
+    }
+  ],
+  "hints": [
+    "Maintain a running prefix sum.",
+    "A subarray summing to k between indices i and j satisfies `pref[j] - pref[i] = k`.",
+    "Store prefix sum frequencies in a hash map."
+  ],
+  "starter_code": {
+    "python": "# Subarray Sum Equals K\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Subarray Sum Equals K\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Subarray Sum Equals K\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Subarray Sum Equals K\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Subarray Sum Equals K\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, k = int(data[0]), int(data[1])\n    nums = [int(x) for x in data[2:2+n]]\n    from collections import defaultdict\n    pref = 0\n    count = 0\n    seen = defaultdict(int)\n    seen[0] = 1\n    for x in nums:\n        pref += x\n        count += seen[pref - k]\n        seen[pref] += 1\n    print(count)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

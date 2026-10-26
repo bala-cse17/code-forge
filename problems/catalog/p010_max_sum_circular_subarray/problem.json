@@ -1,0 +1,64 @@
+{
+  "id": "p010_max_sum_circular_subarray",
+  "number": 10,
+  "slug": "maximum-sum-circular-subarray",
+  "category_id": 1,
+  "category_name": "Arrays",
+  "title": "Maximum Sum Circular Subarray",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Given a circular integer array `nums` of length `n`, return the maximum possible sum of a non-empty subarray of `nums`.",
+  "input_format": "First line contains integer `n`, followed by `n` integers.",
+  "output_format": "Maximum circular subarray sum.",
+  "constraints": "1 <= n <= 3 * 10^4\n-3 * 10^4 <= nums[i] <= 3 * 10^4",
+  "sample_tests": [
+    {
+      "input": "3\n1 -2 3 -2",
+      "output": "3",
+      "explanation": "Subarray [3] has maximum sum 3."
+    },
+    {
+      "input": "3\n5 -3 5",
+      "output": "10",
+      "explanation": "Circular subarray [5, 5] has sum 10."
+    },
+    {
+      "input": "4\n-3 -2 -3 -1",
+      "output": "-1",
+      "explanation": "All negative: max element is -1."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "4\n3 -1 2 -1",
+      "output": "4"
+    },
+    {
+      "input": "5\n3 -2 2 -3 4",
+      "output": "5"
+    },
+    {
+      "input": "3\n2 -1 3",
+      "output": "4"
+    },
+    {
+      "input": "4\n-2 -3 -1 -5",
+      "output": "-1"
+    }
+  ],
+  "hints": [
+    "A circular subarray either stays within bounds or wraps around the ends.",
+    "If it wraps around, circular_sum = total_sum - min_subarray_sum.",
+    "Check if all numbers are negative, where max_sum < 0."
+  ],
+  "starter_code": {
+    "python": "# Maximum Sum Circular Subarray\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Maximum Sum Circular Subarray\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Maximum Sum Circular Subarray\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Maximum Sum Circular Subarray\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Maximum Sum Circular Subarray\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    nums = [int(x) for x in data[1:1+n]]\n    cur_max = max_sum = nums[0]\n    cur_min = min_sum = nums[0]\n    total = nums[0]\n    for x in nums[1:]:\n        total += x\n        cur_max = max(x, cur_max + x)\n        max_sum = max(max_sum, cur_max)\n        cur_min = min(x, cur_min + x)\n        min_sum = min(min_sum, cur_min)\n    if max_sum < 0: print(max_sum)\n    else: print(max(max_sum, total - min_sum))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

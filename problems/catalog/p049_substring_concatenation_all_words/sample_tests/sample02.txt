@@ -1,0 +1,9 @@
+INPUT:
+wordgoodgoodgoodbestword
+4
+word
+good
+best
+word
+EXPECTED:
+

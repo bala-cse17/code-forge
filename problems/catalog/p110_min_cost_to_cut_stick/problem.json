@@ -1,0 +1,51 @@
+{
+  "id": "p110_min_cost_to_cut_stick",
+  "number": 110,
+  "slug": "minimum-cost-to-cut-a-stick",
+  "category_id": 11,
+  "category_name": "Dynamic Programming",
+  "title": "Minimum Cost to Cut a Stick",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Given a wooden stick of length `n` and an array of integers `cuts` where `cuts[i]` denotes a position where you should perform a cut. The cost of one cut is the length of the stick being cut. Return the minimum total cost of the cuts.",
+  "input_format": "First line contains `n` and `m` (number of cuts). Second line contains `m` cuts.",
+  "output_format": "Minimum total cost.",
+  "constraints": "2 <= n <= 10^6\n1 <= m <= 100",
+  "sample_tests": [
+    {
+      "input": "7 4\n1 3 4 5",
+      "output": "16",
+      "explanation": "Optimal cut order gives cost 16."
+    },
+    {
+      "input": "9 5\n5 6 1 4 2",
+      "output": "22",
+      "explanation": "Min cost is 22."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "10 1\n5",
+      "output": "10"
+    },
+    {
+      "input": "8 2\n2 6",
+      "output": "14"
+    }
+  ],
+  "hints": [
+    "Add boundary points 0 and n to the cuts array and sort them.",
+    "Let `dp[i][j]` be the minimum cost to make all cuts between cuts[i] and cuts[j].",
+    "Try every cut `cuts[k]` as the first cut in this interval."
+  ],
+  "starter_code": {
+    "python": "# Minimum Cost to Cut a Stick\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Minimum Cost to Cut a Stick\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Minimum Cost to Cut a Stick\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Minimum Cost to Cut a Stick\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Minimum Cost to Cut a Stick\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, m = int(data[0]), int(data[1])\n    cuts = sorted([int(x) for x in data[2:2+m]])\n    cuts = [0] + cuts + [n]\n    k = len(cuts)\n    dp = [[0]*k for _ in range(k)]\n    for length in range(2, k):\n        for i in range(k - length):\n            j = i + length\n            dp[i][j] = min(dp[i][m_idx] + dp[m_idx][j] for m_idx in range(i+1, j)) + (cuts[j] - cuts[i])\n    print(dp[0][k-1])\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

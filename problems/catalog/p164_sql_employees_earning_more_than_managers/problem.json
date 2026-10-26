@@ -1,0 +1,43 @@
+{
+  "id": "p164_sql_employees_earning_more_than_managers",
+  "number": 164,
+  "slug": "employees-earning-more-than-their-managers",
+  "category_id": 17,
+  "category_name": "Database and SQL",
+  "title": "Employees Earning More Than Their Managers",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Write an SQL query to find the employees who earn more than their managers.\n\nTable `Employee`: `id (INT), name (TEXT), salary (INT), managerId (INT)`",
+  "input_format": "Database contains table `Employee`.",
+  "output_format": "Names of employees earning more than their manager.",
+  "constraints": "managerId references id in the same table.",
+  "sample_tests": [
+    {
+      "input": "CREATE TABLE Employee (id INT, name TEXT, salary INT, managerId INT);\nINSERT INTO Employee VALUES (1, 'Joe', 70000, 3), (2, 'Henry', 80000, 4), (3, 'Sam', 60000, NULL), (4, 'Max', 90000, NULL);",
+      "output": "Joe",
+      "explanation": "Joe earns 70,000, which is more than his manager Sam (60,000)."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "CREATE TABLE Employee (id INT, name TEXT, salary INT, managerId INT);\nINSERT INTO Employee VALUES (1, 'A', 50000, 2), (2, 'B', 40000, NULL);",
+      "output": "A"
+    }
+  ],
+  "hints": [
+    "Self-join `Employee` with itself aliased as `e` (employee) and `m` (manager).",
+    "Join condition is `e.managerId = m.id`.",
+    "Filter with `e.salary > m.salary`."
+  ],
+  "starter_code": {
+    "sql": "-- Employees Earning More Than Their Managers\n-- Write your SQL query below\nSELECT ...\nFROM ...;\n",
+    "python": "# Employees Earning More Than Their Managers (SQL Problem)\n# You can test via SQL query or Python\nimport sys\nprint('Run query in SQL tab')\n",
+    "c": "// SQL Problem: Employees Earning More Than Their Managers\n",
+    "cpp": "// SQL Problem: Employees Earning More Than Their Managers\n",
+    "java": "// SQL Problem: Employees Earning More Than Their Managers\n",
+    "javascript": "// SQL Problem: Employees Earning More Than Their Managers\n"
+  },
+  "reference_solution": "SELECT e.name FROM Employee e JOIN Employee m ON e.managerId = m.id WHERE e.salary > m.salary;",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

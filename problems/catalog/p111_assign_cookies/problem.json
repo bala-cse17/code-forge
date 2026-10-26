@@ -1,0 +1,55 @@
+{
+  "id": "p111_assign_cookies",
+  "number": 111,
+  "slug": "assign-cookies",
+  "category_id": 12,
+  "category_name": "Greedy Algorithms",
+  "title": "Assign Cookies",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Assume you are an awesome parent and want to give your children some cookies. Each child `i` has a greed factor `g[i]`, and each cookie `j` has a size `s[j]`. If `s[j] >= g[i]`, the child is content. Maximize the number of content children.",
+  "input_format": "First line contains `n` and `m`. Second line contains `g`. Third line contains `s`.",
+  "output_format": "Number of content children.",
+  "constraints": "1 <= n, m <= 3 * 10^4",
+  "sample_tests": [
+    {
+      "input": "3 2\n1 2 3\n1 1",
+      "output": "1",
+      "explanation": "Only 1 child can be content."
+    },
+    {
+      "input": "2 3\n1 2\n1 2 3",
+      "output": "2",
+      "explanation": "Both children content."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1 1\n2\n1",
+      "output": "0"
+    },
+    {
+      "input": "3 3\n3 4 5\n5 4 3",
+      "output": "3"
+    },
+    {
+      "input": "2 1\n1 2\n3",
+      "output": "1"
+    }
+  ],
+  "hints": [
+    "Sort both greed factors and cookie sizes in ascending order.",
+    "Greedily satisfy the least greedy child with the smallest possible sufficient cookie.",
+    "Advance both pointers when a match is found."
+  ],
+  "starter_code": {
+    "python": "# Assign Cookies\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Assign Cookies\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Assign Cookies\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Assign Cookies\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Assign Cookies\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, m = int(data[0]), int(data[1])\n    g = sorted([int(x) for x in data[2:2+n]])\n    s = sorted([int(x) for x in data[2+n:2+n+m]])\n    i = j = 0\n    while i < n and j < m:\n        if s[j] >= g[i]: i += 1\n        j += 1\n    print(i)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

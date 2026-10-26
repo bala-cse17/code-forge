@@ -1,0 +1,59 @@
+{
+  "id": "p113_best_time_buy_sell_stock",
+  "number": 113,
+  "slug": "best-time-to-buy-and-sell-stock",
+  "category_id": 12,
+  "category_name": "Greedy Algorithms",
+  "title": "Best Time to Buy and Sell Stock",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "You are given an array `prices` where `prices[i]` is the price of a given stock on the `i`th day. You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock. Return the maximum profit.",
+  "input_format": "First line contains integer `n`, followed by `n` prices.",
+  "output_format": "Maximum profit achievable or 0.",
+  "constraints": "1 <= n <= 10^5\n0 <= prices[i] <= 10^4",
+  "sample_tests": [
+    {
+      "input": "6\n7 1 5 3 6 4",
+      "output": "5",
+      "explanation": "Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6 - 1 = 5."
+    },
+    {
+      "input": "5\n7 6 4 3 1",
+      "output": "0",
+      "explanation": "Prices continually drop, no transaction."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1\n10",
+      "output": "0"
+    },
+    {
+      "input": "3\n2 4 1",
+      "output": "2"
+    },
+    {
+      "input": "4\n1 2 3 4",
+      "output": "3"
+    },
+    {
+      "input": "5\n3 2 6 5 0 3",
+      "output": "4"
+    }
+  ],
+  "hints": [
+    "Maintain `min_price` seen so far in a single pass.",
+    "At each price, calculate profit if sold today: `current_price - min_price`.",
+    "Update `max_profit` if the current profit is higher."
+  ],
+  "starter_code": {
+    "python": "# Best Time to Buy and Sell Stock\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Best Time to Buy and Sell Stock\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Best Time to Buy and Sell Stock\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Best Time to Buy and Sell Stock\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Best Time to Buy and Sell Stock\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    prices = [int(x) for x in data[1:1+n]]\n    min_p = float('inf')\n    max_profit = 0\n    for p in prices:\n        if p < min_p: min_p = p\n        elif p - min_p > max_profit: max_profit = p - min_p\n    print(max_profit)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

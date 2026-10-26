@@ -1,0 +1,5 @@
+INPUT:
+aaaaaaaaaaaabbbbbcdd
+abcdd
+EXPECTED:
+abbbbbcdd

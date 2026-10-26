@@ -1,0 +1,51 @@
+{
+  "id": "p154_longest_word_in_dictionary",
+  "number": 154,
+  "slug": "longest-word-in-a-dictionary",
+  "category_id": 16,
+  "category_name": "Tries and Advanced Data Structures",
+  "title": "Longest Word in a Dictionary",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given an array of strings `words`, return the longest word in `words` that can be built one character at a time by other words in `words`. If there is more than one possible answer, return the longest word with the smallest lexicographical order.",
+  "input_format": "First line contains `n`. Second line contains `n` space-separated words.",
+  "output_format": "The longest word.",
+  "constraints": "1 <= n <= 1000",
+  "sample_tests": [
+    {
+      "input": "5\nw wo wor worl world",
+      "output": "world",
+      "explanation": "world can be built one char at a time."
+    },
+    {
+      "input": "7\na banana app appl ap apply apple",
+      "output": "apple",
+      "explanation": "apple and apply both length 5; apple is lexicographically smaller."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1\nm",
+      "output": "m"
+    },
+    {
+      "input": "4\na b c d",
+      "output": "a"
+    }
+  ],
+  "hints": [
+    "Sort the words lexicographically.",
+    "A word can be built if its prefix `w[:-1]` is already verified as valid.",
+    "Maintain a set of valid words and track the best word by length and lexicographical order."
+  ],
+  "starter_code": {
+    "python": "# Longest Word in a Dictionary\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Longest Word in a Dictionary\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Longest Word in a Dictionary\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Longest Word in a Dictionary\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Longest Word in a Dictionary\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    words = sorted(data[1:1+n])\n    valid = {''}\n    best = ''\n    for w in words:\n        if w[:-1] in valid:\n            valid.add(w)\n            if len(w) > len(best) or (len(w) == len(best) and w < best):\n                best = w\n    print(best)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

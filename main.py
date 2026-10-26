@@ -18,6 +18,9 @@ if hasattr(sys.stdout, "reconfigure"):
     except Exception:
         pass
 
+from backend.env_loader import load_dotenv
+load_dotenv()
+
 from backend.storage import Storage
 from backend.problems_manager import ProblemsManager
 from backend.auth import Auth
@@ -117,9 +120,9 @@ def main():
   ╚██████╗╚██████╔╝██████╔╝███████╗    ╚██████╗╚██████╔╝██║ ╚═╝ ██║
    ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝     ╚═════╝ ╚═════╝ ╚═╝     ╚═╝
 ======================================================================
-               "Compete. Code. Conquer."
+               "Think. Code. Compete."
 ----------------------------------------------------------------------
- [+] Offline Judge Engine : Ready (Python 3, Java, C)
+ [+] Offline Judge Engine : Ready (Python 3, Java, C, C++, JavaScript)
  [+] Loaded Problems     : {total_problems} challenges (Easy/Medium/Hard)
  [+] Competition Timer   : {config.get('competition_duration_minutes', 90)} minutes
  [+] Storage Database    : Local SQLite in 'data/code_combat.db'

@@ -1,0 +1,9 @@
+INPUT:
+5
+PUSH 1
+PUSH 2
+TOP
+POP
+EMPTY
+EXPECTED:
+2 2 false

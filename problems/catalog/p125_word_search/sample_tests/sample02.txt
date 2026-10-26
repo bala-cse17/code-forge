@@ -1,0 +1,7 @@
+INPUT:
+3 4 SEE
+A B C E
+S F C S
+A D E E
+EXPECTED:
+true

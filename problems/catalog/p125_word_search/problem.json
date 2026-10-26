@@ -1,0 +1,60 @@
+{
+  "id": "p125_word_search",
+  "number": 125,
+  "slug": "word-search",
+  "category_id": 13,
+  "category_name": "Backtracking and Recursion",
+  "title": "Word Search",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an `m x n` grid of characters `board` and a string `word`, return `true` if `word` exists in the grid. The word can be constructed from letters of sequentially adjacent cells (horizontally or vertically), where the same letter cell may not be used more than once.",
+  "input_format": "First line contains `m`, `n`, and `word`. Following `m` lines contain `n` space-separated characters.",
+  "output_format": "true if found, false otherwise.",
+  "constraints": "1 <= m, n <= 6\n1 <= length(word) <= 15",
+  "sample_tests": [
+    {
+      "input": "3 4 ABCCED\nA B C E\nS F C S\nA D E E",
+      "output": "true",
+      "explanation": "Word ABCCED exists."
+    },
+    {
+      "input": "3 4 SEE\nA B C E\nS F C S\nA D E E",
+      "output": "true",
+      "explanation": "Word SEE exists."
+    },
+    {
+      "input": "3 4 ABCB\nA B C E\nS F C S\nA D E E",
+      "output": "false",
+      "explanation": "Cannot reuse 'B'."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1 1 A\nA",
+      "output": "true"
+    },
+    {
+      "input": "1 2 AB\nB A",
+      "output": "false"
+    },
+    {
+      "input": "2 2 ABBA\nA B\nB A",
+      "output": "true"
+    }
+  ],
+  "hints": [
+    "Start DFS backtracking from any cell matching the first character of word.",
+    "Temporarily mark visited cells with a sentinel '#' to prevent revisiting.",
+    "Restore the cell's character during backtracking."
+  ],
+  "starter_code": {
+    "python": "# Word Search\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Word Search\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Word Search\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Word Search\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Word Search\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nif lines:\n    parts = lines[0].split()\n    m, n, word = int(parts[0]), int(parts[1]), parts[2]\n    board = []\n    for line in lines[1:1+m]:\n        board.append(line.split())\n    def dfs(r, c, k):\n        if k == len(word): return True\n        if r < 0 or r >= m or c < 0 or c >= n or board[r][c] != word[k]: return False\n        temp = board[r][c]\n        board[r][c] = '#'\n        found = dfs(r+1, c, k+1) or dfs(r-1, c, k+1) or dfs(r, c+1, k+1) or dfs(r, c-1, k+1)\n        board[r][c] = temp\n        return found\n    ok = any(dfs(r, c, 0) for r in range(m) for c in range(n))\n    print('true' if ok else 'false')\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

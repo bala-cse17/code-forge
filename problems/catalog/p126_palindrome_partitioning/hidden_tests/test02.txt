@@ -1,0 +1,4 @@
+INPUT:
+aaa
+EXPECTED:
+4

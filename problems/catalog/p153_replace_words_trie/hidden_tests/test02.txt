@@ -1,0 +1,6 @@
+INPUT:
+2
+re pre
+prepare rebuild react
+EXPECTED:
+pre re re

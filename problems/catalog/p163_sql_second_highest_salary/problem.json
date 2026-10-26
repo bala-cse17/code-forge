@@ -1,0 +1,52 @@
+{
+  "id": "p163_sql_second_highest_salary",
+  "number": 163,
+  "slug": "find-the-second-highest-salary",
+  "category_id": 17,
+  "category_name": "Database and SQL",
+  "title": "Find the Second Highest Salary",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Write an SQL query to find the second highest distinct salary from the `Employee` table. If there is no second highest salary, return NULL.\n\nTable `Employee`: `id (INT), salary (INT)`",
+  "input_format": "Database contains table `Employee`.",
+  "output_format": "Second highest salary or NULL.",
+  "constraints": "1 <= rows <= 100",
+  "sample_tests": [
+    {
+      "input": "CREATE TABLE Employee (id INT, salary INT);\nINSERT INTO Employee VALUES (1, 100), (2, 200), (3, 300);",
+      "output": "200",
+      "explanation": "Second highest is 200."
+    },
+    {
+      "input": "CREATE TABLE Employee (id INT, salary INT);\nINSERT INTO Employee VALUES (1, 100);",
+      "output": "None",
+      "explanation": "No second highest exists."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "CREATE TABLE Employee (id INT, salary INT);\nINSERT INTO Employee VALUES (1, 100), (2, 100);",
+      "output": "None"
+    },
+    {
+      "input": "CREATE TABLE Employee (id INT, salary INT);\nINSERT INTO Employee VALUES (1, 500), (2, 400), (3, 300);",
+      "output": "400"
+    }
+  ],
+  "hints": [
+    "Find the maximum salary using a subquery.",
+    "Filter for salaries strictly less than the maximum.",
+    "Take the MAX of those remaining salaries to get the second highest."
+  ],
+  "starter_code": {
+    "sql": "-- Find the Second Highest Salary\n-- Write your SQL query below\nSELECT ...\nFROM ...;\n",
+    "python": "# Find the Second Highest Salary (SQL Problem)\n# You can test via SQL query or Python\nimport sys\nprint('Run query in SQL tab')\n",
+    "c": "// SQL Problem: Find the Second Highest Salary\n",
+    "cpp": "// SQL Problem: Find the Second Highest Salary\n",
+    "java": "// SQL Problem: Find the Second Highest Salary\n",
+    "javascript": "// SQL Problem: Find the Second Highest Salary\n"
+  },
+  "reference_solution": "SELECT MAX(salary) FROM Employee WHERE salary < (SELECT MAX(salary) FROM Employee);",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

@@ -1,0 +1,11 @@
+INPUT:
+hit cog
+6
+hot
+dot
+dog
+lot
+log
+cog
+EXPECTED:
+5

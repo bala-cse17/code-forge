@@ -1,0 +1,56 @@
+{
+  "id": "p141_fizz_buzz",
+  "number": 141,
+  "slug": "fizzbuzz",
+  "category_id": 15,
+  "category_name": "Mathematics and Number Theory",
+  "title": "FizzBuzz",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given an integer `n`, return a string array `answer` (1-indexed) where: answer[i] == 'FizzBuzz' if i divisible by 3 and 5, 'Fizz' if divisible by 3, 'Buzz' if divisible by 5, or 'i' as string.",
+  "input_format": "A single line containing integer `n`.",
+  "output_format": "Space-separated FizzBuzz tokens.",
+  "constraints": "1 <= n <= 10^4",
+  "sample_tests": [
+    {
+      "input": "3",
+      "output": "1 2 Fizz",
+      "explanation": "3 is Fizz."
+    },
+    {
+      "input": "5",
+      "output": "1 2 Fizz 4 Buzz",
+      "explanation": "5 is Buzz."
+    },
+    {
+      "input": "15",
+      "output": "1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz",
+      "explanation": "15 is FizzBuzz."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1",
+      "output": "1"
+    },
+    {
+      "input": "4",
+      "output": "1 2 Fizz 4"
+    }
+  ],
+  "hints": [
+    "Check divisibility by 15 (both 3 and 5) first.",
+    "Then check divisibility by 3 for 'Fizz' and 5 for 'Buzz'.",
+    "Otherwise output the integer itself as string."
+  ],
+  "starter_code": {
+    "python": "# FizzBuzz\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// FizzBuzz\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// FizzBuzz\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// FizzBuzz\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// FizzBuzz\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    res = []\n    for i in range(1, n + 1):\n        if i % 15 == 0: res.append('FizzBuzz')\n        elif i % 3 == 0: res.append('Fizz')\n        elif i % 5 == 0: res.append('Buzz')\n        else: res.append(str(i))\n    print(' '.join(res))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

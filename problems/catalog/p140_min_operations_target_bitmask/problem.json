@@ -1,0 +1,56 @@
+{
+  "id": "p140_min_operations_target_bitmask",
+  "number": 140,
+  "slug": "minimum-operations-to-form-a-target-bitmask",
+  "category_id": 14,
+  "category_name": "Bit Manipulation",
+  "title": "Minimum Operations to Form a Target Bitmask",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Given an integer array `nums` containing powers of 2 and an integer `target`, return the minimum number of operations (divisions by 2) to form `target` as a sum of elements from `nums`, or -1 if impossible.",
+  "input_format": "First line contains `n` and `target`. Second line contains `n` integers.",
+  "output_format": "Minimum operations or -1.",
+  "constraints": "1 <= n <= 10^5\n1 <= target <= 2^31 - 1",
+  "sample_tests": [
+    {
+      "input": "3 6\n1 2 8",
+      "output": "1",
+      "explanation": "Divide 8 into 4 and 4, giving [1, 2, 4, 4]. Take 2 + 4 = 6. 1 op."
+    },
+    {
+      "input": "2 7\n1 32",
+      "output": "2",
+      "explanation": "32 -> 16, 16 -> 8. Then 8 -> 4, etc. 2 ops."
+    },
+    {
+      "input": "1 3\n2",
+      "output": "-1",
+      "explanation": "Cannot form 3."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1 1\n1",
+      "output": "0"
+    },
+    {
+      "input": "2 2\n1 1",
+      "output": "0"
+    }
+  ],
+  "hints": [
+    "Count available powers of 2.",
+    "If bit i of target is needed and unavailable, find the next available higher power of 2 and split it downwards.",
+    "Accumulate smaller powers into higher powers: `counts[i+1] += counts[i] // 2`."
+  ],
+  "starter_code": {
+    "python": "# Minimum Operations to Form a Target Bitmask\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Minimum Operations to Form a Target Bitmask\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Minimum Operations to Form a Target Bitmask\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Minimum Operations to Form a Target Bitmask\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Minimum Operations to Form a Target Bitmask\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, target = int(data[0]), int(data[1])\n    nums = [int(x) for x in data[2:2+n]]\n    if sum(nums) < target: print(-1); sys.exit(0)\n    counts = [0] * 32\n    for x in nums:\n        counts[x.bit_length() - 1] += 1\n    ans = 0\n    for i in range(31):\n        if (target >> i) & 1:\n            if counts[i] > 0: counts[i] -= 1\n            else:\n                j = i\n                while j < 31 and counts[j] == 0: j += 1\n                counts[j] -= 1\n                while j > i:\n                    j -= 1\n                    counts[j] += 1\n                    ans += 1\n        counts[i + 1] += counts[i] // 2\n    print(ans)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

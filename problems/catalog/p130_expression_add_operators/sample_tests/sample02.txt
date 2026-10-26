@@ -1,0 +1,4 @@
+INPUT:
+232 8
+EXPECTED:
+2

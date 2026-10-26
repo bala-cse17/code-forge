@@ -1,0 +1,55 @@
+{
+  "id": "p100_min_cost_connect_all_points",
+  "number": 100,
+  "slug": "minimum-cost-to-connect-all-points",
+  "category_id": 10,
+  "category_name": "Graphs",
+  "title": "Minimum Cost to Connect All Points",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "You are given an array `points` representing integer coordinates of points on a 2D-plane. The cost of connecting two points `(x_i, y_i)` and `(x_j, y_j)` is Manhattan distance `|x_i - x_j| + |y_i - y_j|`. Return the minimum cost to make all points connected.",
+  "input_format": "First line contains `n`. Following `n` lines contain `x` and `y`.",
+  "output_format": "Minimum spanning tree cost.",
+  "constraints": "1 <= n <= 1000",
+  "sample_tests": [
+    {
+      "input": "5\n0 0\n2 2\n3 10\n5 2\n7 0",
+      "output": "20",
+      "explanation": "Min spanning tree cost is 20."
+    },
+    {
+      "input": "3\n3 12\n-2 5\n-4 1",
+      "output": "18",
+      "explanation": "MST cost is 18."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1\n0 0",
+      "output": "0"
+    },
+    {
+      "input": "2\n0 0\n1 1",
+      "output": "2"
+    },
+    {
+      "input": "3\n0 0\n1 0\n0 1",
+      "output": "2"
+    }
+  ],
+  "hints": [
+    "This is a Minimum Spanning Tree (MST) problem on a complete graph.",
+    "Prim's algorithm with a priority queue finds the MST in O(N^2) or O(N log N).",
+    "Track the minimum Manhattan distance to add each unvisited point."
+  ],
+  "starter_code": {
+    "python": "# Minimum Cost to Connect All Points\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Minimum Cost to Connect All Points\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Minimum Cost to Connect All Points\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Minimum Cost to Connect All Points\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Minimum Cost to Connect All Points\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys, heapq\nlines = sys.stdin.read().splitlines()\nif lines:\n    n = int(lines[0])\n    pts = []\n    for line in lines[1:1+n]:\n        xy = [int(v) for v in line.split()]\n        if len(xy) == 2: pts.append(xy)\n    if n <= 1: print(0); sys.exit(0)\n    visited = [False] * n\n    min_d = [float('inf')] * n\n    min_d[0] = 0\n    total_cost = 0\n    pq = [(0, 0)]\n    while pq:\n        cost, u = heapq.heappop(pq)\n        if visited[u]: continue\n        visited[u] = True\n        total_cost += cost\n        for v in range(n):\n            if not visited[v]:\n                d = abs(pts[u][0] - pts[v][0]) + abs(pts[u][1] - pts[v][1])\n                if d < min_d[v]:\n                    min_d[v] = d\n                    heapq.heappush(pq, (d, v))\n    print(total_cost)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

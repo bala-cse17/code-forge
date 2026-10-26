@@ -1,0 +1,5 @@
+INPUT:
+CREATE TABLE Logins (id INT, user_id INT, login_date TEXT);
+INSERT INTO Logins VALUES (1, 5, '2024-02-10'), (2, 5, '2024-02-11'), (3, 5, '2024-02-12');
+EXPECTED:
+5

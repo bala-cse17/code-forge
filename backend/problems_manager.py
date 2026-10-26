@@ -26,6 +26,14 @@ except ImportError:
         SOLUTIONS_REGISTRY = {}
         get_all_solutions_for_problem = lambda pid: {}
 
+try:
+    from .seed_data import SEED_PROBLEMS, CATEGORIES
+except ImportError:
+    try:
+        from backend.seed_data import SEED_PROBLEMS, CATEGORIES
+    except Exception:
+        SEED_PROBLEMS, CATEGORIES = [], []
+
 
 class ProblemsManager:
     """Manages problem metadata, starter templates, visible samples, hints, and hidden test suites."""
@@ -499,24 +507,24 @@ class ProblemsManager:
     }
 
     @staticmethod
-    def get_hint_penalty(difficulty: str, hint_index: int) -> int:
-        """Returns the point deduction penalty for a given hint index."""
-        diff = (difficulty or "Easy").strip().capitalize()
-        idx = int(hint_index)
-        if diff == "Easy":
-            return {1: 10, 2: 15, 3: 25}.get(idx, 10)
-        elif diff == "Medium":
-            return {1: 20, 2: 30, 3: 50}.get(idx, 20)
-        else:  # Hard
-            return {1: 30, 2: 45, 3: 75}.get(idx, 30)
+    def get_hint_penalty(*args, **kwargs) -> int:
+        """Hints are 100% free learning aids on Code Combat practice platform. Returns 0."""
+        return 0
 
     def get_available_sets(self) -> List[Dict[str, Any]]:
-        """Lists available problem sets."""
+        """Lists available problem sets and catalog."""
         set_titles = {
+            "catalog": "Continuous Practice Platform (180 Curated Challenges)",
             "set1": "Problem Set 1 (Blind 15 Fundamentals)",
             "set2": "Problem Set 2 (LeetCode 15 Core Challenges)"
         }
-        sets = []
+        sets = [
+            {
+                "id": "catalog",
+                "name": set_titles["catalog"],
+                "active": (self.active_set == "catalog")
+            }
+        ]
         for s in ["set1", "set2"]:
             p = os.path.join(self.problems_dir, s)
             if os.path.isdir(p):
@@ -528,8 +536,12 @@ class ProblemsManager:
         return sets
 
     def switch_set(self, set_id: str) -> bool:
-        """Switches the active problem set and reloads index."""
+        """Switches the active problem set or catalog and reloads index."""
         clean_id = (set_id or "").strip().lower()
+        if clean_id == "catalog":
+            self.active_set = "catalog"
+            self.reload_problems()
+            return True
         target_path = os.path.join(self.problems_dir, clean_id)
         if os.path.isdir(target_path):
             self.active_set = clean_id
@@ -538,49 +550,103 @@ class ProblemsManager:
         return False
 
     def reload_problems(self):
-        """Scans the active problems directory and indexes all problems."""
+        """Indexes all 180 curated problems and any local problem set directories."""
         self.problems.clear()
         self.hidden_dirs.clear()
+        self.catalog_problems = {}
+        self.set_problems = {"set1": {}, "set2": {}}
 
-        if not os.path.exists(self.problems_dir):
-            os.makedirs(self.problems_dir, exist_ok=True)
-            return
+        # 1. Load curated master problems from SEED_PROBLEMS (180 problems)
+        for p in SEED_PROBLEMS:
+            pid = p["id"]
+            data = dict(p)
+            cat_dir = os.path.join(self.problems_dir, "catalog", pid)
+            data["dir_path"] = cat_dir if os.path.isdir(cat_dir) else self.problems_dir
 
-        set_path = os.path.join(self.problems_dir, self.active_set)
-        search_root = set_path if os.path.isdir(set_path) else self.problems_dir
+            hidden_dir = os.path.join(cat_dir, "hidden_tests")
+            if os.path.isdir(hidden_dir):
+                self.hidden_dirs[pid] = hidden_dir
+            else:
+                self.hidden_dirs[pid] = ""
 
-        for difficulty in ["easy", "medium", "hard"]:
-            diff_dir = os.path.join(search_root, difficulty)
-            if not os.path.isdir(diff_dir):
-                continue
+            # Populate METADATA_REGISTRY with hints and categories
+            if pid not in self.METADATA_REGISTRY:
+                self.METADATA_REGISTRY[pid] = {
+                    "number": p.get("number"),
+                    "hints": p.get("hints", []),
+                    "topics": [p.get("category_name", "Algorithms")],
+                    "companies": ["Amazon", "Google", "Microsoft", "Meta"]
+                }
 
-            for prob_slug in os.listdir(diff_dir):
-                prob_path = os.path.join(diff_dir, prob_slug)
+            self.catalog_problems[pid] = data
+
+        # 2. Also scan catalog directory on disk
+        catalog_path = os.path.join(self.problems_dir, "catalog")
+        if os.path.isdir(catalog_path):
+            for prob_id in os.listdir(catalog_path):
+                prob_path = os.path.join(catalog_path, prob_id)
                 if not os.path.isdir(prob_path):
                     continue
-
                 json_file = os.path.join(prob_path, "problem.json")
                 if os.path.exists(json_file):
                     try:
                         with open(json_file, "r", encoding="utf-8") as f:
                             data = json.load(f)
-                            prob_id = data.get("id", prob_slug)
-                            data["id"] = prob_id
-                            data["difficulty"] = data.get("difficulty", difficulty.capitalize())
-                            data["slug"] = prob_slug
+                            pid = data.get("id", prob_id)
+                            data["id"] = pid
                             data["dir_path"] = prob_path
+                            self.hidden_dirs[pid] = os.path.join(prob_path, "hidden_tests")
+                            if pid not in self.catalog_problems:
+                                self.catalog_problems[pid] = data
+                    except Exception:
+                        pass
 
-                            hidden_dir = os.path.join(prob_path, "hidden_tests")
-                            self.hidden_dirs[prob_id] = hidden_dir
-                            self.problems[prob_id] = data
-                    except Exception as e:
-                        print(f"[ProblemsManager] Error loading {json_file}: {e}")
+        # 3. Scan legacy set paths (set1, set2) if present
+        for set_key in ["set1", "set2"]:
+            set_path = os.path.join(self.problems_dir, set_key)
+            if not os.path.isdir(set_path):
+                continue
+
+            for difficulty in ["easy", "medium", "hard"]:
+                diff_dir = os.path.join(set_path, difficulty)
+                if not os.path.isdir(diff_dir):
+                    continue
+
+                for prob_slug in os.listdir(diff_dir):
+                    prob_path = os.path.join(diff_dir, prob_slug)
+                    if not os.path.isdir(prob_path):
+                        continue
+
+                    json_file = os.path.join(prob_path, "problem.json")
+                    if os.path.exists(json_file):
+                        try:
+                            with open(json_file, "r", encoding="utf-8") as f:
+                                data = json.load(f)
+                                prob_id = data.get("id", prob_slug)
+                                data["id"] = prob_id
+                                data["difficulty"] = data.get("difficulty", difficulty.capitalize())
+                                data["slug"] = prob_slug
+                                data["dir_path"] = prob_path
+
+                                hidden_dir = os.path.join(prob_path, "hidden_tests")
+                                self.hidden_dirs[prob_id] = hidden_dir
+                                self.set_problems[set_key][prob_id] = data
+                        except Exception as e:
+                            print(f"[ProblemsManager] Error loading {json_file}: {e}")
+
+        # Active view assignment
+        if self.active_set in self.set_problems and self.set_problems[self.active_set]:
+            self.problems = dict(self.set_problems[self.active_set])
+        else:
+            self.problems = dict(self.catalog_problems)
 
     def __init__(self, problems_dir: str = "problems"):
         self.problems_dir = os.path.abspath(problems_dir)
-        self.active_set = "set1"
+        self.active_set = "catalog"
         self.problems: Dict[str, Dict[str, Any]] = {}
         self.hidden_dirs: Dict[str, str] = {}
+        self.catalog_problems: Dict[str, Dict[str, Any]] = {}
+        self.set_problems: Dict[str, Dict[str, Dict[str, Any]]] = {"set1": {}, "set2": {}}
         self.reload_problems()
 
     def get_problem_list(self, solved_set: Optional[Set[str]] = None, tier_locks: Optional[Dict[str, bool]] = None) -> List[Dict[str, Any]]:
@@ -603,33 +669,64 @@ class ProblemsManager:
             round_num, round_name = round_map.get(diff_lower, (1, f"Round ({diff})"))
             is_locked = bool(tier_locks.get(diff_lower, False))
 
+            cat_id = data.get("category_id", 1)
+            cat_name = data.get("category_name") or data.get("category") or "General"
+            num = data.get("number") or meta.get("number") or 0
+
             problem_list.append({
                 "id": prob_id,
+                "number": num,
+                "slug": data.get("slug", prob_id),
                 "title": data.get("title", prob_id),
-                "number": meta.get("number"),
                 "difficulty": diff,
                 "difficulty_rank": difficulty_order.get(diff, 1),
                 "round_num": round_num,
                 "round_name": round_name,
                 "locked": is_locked,
                 "points": data.get("points", 100),
-                "time_limit": data.get("time_limit", 2.0),
-                "category": data.get("category", "General"),
+                "time_limit": data.get("time_limit", 3.0),
+                "category_id": cat_id,
+                "category_name": cat_name,
+                "category": cat_name,
                 "status": "Solved" if is_solved else "Not Started",
                 "solved": is_solved
             })
 
-        problem_list.sort(key=lambda p: (p["difficulty_rank"], p["title"]))
+        problem_list.sort(key=lambda p: (p.get("number") or 999, p["title"]))
         return problem_list
+
+    def _find_raw_problem(self, problem_id: str) -> Optional[Dict[str, Any]]:
+        """Helper to find raw problem data across active problems, catalog, and sets."""
+        clean_id = (problem_id or "").strip().lower()
+        # 1. Active problems
+        if clean_id in self.problems:
+            return self.problems[clean_id]
+        raw = next((p for p in self.problems.values() if p.get("id", "").lower() == clean_id or p.get("slug", "").lower() == clean_id or p.get("title", "").lower().replace(" ", "_") == clean_id), None)
+        if raw:
+            return raw
+
+        # 2. Catalog problems
+        if hasattr(self, "catalog_problems"):
+            if clean_id in self.catalog_problems:
+                return self.catalog_problems[clean_id]
+            raw = next((p for p in self.catalog_problems.values() if p.get("id", "").lower() == clean_id or p.get("slug", "").lower() == clean_id or p.get("title", "").lower().replace(" ", "_") == clean_id), None)
+            if raw:
+                return raw
+
+        # 3. Set problems
+        if hasattr(self, "set_problems"):
+            for s_dict in self.set_problems.values():
+                if clean_id in s_dict:
+                    return s_dict[clean_id]
+                raw = next((p for p in s_dict.values() if p.get("id", "").lower() == clean_id or p.get("slug", "").lower() == clean_id or p.get("title", "").lower().replace(" ", "_") == clean_id), None)
+                if raw:
+                    return raw
+        return None
 
     def get_problem_detail(self, problem_id: str, participant_id: Optional[str] = None, storage: Optional[Any] = None, is_admin: bool = False, tier_locks: Optional[Dict[str, bool]] = None) -> Optional[Dict[str, Any]]:
         """Returns problem details with 3 progressive hints and unlock status."""
         clean_id = (problem_id or "").strip().lower()
-        if clean_id in self.problems:
-            raw = self.problems[clean_id]
-        else:
-            raw = next((p for p in self.problems.values() if p.get("id", "").lower() == clean_id or p.get("slug", "").lower() == clean_id or p.get("title", "").lower().replace(" ", "_") == clean_id), None)
-
+        raw = self._find_raw_problem(clean_id)
         if not raw:
             return None
 
@@ -647,7 +744,7 @@ class ProblemsManager:
         is_locked = bool(tier_locks.get(diff_lower, False))
         base_points = int(raw.get("points", 100))
 
-        raw_hints = meta.get("hints") or [
+        raw_hints = raw.get("hints") or meta.get("hints") or [
             f"Think about the edge cases for {raw.get('title', 'this problem')}.",
             "Can you optimize the time complexity using a suitable data structure?",
             "Look for mathematical invariants or a two-pointer / hash-map approach."
@@ -659,66 +756,79 @@ class ProblemsManager:
         if participant_id and storage:
             try:
                 unlocked_indices = set(storage.get_unlocked_hints(participant_id, pid))
+                if not unlocked_indices and clean_id != pid:
+                    unlocked_indices = set(storage.get_unlocked_hints(participant_id, clean_id))
             except Exception:
                 unlocked_indices = set()
 
         hints_data = []
-        total_penalty = 0
         for i in range(1, 4):
-            hint_txt = raw_hints[i - 1]
-            pen = self.get_hint_penalty(diff, i)
-            is_unlocked = (i in unlocked_indices)
-            if is_unlocked:
-                total_penalty += pen
+            hint_txt = raw_hints[i - 1] if i - 1 < len(raw_hints) else ""
+            is_unlocked = (i in unlocked_indices) or is_admin
             hints_data.append({
                 "index": i,
                 "title": f"Hint {i}",
-                "penalty": pen,
+                "penalty": 0,
                 "unlocked": is_unlocked,
                 "text": hint_txt if is_unlocked else None
             })
 
-        max_score = max(int(base_points * 0.25), base_points - total_penalty)
+        max_score = base_points
+
+        cat_id = raw.get("category_id", 1)
+        cat_name = raw.get("category_name") or raw.get("category") or "General"
+        num = raw.get("number") or meta.get("number") or 0
+
+        starter_code = raw.get("starter_code", {})
+        if not starter_code and Harness:
+            starter_code = Harness.get_starter_code(pid)
 
         res = {
             "id": pid,
             "title": raw.get("title"),
-            "number": meta.get("number"),
+            "number": num,
+            "slug": raw.get("slug", pid),
             "difficulty": diff,
             "round_num": round_num,
             "round_name": round_name,
             "locked": is_locked,
             "points": base_points,
             "max_score": max_score,
-            "total_hint_penalty": total_penalty,
-            "time_limit": raw.get("time_limit") or 3.5,
-            "category": raw.get("category", "General"),
+            "total_hint_penalty": 0,
+            "time_limit": raw.get("time_limit") or 3.0,
+            "memory_limit": raw.get("memory_limit") or 256,
+            "category_id": cat_id,
+            "category_name": cat_name,
+            "category": cat_name,
             "description": raw.get("description", ""),
             "input_format": raw.get("input_format", ""),
             "output_format": raw.get("output_format", ""),
             "constraints": raw.get("constraints", ""),
-            "topics": meta.get("topics") or [raw.get("category", "Algorithms")],
+            "topics": meta.get("topics") or [cat_name],
             "companies": meta.get("companies") or ["Amazon", "Google", "Microsoft", "Meta"],
             "hints": hints_data,
             "leetcode_examples": meta.get("leetcode_examples"),
             "sample_tests": raw.get("sample_tests", []),
-            "starter_code": Harness.get_starter_code(pid) if Harness else raw.get("starter_code", {})
+            "starter_code": starter_code
         }
         if is_admin:
-            res["solutions"] = get_all_solutions_for_problem(pid)
+            sols = get_all_solutions_for_problem(pid)
+            if not sols and raw.get("reference_solution"):
+                sols = {"python": raw.get("reference_solution")}
+            res["solutions"] = sols
         return res
 
     def get_solutions_for_problem(self, problem_id: str) -> Dict[str, str]:
         """Returns the dictionary of solutions for a problem."""
         clean_id = (problem_id or "").strip().lower()
-        raw = self.problems.get(clean_id) or next((p for p in self.problems.values() if p.get("id", "").lower() == clean_id or p.get("slug", "").lower() == clean_id), None)
+        raw = self._find_raw_problem(clean_id)
         pid = raw.get("id", clean_id) if raw else clean_id
         return get_all_solutions_for_problem(pid)
 
     def get_hint_text(self, problem_id: str, hint_index: int) -> Optional[str]:
         """Returns the specific raw hint string (1-indexed)."""
         clean_id = (problem_id or "").strip().lower()
-        raw = self.problems.get(clean_id) or next((p for p in self.problems.values() if p.get("id", "").lower() == clean_id or p.get("slug", "").lower() == clean_id), None)
+        raw = self._find_raw_problem(clean_id)
         if not raw:
             return None
         pid = raw.get("id", clean_id)
@@ -739,7 +849,7 @@ class ProblemsManager:
         clean_id = (problem_id or "").strip().lower()
         if clean_id in self.hidden_dirs:
             return self.hidden_dirs[clean_id]
-        raw = next((p for p in self.problems.values() if p.get("id", "").lower() == clean_id or p.get("slug", "").lower() == clean_id), None)
+        raw = self._find_raw_problem(clean_id)
         if raw and raw.get("id") in self.hidden_dirs:
             return self.hidden_dirs[raw["id"]]
         return None

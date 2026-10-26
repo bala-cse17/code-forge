@@ -1,0 +1,64 @@
+{
+  "id": "p101_climbing_stairs",
+  "number": 101,
+  "slug": "climbing-stairs",
+  "category_id": 11,
+  "category_name": "Dynamic Programming",
+  "title": "Climbing Stairs",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "You are climbing a staircase. It takes `n` steps to reach the top. Each time you can climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
+  "input_format": "A single line containing integer `n`.",
+  "output_format": "Distinct ways to climb.",
+  "constraints": "1 <= n <= 45",
+  "sample_tests": [
+    {
+      "input": "2",
+      "output": "2",
+      "explanation": "Ways: (1+1), (2)."
+    },
+    {
+      "input": "3",
+      "output": "3",
+      "explanation": "Ways: (1+1+1), (1+2), (2+1)."
+    },
+    {
+      "input": "1",
+      "output": "1",
+      "explanation": "1 way."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "4",
+      "output": "5"
+    },
+    {
+      "input": "5",
+      "output": "8"
+    },
+    {
+      "input": "10",
+      "output": "89"
+    },
+    {
+      "input": "20",
+      "output": "10946"
+    }
+  ],
+  "hints": [
+    "To reach step n, you must arrive from step n - 1 or step n - 2.",
+    "This recurrence matches the Fibonacci sequence: `ways(n) = ways(n-1) + ways(n-2)`.",
+    "Compute in O(n) time and O(1) space."
+  ],
+  "starter_code": {
+    "python": "# Climbing Stairs\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Climbing Stairs\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Climbing Stairs\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Climbing Stairs\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Climbing Stairs\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    if n <= 2: print(n); sys.exit(0)\n    a, b = 1, 2\n    for _ in range(3, n + 1):\n        a, b = b, a + b\n    print(b)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

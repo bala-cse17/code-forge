@@ -1,0 +1,6 @@
+INPUT:
+1 1
+apple
+a e
+EXPECTED:
+0

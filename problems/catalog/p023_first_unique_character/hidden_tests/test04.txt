@@ -1,0 +1,4 @@
+INPUT:
+stress
+EXPECTED:
+1

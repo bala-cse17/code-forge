@@ -1,0 +1,64 @@
+{
+  "id": "p018_minimum_window_substring",
+  "number": 18,
+  "slug": "minimum-window-substring",
+  "category_id": 2,
+  "category_name": "Strings",
+  "title": "Minimum Window Substring",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given two strings `s` and `t`, return the minimum window substring of `s` such that every character in `t` (including duplicates) is included in the window. If none exists, return empty string.",
+  "input_format": "Two lines: first string `s`, second string `t`.",
+  "output_format": "The minimum window substring or empty line.",
+  "constraints": "1 <= length(s), length(t) <= 10^5",
+  "sample_tests": [
+    {
+      "input": "ADOBECODEBANC\nABC",
+      "output": "BANC",
+      "explanation": "BANC contains A, B, and C with length 4."
+    },
+    {
+      "input": "a\na",
+      "output": "a",
+      "explanation": "Window is a."
+    },
+    {
+      "input": "a\naa",
+      "output": "",
+      "explanation": "Cannot cover two a's."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "ab\nb",
+      "output": "b"
+    },
+    {
+      "input": "xyz\nz",
+      "output": "z"
+    },
+    {
+      "input": "cabwefgewcwaefgcf\ncae",
+      "output": "cwae"
+    },
+    {
+      "input": "aaaaaaaaaaaabbbbbcdd\nabcdd",
+      "output": "abbbbbcdd"
+    }
+  ],
+  "hints": [
+    "Use two pointers to create a sliding window.",
+    "Expand the right pointer until all characters of t are included.",
+    "Then contract the left pointer as much as possible while maintaining all characters."
+  ],
+  "starter_code": {
+    "python": "# Minimum Window Substring\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Minimum Window Substring\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Minimum Window Substring\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Minimum Window Substring\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Minimum Window Substring\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().split()\nif len(lines) >= 2:\n    s, t = lines[0], lines[1]\n    from collections import Counter\n    need = Counter(t)\n    missing = len(t)\n    start = end = 0\n    l = 0\n    for r, c in enumerate(s, 1):\n        if need[c] > 0: missing -= 1\n        need[c] -= 1\n        if missing == 0:\n            while need[s[l]] < 0:\n                need[s[l]] += 1\n                l += 1\n            if end == 0 or r - l < end - start:\n                start, end = l, r\n            need[s[l]] += 1\n            missing += 1\n            l += 1\n    print(s[start:end])\nelse:\n    print('')\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

@@ -1,0 +1,60 @@
+{
+  "id": "p065_next_greater_element",
+  "number": 65,
+  "slug": "next-greater-element",
+  "category_id": 7,
+  "category_name": "Stacks and Queues",
+  "title": "Next Greater Element",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an array `nums`, find the next greater element for each element. The next greater element of a number `x` is the first greater number to its right. If none exists, output -1.",
+  "input_format": "First line contains integer `n`, followed by `n` integers.",
+  "output_format": "Space-separated next greater elements.",
+  "constraints": "1 <= n <= 10^5\n-10^9 <= nums[i] <= 10^9",
+  "sample_tests": [
+    {
+      "input": "4\n1 3 2 4",
+      "output": "3 4 4 -1",
+      "explanation": "Next greater: for 1 is 3, for 3 is 4, for 2 is 4, for 4 is -1."
+    },
+    {
+      "input": "3\n6 8 0 1",
+      "output": "8 -1 1 -1",
+      "explanation": "Next greater elements."
+    },
+    {
+      "input": "3\n4 3 2",
+      "output": "-1 -1 -1",
+      "explanation": "Monotonically decreasing, no greater elements."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1\n100",
+      "output": "-1"
+    },
+    {
+      "input": "5\n1 2 3 4 5",
+      "output": "2 3 4 5 -1"
+    },
+    {
+      "input": "4\n5 4 3 8",
+      "output": "8 8 8 -1"
+    }
+  ],
+  "hints": [
+    "Use a monotonic decreasing stack storing indices.",
+    "While current element > nums[stack.top()], pop top index and record current element as its answer.",
+    "Push current index onto stack."
+  ],
+  "starter_code": {
+    "python": "# Next Greater Element\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Next Greater Element\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Next Greater Element\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Next Greater Element\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Next Greater Element\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    nums = [int(x) for x in data[1:1+n]]\n    ans = [-1] * n\n    stk = []\n    for i in range(n):\n        while stk and nums[stk[-1]] < nums[i]:\n            idx = stk.pop()\n            ans[idx] = nums[i]\n        stk.append(i)\n    print(' '.join(map(str, ans)))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

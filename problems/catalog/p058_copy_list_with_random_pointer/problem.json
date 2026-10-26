@@ -1,0 +1,60 @@
+{
+  "id": "p058_copy_list_with_random_pointer",
+  "number": 58,
+  "slug": "copy-list-with-random-pointer",
+  "category_id": 6,
+  "category_name": "Linked Lists",
+  "title": "Copy List With Random Pointer",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "A linked list of length `n` is given such that each node contains an additional random pointer. Construct a deep copy of the list. Output the node values and their random pointer indices.",
+  "input_format": "First line contains `n`. Following `n` lines contain `val` and `random_index` (or -1).",
+  "output_format": "Space-separated cloned node values.",
+  "constraints": "0 <= n <= 1000",
+  "sample_tests": [
+    {
+      "input": "5\n7 -1\n13 0\n11 4\n10 2\n1 0",
+      "output": "7 13 11 10 1",
+      "explanation": "Cloned list with preserved structure."
+    },
+    {
+      "input": "2\n1 1\n2 1",
+      "output": "1 2",
+      "explanation": "Both point to node 1."
+    },
+    {
+      "input": "3\n3 -1\n3 0\n3 -1",
+      "output": "3 3 3",
+      "explanation": "List with duplicate values."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1\n5 0",
+      "output": "5"
+    },
+    {
+      "input": "0",
+      "output": ""
+    },
+    {
+      "input": "2\n1 -1\n2 -1",
+      "output": "1 2"
+    }
+  ],
+  "hints": [
+    "First pass: weave cloned nodes directly after original nodes (`curr.next = cloned`).",
+    "Second pass: set `cloned.random = curr.random.next`.",
+    "Third pass: unweave the two lists to restore the original and isolate the copy."
+  ],
+  "starter_code": {
+    "python": "# Copy List With Random Pointer\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Copy List With Random Pointer\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Copy List With Random Pointer\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Copy List With Random Pointer\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Copy List With Random Pointer\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nif lines:\n    n = int(lines[0].split()[0])\n    vals = []\n    for line in lines[1:1+n]:\n        parts = line.split()\n        if parts: vals.append(parts[0])\n    print(' '.join(vals))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

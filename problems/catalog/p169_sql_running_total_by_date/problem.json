@@ -1,0 +1,43 @@
+{
+  "id": "p169_sql_running_total_by_date",
+  "number": 169,
+  "slug": "running-total-by-date",
+  "category_id": 17,
+  "category_name": "Database and SQL",
+  "title": "Running Total by Date",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Write an SQL query to calculate the cumulative running total of transaction amounts by date.\n\nTable `Transactions`: `id (INT), transaction_date (TEXT), amount (INT)`",
+  "input_format": "Database contains table `Transactions`.",
+  "output_format": "Date and Running Total separated by space.",
+  "constraints": "Dates are formatted as YYYY-MM-DD.",
+  "sample_tests": [
+    {
+      "input": "CREATE TABLE Transactions (id INT, transaction_date TEXT, amount INT);\nINSERT INTO Transactions VALUES (1, '2024-01-01', 100), (2, '2024-01-02', 200), (3, '2024-01-03', 150);",
+      "output": "2024-01-01 100\n2024-01-02 300\n2024-01-03 450",
+      "explanation": "Cumulative daily sums."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "CREATE TABLE Transactions (id INT, transaction_date TEXT, amount INT);\nINSERT INTO Transactions VALUES (1, '2024-05-01', 50);",
+      "output": "2024-05-01 50"
+    }
+  ],
+  "hints": [
+    "Use the window function `SUM(amount) OVER (...)`.",
+    "Specify `ORDER BY transaction_date` with `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`.",
+    "Sort final output by date."
+  ],
+  "starter_code": {
+    "sql": "-- Running Total by Date\n-- Write your SQL query below\nSELECT ...\nFROM ...;\n",
+    "python": "# Running Total by Date (SQL Problem)\n# You can test via SQL query or Python\nimport sys\nprint('Run query in SQL tab')\n",
+    "c": "// SQL Problem: Running Total by Date\n",
+    "cpp": "// SQL Problem: Running Total by Date\n",
+    "java": "// SQL Problem: Running Total by Date\n",
+    "javascript": "// SQL Problem: Running Total by Date\n"
+  },
+  "reference_solution": "SELECT transaction_date, SUM(amount) OVER (ORDER BY transaction_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total FROM Transactions ORDER BY transaction_date;",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

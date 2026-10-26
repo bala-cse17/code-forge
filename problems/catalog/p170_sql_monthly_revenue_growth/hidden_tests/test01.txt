@@ -1,0 +1,5 @@
+INPUT:
+CREATE TABLE MonthlyRevenue (month TEXT, revenue INT);
+INSERT INTO MonthlyRevenue VALUES ('2024-01', 500), ('2024-02', 500);
+EXPECTED:
+2024-02 0.00

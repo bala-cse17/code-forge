@@ -1,0 +1,5 @@
+INPUT:
+3
+abc bca cab
+EXPECTED:
+3

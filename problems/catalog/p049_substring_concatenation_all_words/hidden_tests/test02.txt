@@ -1,0 +1,10 @@
+INPUT:
+lingmindraboofooowingdingbarrwingmonkeypoundcake
+5
+fooo
+barr
+wing
+ding
+wing
+EXPECTED:
+13

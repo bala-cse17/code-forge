@@ -1,0 +1,51 @@
+{
+  "id": "p139_count_excellent_pairs",
+  "number": 139,
+  "slug": "count-excellent-pairs",
+  "category_id": 14,
+  "category_name": "Bit Manipulation",
+  "title": "Count Excellent Pairs",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "You are given a 0-indexed positive integer array `nums` and a positive integer `k`. A pair `(nums[i], nums[j])` is excellent if `bits(nums[i] OR nums[j]) + bits(nums[i] AND nums[j]) >= k`. Return number of distinct excellent pairs.",
+  "input_format": "First line contains `n` and `k`. Second line contains `n` integers.",
+  "output_format": "Number of excellent pairs.",
+  "constraints": "1 <= n <= 10^5\n1 <= k <= 60",
+  "sample_tests": [
+    {
+      "input": "4 5\n1 2 3 1",
+      "output": "5",
+      "explanation": "Distinct elements [1, 2, 3]. Pairs: (1,3), (2,3), (3,1), (3,2), (3,3). Total 5."
+    },
+    {
+      "input": "2 3\n5 1",
+      "output": "0",
+      "explanation": "No pairs sum to 3."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "3 2\n1 2 3",
+      "output": "9"
+    },
+    {
+      "input": "1 2\n3",
+      "output": "1"
+    }
+  ],
+  "hints": [
+    "Key identity: `bits(a OR b) + bits(a AND b) = bits(a) + bits(b)`.",
+    "Remove duplicates from `nums` since distinct values define pairs.",
+    "Sort set bit counts and use binary search to count valid partners."
+  ],
+  "starter_code": {
+    "python": "# Count Excellent Pairs\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Count Excellent Pairs\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Count Excellent Pairs\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Count Excellent Pairs\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Count Excellent Pairs\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys, bisect\ndata = sys.stdin.read().split()\nif data:\n    n, k = int(data[0]), int(data[1])\n    nums = list(set([int(x) for x in data[2:2+n]]))\n    bit_counts = sorted([bin(x).count('1') for x in nums])\n    ans = 0\n    total = len(bit_counts)\n    for c in bit_counts:\n        needed = k - c\n        idx = bisect.bisect_left(bit_counts, needed)\n        ans += (total - idx)\n    print(ans)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

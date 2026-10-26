@@ -1,0 +1,60 @@
+{
+  "id": "p069_maximal_rectangle",
+  "number": 69,
+  "slug": "maximal-rectangle",
+  "category_id": 7,
+  "category_name": "Stacks and Queues",
+  "title": "Maximal Rectangle",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Given a `rows x cols` binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.",
+  "input_format": "First line contains `rows` and `cols`. Following `rows` lines contain `cols` space-separated binary values.",
+  "output_format": "Area of maximal rectangle.",
+  "constraints": "1 <= rows, cols <= 200",
+  "sample_tests": [
+    {
+      "input": "4 5\n1 0 1 0 0\n1 0 1 1 1\n1 1 1 1 1\n1 0 0 1 0",
+      "output": "6",
+      "explanation": "Max rectangle area is 6 formed by 1s."
+    },
+    {
+      "input": "1 1\n0",
+      "output": "0",
+      "explanation": "Matrix has only 0."
+    },
+    {
+      "input": "1 1\n1",
+      "output": "1",
+      "explanation": "Single 1 has area 1."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2 2\n1 1\n1 1",
+      "output": "4"
+    },
+    {
+      "input": "3 3\n0 1 1\n0 1 1\n0 0 0",
+      "output": "4"
+    },
+    {
+      "input": "1 4\n1 1 1 1",
+      "output": "4"
+    }
+  ],
+  "hints": [
+    "Treat each row as the base of a histogram.",
+    "Accumulate consecutive 1's column-wise across rows.",
+    "Apply Largest Rectangle in Histogram on each row in O(rows * cols) time."
+  ],
+  "starter_code": {
+    "python": "# Maximal Rectangle\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Maximal Rectangle\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Maximal Rectangle\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Maximal Rectangle\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Maximal Rectangle\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    r, c = int(data[0]), int(data[1])\n    grid = []\n    idx = 2\n    for _ in range(r):\n        grid.append([int(x) for x in data[idx:idx+c]])\n        idx += c\n    heights = [0] * c\n    max_area = 0\n    for row in grid:\n        for j in range(c):\n            heights[j] = heights[j] + 1 if row[j] == 1 else 0\n        h = heights + [0]\n        stk = []\n        for i in range(len(h)):\n            while stk and h[stk[-1]] > h[i]:\n                height = h[stk.pop()]\n                width = i if not stk else (i - stk[-1] - 1)\n                max_area = max(max_area, height * width)\n            stk.append(i)\n    print(max_area)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

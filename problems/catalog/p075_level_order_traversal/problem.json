@@ -1,0 +1,56 @@
+{
+  "id": "p075_level_order_traversal",
+  "number": 75,
+  "slug": "level-order-traversal",
+  "category_id": 8,
+  "category_name": "Trees and Binary Search Trees",
+  "title": "Level Order Traversal",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given the root of a binary tree, return the level order traversal of its nodes' values (i.e., from left to right, level by level), grouped by level on separate lines.",
+  "input_format": "First line contains `n`. Second line contains level-order tokens.",
+  "output_format": "Each line contains space-separated values for that level.",
+  "constraints": "0 <= n <= 2000",
+  "sample_tests": [
+    {
+      "input": "5\n3 9 20 null null 15 7",
+      "output": "3\n9 20\n15 7",
+      "explanation": "Grouped level by level."
+    },
+    {
+      "input": "1\n1",
+      "output": "1",
+      "explanation": "Single level."
+    },
+    {
+      "input": "0\n",
+      "output": "",
+      "explanation": "Empty tree."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "3\n1 2 3",
+      "output": "1\n2 3"
+    },
+    {
+      "input": "4\n1 2 null 3",
+      "output": "1\n2\n3"
+    }
+  ],
+  "hints": [
+    "Use a queue for Breadth-First Search (BFS).",
+    "Record `level_size = len(q)` at the beginning of each iteration.",
+    "Pop exactly `level_size` nodes to extract all elements belonging to that level."
+  ],
+  "starter_code": {
+    "python": "# Level Order Traversal\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Level Order Traversal\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Level Order Traversal\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Level Order Traversal\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Level Order Traversal\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    tokens = data[1:1+n]\n    if not tokens or tokens[0] == 'null': sys.exit(0)\n    class Node:\n        def __init__(self, v): self.v = v; self.left = None; self.right = None\n    from collections import deque\n    root = Node(tokens[0])\n    q = deque([root])\n    idx = 1\n    while q and idx < len(tokens):\n        curr = q.popleft()\n        if idx < len(tokens) and tokens[idx] != 'null':\n            curr.left = Node(tokens[idx]); q.append(curr.left)\n        idx += 1\n        if idx < len(tokens) and tokens[idx] != 'null':\n            curr.right = Node(tokens[idx]); q.append(curr.right)\n        idx += 1\n    q = deque([root])\n    while q:\n        level = []\n        for _ in range(len(q)):\n            node = q.popleft()\n            level.append(str(node.v))\n            if node.left: q.append(node.left)\n            if node.right: q.append(node.right)\n        print(' '.join(level))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

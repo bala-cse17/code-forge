@@ -1,0 +1,60 @@
+{
+  "id": "p060_reverse_nodes_in_k_group",
+  "number": 60,
+  "slug": "reverse-nodes-in-k-group",
+  "category_id": 6,
+  "category_name": "Linked Lists",
+  "title": "Reverse Nodes in K-Group",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Given the head of a linked list, reverse the nodes of the list `k` at a time, and return the modified list. If the number of nodes is not a multiple of `k` then left-out nodes at the end should remain as-is.",
+  "input_format": "First line contains `n` and `k`. Second line contains `n` integers.",
+  "output_format": "Space-separated modified linked list values.",
+  "constraints": "1 <= k <= n <= 5000",
+  "sample_tests": [
+    {
+      "input": "5 2\n1 2 3 4 5",
+      "output": "2 1 4 3 5",
+      "explanation": "Reversed in groups of 2, 5 remains."
+    },
+    {
+      "input": "5 3\n1 2 3 4 5",
+      "output": "3 2 1 4 5",
+      "explanation": "Reversed first group of 3, 4 and 5 remain."
+    },
+    {
+      "input": "4 4\n1 2 3 4",
+      "output": "4 3 2 1",
+      "explanation": "Entire list reversed."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "4 1\n1 2 3 4",
+      "output": "1 2 3 4"
+    },
+    {
+      "input": "6 3\n1 2 3 4 5 6",
+      "output": "3 2 1 6 5 4"
+    },
+    {
+      "input": "5 4\n1 2 3 4 5",
+      "output": "4 3 2 1 5"
+    }
+  ],
+  "hints": [
+    "Check if there are at least k nodes remaining before reversing each group.",
+    "Reverse k nodes using the standard iterative reversal pointer manipulation.",
+    "Connect the previous group's tail to the new group's head."
+  ],
+  "starter_code": {
+    "python": "# Reverse Nodes in K-Group\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Reverse Nodes in K-Group\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Reverse Nodes in K-Group\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Reverse Nodes in K-Group\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Reverse Nodes in K-Group\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, k = int(data[0]), int(data[1])\n    nums = data[2:2+n]\n    res = []\n    for i in range(0, n, k):\n        chunk = nums[i:i+k]\n        if len(chunk) == k: res.extend(reversed(chunk))\n        else: res.extend(chunk)\n    print(' '.join(res))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

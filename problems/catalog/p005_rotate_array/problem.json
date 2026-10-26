@@ -1,0 +1,64 @@
+{
+  "id": "p005_rotate_array",
+  "number": 5,
+  "slug": "rotate-array",
+  "category_id": 1,
+  "category_name": "Arrays",
+  "title": "Rotate Array",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an integer array `nums`, rotate the array to the right by `k` steps, where `k` is non-negative.",
+  "input_format": "First line contains `n` and `k`. Second line contains `n` integers.",
+  "output_format": "The array elements after right rotation by `k`.",
+  "constraints": "1 <= n <= 10^5\n0 <= k <= 10^5",
+  "sample_tests": [
+    {
+      "input": "7 3\n1 2 3 4 5 6 7",
+      "output": "5 6 7 1 2 3 4",
+      "explanation": "Rotated right by 3 positions."
+    },
+    {
+      "input": "4 2\n-1 -100 3 99",
+      "output": "3 99 -1 -100",
+      "explanation": "Rotated right by 2 positions."
+    },
+    {
+      "input": "3 0\n1 2 3",
+      "output": "1 2 3",
+      "explanation": "k = 0 leaves array unchanged."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "5 7\n1 2 3 4 5",
+      "output": "4 5 1 2 3"
+    },
+    {
+      "input": "1 5\n10",
+      "output": "10"
+    },
+    {
+      "input": "4 4\n1 2 3 4",
+      "output": "1 2 3 4"
+    },
+    {
+      "input": "6 2\n1 2 3 4 5 6",
+      "output": "5 6 1 2 3 4"
+    }
+  ],
+  "hints": [
+    "Reduce k using modulo: k = k % n.",
+    "Notice that rotating right by k moves the last k elements to the front.",
+    "You can also reverse the whole array, reverse the first k, and reverse the rest."
+  ],
+  "starter_code": {
+    "python": "# Rotate Array\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Rotate Array\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Rotate Array\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Rotate Array\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Rotate Array\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n, k = int(data[0]), int(data[1])\n    nums = data[2:2+n]\n    k %= n\n    if k == 0: print(' '.join(nums))\n    else: print(' '.join(nums[-k:] + nums[:-k]))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

@@ -1,0 +1,5 @@
+INPUT:
+intention
+execution
+EXPECTED:
+5

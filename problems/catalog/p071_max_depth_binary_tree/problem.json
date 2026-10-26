@@ -1,0 +1,60 @@
+{
+  "id": "p071_max_depth_binary_tree",
+  "number": 71,
+  "slug": "maximum-depth-of-binary-tree",
+  "category_id": 8,
+  "category_name": "Trees and Binary Search Trees",
+  "title": "Maximum Depth of Binary Tree",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given the level-order traversal of a binary tree (where 'null' denotes missing nodes), return its maximum depth.",
+  "input_format": "First line contains `n` (number of nodes in level-order). Second line contains level-order tokens.",
+  "output_format": "Maximum depth integer.",
+  "constraints": "0 <= n <= 10^4",
+  "sample_tests": [
+    {
+      "input": "5\n3 9 20 null null 15 7",
+      "output": "3",
+      "explanation": "Tree has 3 levels: [3] -> [9, 20] -> [15, 7]."
+    },
+    {
+      "input": "2\n1 null 2",
+      "output": "2",
+      "explanation": "Depth is 2."
+    },
+    {
+      "input": "0\n",
+      "output": "0",
+      "explanation": "Empty tree depth is 0."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1\n10",
+      "output": "1"
+    },
+    {
+      "input": "3\n1 2 3",
+      "output": "2"
+    },
+    {
+      "input": "7\n1 2 3 4 null null 5",
+      "output": "3"
+    }
+  ],
+  "hints": [
+    "Maximum depth is 1 + max(depth(left), depth(right)).",
+    "Base case: depth of an empty tree (null) is 0.",
+    "BFS level-order traversal can also count levels directly."
+  ],
+  "starter_code": {
+    "python": "# Maximum Depth of Binary Tree\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Maximum Depth of Binary Tree\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Maximum Depth of Binary Tree\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Maximum Depth of Binary Tree\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Maximum Depth of Binary Tree\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    tokens = data[1:1+n]\n    if not tokens or tokens[0] == 'null': print(0); sys.exit(0)\n    from collections import deque\n    class Node:\n        def __init__(self, v): self.v = v; self.left = None; self.right = None\n    root = Node(tokens[0])\n    q = deque([root])\n    idx = 1\n    while q and idx < len(tokens):\n        curr = q.popleft()\n        if idx < len(tokens) and tokens[idx] != 'null':\n            curr.left = Node(tokens[idx]); q.append(curr.left)\n        idx += 1\n        if idx < len(tokens) and tokens[idx] != 'null':\n            curr.right = Node(tokens[idx]); q.append(curr.right)\n        idx += 1\n    def depth(node):\n        if not node: return 0\n        return 1 + max(depth(node.left), depth(node.right))\n    print(depth(root))\nelse:\n    print(0)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

@@ -1,0 +1,4 @@
+INPUT:
+(5 - (2 + 1))
+EXPECTED:
+2

@@ -1,0 +1,9 @@
+INPUT:
+5
+INSERT apple
+SEARCH apple
+SEARCH app
+STARTSWITH app
+INSERT app
+EXPECTED:
+true false true

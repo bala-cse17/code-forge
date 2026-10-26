@@ -20,18 +20,24 @@ class Harness:
 
     @classmethod
     def get_starter_code(cls, problem_id: str) -> Dict[str, str]:
-        """Returns starter code templates for all 4 tracks for a problem."""
+        """Returns starter code templates for all tracks for a problem."""
         clean_id = (problem_id or "").strip().lower()
         if clean_id in cls.STARTER_TEMPLATES:
-            return cls.STARTER_TEMPLATES[clean_id]
+            templates = dict(cls.STARTER_TEMPLATES[clean_id])
+        else:
+            templates = {
+                "python": "# Python 3 Solution\n# Read input and print output\n\n",
+                "python_class": "class Solution:\n    # Write your solution methods here\n    pass\n",
+                "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        // Write your solution here\n        \n    }\n}\n",
+                "c": "#include <stdio.h>\n\nint main() {\n    // Write your solution here\n    return 0;\n}\n"
+            }
         
-        # Generic fallback
-        return {
-            "python": "# Python 3 Solution\n# Read input and print output\n\n",
-            "python_class": "class Solution:\n    # Write your solution methods here\n    pass\n",
-            "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        // Write your solution here\n        \n    }\n}\n",
-            "c": "#include <stdio.h>\n\nint main() {\n    // Write your solution here\n    return 0;\n}\n"
-        }
+        if "javascript" not in templates:
+            templates["javascript"] = "// JavaScript (Node.js) Solution\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim();\n\n// Write your solution here:\n"
+        if "cpp" not in templates:
+            templates["cpp"] = "#include <iostream>\n#include <vector>\n#include <string>\n\nusing namespace std;\n\nint main() {\n    // Fast I/O\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    // Write your solution here\n\n    return 0;\n}\n"
+        
+        return templates
 
     @classmethod
     def has_standalone_main(cls, language: str, user_code: str) -> bool:
@@ -41,14 +47,14 @@ class Harness:
             return ("if __name__ ==" in user_code or "sys.stdin" in user_code or "input(" in user_code)
         elif lang == "java":
             return ("public static void main" in user_code or "static public void main" in user_code)
-        elif lang in ["c", "c99", "c11"]:
+        elif lang in ["c", "c99", "c11", "cpp", "c++", "cxx"]:
             return ("main(" in user_code)
         return False
 
     @classmethod
     def wrap_code(cls, arg1: str, arg2: str, user_code: str) -> str:
         """Wraps pure LeetCode class Solution / function code with problem IO harness."""
-        known_langs = {"python", "python3", "py", "python_class", "python_leetcode", "python_normal", "python_script", "java", "c", "c99", "c11"}
+        known_langs = {"python", "python3", "py", "python_class", "python_leetcode", "python_normal", "python_script", "java", "c", "c99", "c11", "cpp", "c++", "javascript", "js"}
         if (arg1 or "").lower() in known_langs:
             lang = (arg1 or "").lower()
             clean_id = (arg2 or "").strip().lower()

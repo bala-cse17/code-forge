@@ -12,6 +12,7 @@ from typing import Dict, Any, List, Optional, Tuple
 
 from .compiler import Compiler
 from .executor import Executor
+from .sql_runner import SQLRunner
 
 
 class Judge:
@@ -66,6 +67,17 @@ class Judge:
         timeout: Optional[float] = None
     ) -> Dict[str, Any]:
         """Runs user code against a custom stdin string in an isolated directory."""
+        if (language or "").lower() in ["sql", "sqlite", "sqlite3"]:
+            sql_res = SQLRunner.run_query(code, custom_input or "", timeout_seconds=timeout or 3.0)
+            return {
+                "status": sql_res["status"],
+                "stdout": sql_res["output"],
+                "stderr": sql_res["error"],
+                "runtime": sql_res["runtime"],
+                "passed": (sql_res["status"] == "ACCEPTED"),
+                "error": sql_res["error"]
+            }
+
         work_dir = tempfile.mkdtemp(dir=self.temp_root, prefix="cc_run_")
         try:
             # 1. Compile / Prepare
@@ -113,6 +125,16 @@ class Judge:
         timeout: Optional[float] = None
     ) -> Dict[str, Any]:
         """Evaluates code against visible problem sample test cases."""
+        if (language or "").lower() in ["sql", "sqlite", "sqlite3"]:
+            eval_res = SQLRunner.evaluate_test_cases(code, sample_tests, timeout_seconds=timeout or 3.0)
+            return {
+                "status": eval_res["status"],
+                "all_passed": eval_res["all_passed"],
+                "results": eval_res["results"],
+                "error_message": eval_res["error_message"],
+                "total_runtime": eval_res["total_runtime"]
+            }
+
         work_dir = tempfile.mkdtemp(dir=self.temp_root, prefix="cc_sample_")
         results = []
         all_passed = True
@@ -200,10 +222,11 @@ class Judge:
         self,
         language: str,
         code: str,
-        hidden_tests_dir: str,
+        hidden_tests_dir: Optional[str] = None,
         problem_points: int = 100,
         timeout: Optional[Any] = None,
-        problem_id: Optional[str] = None
+        problem_id: Optional[str] = None,
+        hidden_tests: Optional[List[Dict[str, str]]] = None
     ) -> Dict[str, Any]:
         """
         Evaluates submission against server-side hidden test cases.
@@ -216,6 +239,38 @@ class Judge:
         elif isinstance(problem_id, (int, float)) and timeout is None:
             timeout = float(problem_id)
             problem_id = None
+
+        if (language or "").lower() in ["sql", "sqlite", "sqlite3"]:
+            tests = list(hidden_tests or [])
+            if not tests and hidden_tests_dir and os.path.exists(hidden_tests_dir):
+                test_files = sorted(
+                    glob.glob(os.path.join(hidden_tests_dir, "test*.txt")),
+                    key=lambda x: [int(c) if c.isdigit() else c for c in os.path.basename(x).split(".")[0]]
+                )
+                for tf in test_files:
+                    sin, sout = self.parse_test_file(tf)
+                    tests.append({"input": sin, "output": sout})
+            eval_res = SQLRunner.evaluate_test_cases(code, tests, timeout_seconds=timeout or 3.0)
+            total_c = len(tests)
+            passed_c = eval_res["passed_count"]
+            score = int(problem_points * (passed_c / total_c)) if total_c > 0 else 0
+            return {
+                "status": eval_res["status"],
+                "passed_count": passed_c,
+                "total_count": total_c,
+                "score": score,
+                "runtime": eval_res["total_runtime"],
+                "error_message": eval_res["error_message"],
+                "details": [
+                    {
+                        "test_num": r["test_index"],
+                        "status": r["status"],
+                        "passed": r["passed"],
+                        "runtime": r["runtime"]
+                    }
+                    for r in eval_res.get("results", [])
+                ]
+            }
 
         if not problem_id and hidden_tests_dir:
             inferred = os.path.basename(os.path.dirname(os.path.abspath(hidden_tests_dir)))
@@ -242,13 +297,21 @@ class Judge:
                     "details": []
                 }
 
-            # 2. Discover test files
-            test_files = sorted(
-                glob.glob(os.path.join(hidden_tests_dir, "test*.txt")),
-                key=lambda x: [int(c) if c.isdigit() else c for c in os.path.basename(x).split(".")[0]]
-            )
+            # 2. Discover test cases (from files or memory)
+            test_entries = []
+            if hidden_tests_dir and os.path.exists(hidden_tests_dir):
+                test_files = sorted(
+                    glob.glob(os.path.join(hidden_tests_dir, "test*.txt")),
+                    key=lambda x: [int(c) if c.isdigit() else c for c in os.path.basename(x).split(".")[0]]
+                )
+                for tf in test_files:
+                    stdin_data, expected_out = self.parse_test_file(tf)
+                    test_entries.append((stdin_data, expected_out))
+            elif hidden_tests:
+                for ht in hidden_tests:
+                    test_entries.append((ht.get("input", ""), ht.get("output", "")))
 
-            total_count = len(test_files)
+            total_count = len(test_entries)
             if total_count == 0:
                 return {
                     "status": "ERROR",
@@ -263,9 +326,7 @@ class Judge:
             overall_verdict = "ACCEPTED"
             first_fail_msg = None
 
-            for idx, tf in enumerate(test_files, start=1):
-                stdin_data, expected_out = self.parse_test_file(tf)
-
+            for idx, (stdin_data, expected_out) in enumerate(test_entries, start=1):
                 exec_res = self.executor.execute(
                     cmd=meta["cmd"],
                     work_dir=work_dir,

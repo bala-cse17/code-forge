@@ -1,0 +1,63 @@
+{
+  "id": "p150_count_restricted_prime_factors",
+  "number": 150,
+  "slug": "count-numbers-with-restricted-prime-factors",
+  "category_id": 15,
+  "category_name": "Mathematics and Number Theory",
+  "title": "Count Numbers With Restricted Prime Factors",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "An ugly number is a positive integer whose prime factors are limited to 2, 3, and 5. Given an integer `n`, return the `n`th ugly number.",
+  "input_format": "A single line containing integer `n`.",
+  "output_format": "The nth ugly number.",
+  "constraints": "1 <= n <= 1690",
+  "sample_tests": [
+    {
+      "input": "10",
+      "output": "12",
+      "explanation": "[1, 2, 3, 4, 5, 6, 8, 9, 10, 12] is the sequence of the first 10 ugly numbers."
+    },
+    {
+      "input": "1",
+      "output": "1",
+      "explanation": "1 has no prime factors and is conventionally treated as ugly."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2",
+      "output": "2"
+    },
+    {
+      "input": "3",
+      "output": "3"
+    },
+    {
+      "input": "4",
+      "output": "4"
+    },
+    {
+      "input": "5",
+      "output": "5"
+    },
+    {
+      "input": "15",
+      "output": "24"
+    }
+  ],
+  "hints": [
+    "Use three pointers `i2`, `i3`, and `i5` tracking multiples of 2, 3, and 5.",
+    "At each step, `next_ugly = min(ugly[i2]*2, ugly[i3]*3, ugly[i5]*5)`.",
+    "Advance the pointers matching the chosen minimum value."
+  ],
+  "starter_code": {
+    "python": "# Count Numbers With Restricted Prime Factors\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Count Numbers With Restricted Prime Factors\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Count Numbers With Restricted Prime Factors\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Count Numbers With Restricted Prime Factors\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Count Numbers With Restricted Prime Factors\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    ugly = [1] * n\n    i2 = i3 = i5 = 0\n    for i in range(1, n):\n        next_ugly = min(ugly[i2]*2, ugly[i3]*3, ugly[i5]*5)\n        ugly[i] = next_ugly\n        if next_ugly == ugly[i2]*2: i2 += 1\n        if next_ugly == ugly[i3]*3: i3 += 1\n        if next_ugly == ugly[i5]*5: i5 += 1\n    print(ugly[-1])\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

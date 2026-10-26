@@ -1,0 +1,6 @@
+INPUT:
+2
+PUSH 42
+EMPTY
+EXPECTED:
+false

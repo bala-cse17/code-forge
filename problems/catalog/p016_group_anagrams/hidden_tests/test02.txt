@@ -1,0 +1,5 @@
+INPUT:
+5
+cat dog tac god act
+EXPECTED:
+3 2

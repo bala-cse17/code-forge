@@ -1,0 +1,6 @@
+INPUT:
+2
+ADD a
+SEARCH .
+EXPECTED:
+true

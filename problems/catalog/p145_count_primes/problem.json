@@ -1,0 +1,64 @@
+{
+  "id": "p145_count_primes",
+  "number": 145,
+  "slug": "count-primes",
+  "category_id": 15,
+  "category_name": "Mathematics and Number Theory",
+  "title": "Count Primes",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given an integer `n`, return the number of prime numbers that are strictly less than `n`.",
+  "input_format": "A single line containing integer `n`.",
+  "output_format": "Number of primes strictly less than n.",
+  "constraints": "0 <= n <= 5 * 10^6",
+  "sample_tests": [
+    {
+      "input": "10",
+      "output": "4",
+      "explanation": "Primes less than 10 are 2, 3, 5, 7 (total 4)."
+    },
+    {
+      "input": "0",
+      "output": "0",
+      "explanation": "No primes."
+    },
+    {
+      "input": "1",
+      "output": "0",
+      "explanation": "No primes."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2",
+      "output": "0"
+    },
+    {
+      "input": "3",
+      "output": "1"
+    },
+    {
+      "input": "20",
+      "output": "8"
+    },
+    {
+      "input": "100",
+      "output": "25"
+    }
+  ],
+  "hints": [
+    "Use the Sieve of Eratosthenes.",
+    "Start at 2 and mark all multiples of each prime up to `n - 1` as composite.",
+    "Counting remaining unmarked entries gives prime count in O(n log log n)."
+  ],
+  "starter_code": {
+    "python": "# Count Primes\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Count Primes\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Count Primes\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Count Primes\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Count Primes\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    if n <= 2: print(0); sys.exit(0)\n    primes = bytearray([1]) * n\n    primes[0] = primes[1] = 0\n    for p in range(2, int(n**0.5) + 1):\n        if primes[p]:\n            primes[p*p:n:p] = bytes(len(range(p*p, n, p)))\n    print(sum(primes))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

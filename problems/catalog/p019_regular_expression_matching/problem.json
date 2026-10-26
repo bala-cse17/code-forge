@@ -1,0 +1,64 @@
+{
+  "id": "p019_regular_expression_matching",
+  "number": 19,
+  "slug": "regular-expression-matching",
+  "category_id": 2,
+  "category_name": "Strings",
+  "title": "Regular Expression Matching",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Given an input string `s` and a pattern `p`, implement regular expression matching with support for '.' and '*' where '.' matches any single character and '*' matches zero or more of the preceding element.",
+  "input_format": "Two lines: first string `s`, second pattern `p`.",
+  "output_format": "true if matches, false otherwise.",
+  "constraints": "1 <= length(s), length(p) <= 20",
+  "sample_tests": [
+    {
+      "input": "aa\na",
+      "output": "false",
+      "explanation": "a does not match entire string aa."
+    },
+    {
+      "input": "aa\na*",
+      "output": "true",
+      "explanation": "* matches zero or more of the preceding 'a'."
+    },
+    {
+      "input": "ab\n.*",
+      "output": "true",
+      "explanation": ".* matches any sequence of characters."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "aab\nc*a*b",
+      "output": "true"
+    },
+    {
+      "input": "mississippi\nmis*is*p*.",
+      "output": "false"
+    },
+    {
+      "input": "ab\n.",
+      "output": "false"
+    },
+    {
+      "input": "a\nab*",
+      "output": "true"
+    }
+  ],
+  "hints": [
+    "Define DP state `dp(i, j)`: does s[i:] match p[j:]?",
+    "If p[j+1] == '*', we can either skip the '*' (match 0 times) or match s[i] and continue.",
+    "Otherwise, s[i] must match p[j] (or '.') and recurse on dp(i+1, j+1)."
+  ],
+  "starter_code": {
+    "python": "# Regular Expression Matching\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Regular Expression Matching\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Regular Expression Matching\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Regular Expression Matching\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Regular Expression Matching\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().split()\nif len(lines) >= 2:\n    s, p = lines[0], lines[1]\n    memo = {}\n    def dp(i, j):\n        if (i, j) in memo: return memo[(i, j)]\n        if j == len(p): return i == len(s)\n        first = i < len(s) and (p[j] == s[i] or p[j] == '.')\n        if j + 1 < len(p) and p[j+1] == '*':\n            ans = dp(i, j + 2) or (first and dp(i + 1, j))\n        else:\n            ans = first and dp(i + 1, j + 1)\n        memo[(i, j)] = ans\n        return ans\n    print('true' if dp(0, 0) else 'false')\nelse:\n    print('false')\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

@@ -1,0 +1,4 @@
+INPUT:
+eccbbbbdec
+EXPECTED:
+10

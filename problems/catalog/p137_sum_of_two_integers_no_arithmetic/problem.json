@@ -1,0 +1,60 @@
+{
+  "id": "p137_sum_of_two_integers_no_arithmetic",
+  "number": 137,
+  "slug": "sum-of-two-integers-without-arithmetic-operators",
+  "category_id": 14,
+  "category_name": "Bit Manipulation",
+  "title": "Sum of Two Integers Without Arithmetic Operators",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given two integers `a` and `b`, return the sum of the two integers without using the operators `+` and `-`.",
+  "input_format": "A single line containing integers `a` and `b`.",
+  "output_format": "Sum of a and b.",
+  "constraints": "-1000 <= a, b <= 1000",
+  "sample_tests": [
+    {
+      "input": "1 2",
+      "output": "3",
+      "explanation": "1 + 2 = 3."
+    },
+    {
+      "input": "2 3",
+      "output": "5",
+      "explanation": "2 + 3 = 5."
+    },
+    {
+      "input": "-1 1",
+      "output": "0",
+      "explanation": "Negative and positive sum."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "0 0",
+      "output": "0"
+    },
+    {
+      "input": "-5 -5",
+      "output": "-10"
+    },
+    {
+      "input": "100 -50",
+      "output": "50"
+    }
+  ],
+  "hints": [
+    "Half adder logic: `sum_bits = a ^ b` and `carry_bits = (a & b) << 1`.",
+    "Repeat until carry becomes 0.",
+    "Use 32-bit bitmasking to handle negative numbers in Python."
+  ],
+  "starter_code": {
+    "python": "# Sum of Two Integers Without Arithmetic Operators\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Sum of Two Integers Without Arithmetic Operators\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Sum of Two Integers Without Arithmetic Operators\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Sum of Two Integers Without Arithmetic Operators\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Sum of Two Integers Without Arithmetic Operators\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    a, b = int(data[0]), int(data[1])\n    mask = 0xffffffff\n    while (b & mask) != 0:\n        carry = (a & b) << 1\n        a = a ^ b\n        b = carry\n    print(a if a <= 0x7fffffff else ~(a ^ mask))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

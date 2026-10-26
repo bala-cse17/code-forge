@@ -37,3 +37,8 @@ build/
 dist/
 *.pyc
 __pycache__/
+
+# Backups and archives
+*.bak
+*.zip
+user_prompt_*.txt

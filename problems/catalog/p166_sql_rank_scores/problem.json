@@ -1,0 +1,43 @@
+{
+  "id": "p166_sql_rank_scores",
+  "number": 166,
+  "slug": "rank-scores",
+  "category_id": 17,
+  "category_name": "Database and SQL",
+  "title": "Rank Scores",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Write an SQL query to rank the scores. The scores should be ranked from the highest to the lowest. If there is a tie between two scores, both should have the same ranking with no holes (Dense Rank).\n\nTable `Scores`: `id (INT), score (REAL)`",
+  "input_format": "Database contains table `Scores`.",
+  "output_format": "Score and Rank separated by space.",
+  "constraints": "Scores are non-negative floats.",
+  "sample_tests": [
+    {
+      "input": "CREATE TABLE Scores (id INT, score REAL);\nINSERT INTO Scores VALUES (1, 3.50), (2, 3.65), (3, 4.00), (4, 3.85), (5, 4.00), (6, 3.65);",
+      "output": "4.0 1\n4.0 1\n3.85 2\n3.65 3\n3.65 3\n3.5 4",
+      "explanation": "Dense ranked scores."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "CREATE TABLE Scores (id INT, score REAL);\nINSERT INTO Scores VALUES (1, 10.0), (2, 10.0);",
+      "output": "10.0 1\n10.0 1"
+    }
+  ],
+  "hints": [
+    "Use the window function `DENSE_RANK()`.",
+    "Specify `OVER (ORDER BY score DESC)` for descending order.",
+    "Dense rank ensures ties receive identical rank without skipping numbers."
+  ],
+  "starter_code": {
+    "sql": "-- Rank Scores\n-- Write your SQL query below\nSELECT ...\nFROM ...;\n",
+    "python": "# Rank Scores (SQL Problem)\n# You can test via SQL query or Python\nimport sys\nprint('Run query in SQL tab')\n",
+    "c": "// SQL Problem: Rank Scores\n",
+    "cpp": "// SQL Problem: Rank Scores\n",
+    "java": "// SQL Problem: Rank Scores\n",
+    "javascript": "// SQL Problem: Rank Scores\n"
+  },
+  "reference_solution": "SELECT score, DENSE_RANK() OVER (ORDER BY score DESC) AS rank FROM Scores ORDER BY score DESC;",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

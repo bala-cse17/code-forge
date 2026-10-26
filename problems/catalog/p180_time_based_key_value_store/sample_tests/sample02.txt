@@ -1,0 +1,7 @@
+INPUT:
+3
+SET a b 10
+GET a 5
+GET a 10
+EXPECTED:
+ b

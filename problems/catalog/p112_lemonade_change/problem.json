@@ -1,0 +1,59 @@
+{
+  "id": "p112_lemonade_change",
+  "number": 112,
+  "slug": "lemonade-change",
+  "category_id": 12,
+  "category_name": "Greedy Algorithms",
+  "title": "Lemonade Change",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "At a lemonade stand, each lemonade costs $5. Customers stand in a queue and order one at a time, paying with a $5, $10, or $20 bill. Return `true` if you can provide every customer with correct change, or `false`.",
+  "input_format": "First line contains integer `n`, followed by `n` customer bill values.",
+  "output_format": "true if all change can be provided, false otherwise.",
+  "constraints": "1 <= n <= 10^5",
+  "sample_tests": [
+    {
+      "input": "5\n5 5 5 10 20",
+      "output": "true",
+      "explanation": "First 3 pay 5, 4th gets 5 change, 5th gets 10+5 change."
+    },
+    {
+      "input": "5\n5 5 10 10 20",
+      "output": "false",
+      "explanation": "Cannot give $15 change for the last $20."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1\n5",
+      "output": "true"
+    },
+    {
+      "input": "1\n10",
+      "output": "false"
+    },
+    {
+      "input": "4\n5 5 5 20",
+      "output": "true"
+    },
+    {
+      "input": "3\n5 10 5",
+      "output": "true"
+    }
+  ],
+  "hints": [
+    "Track count of $5 and $10 bills.",
+    "When receiving a $20 bill, greedily prioritize giving a $10 bill and a $5 bill rather than three $5 bills.",
+    "A $5 bill is more versatile for future change."
+  ],
+  "starter_code": {
+    "python": "# Lemonade Change\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Lemonade Change\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Lemonade Change\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Lemonade Change\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Lemonade Change\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    bills = [int(x) for x in data[1:1+n]]\n    five = ten = 0\n    ok = True\n    for b in bills:\n        if b == 5: five += 1\n        elif b == 10:\n            if five == 0: ok = False; break\n            five -= 1; ten += 1\n        elif b == 20:\n            if ten > 0 and five > 0: ten -= 1; five -= 1\n            elif five >= 3: five -= 3\n            else: ok = False; break\n    print('true' if ok else 'false')\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

@@ -1,0 +1,8 @@
+INPUT:
+barfoofoobarthefoobarman
+3
+bar
+foo
+the
+EXPECTED:
+6 9 12

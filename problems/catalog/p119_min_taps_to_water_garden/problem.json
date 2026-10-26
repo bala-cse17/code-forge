@@ -1,0 +1,51 @@
+{
+  "id": "p119_min_taps_to_water_garden",
+  "number": 119,
+  "slug": "minimum-number-of-taps-to-water-a-garden",
+  "category_id": 12,
+  "category_name": "Greedy Algorithms",
+  "title": "Minimum Number of Taps to Water a Garden",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "There is a one-dimensional garden on the x-axis. The garden starts at 0 and ends at `n`. There are `n + 1` taps located at points `[0, 1, ..., n]`. Given integer array `ranges` where `ranges[i]` means tap `i` can water `[i - ranges[i], i + ranges[i]]`. Return minimum taps to water whole garden, or -1.",
+  "input_format": "First line contains `n`. Second line contains `n + 1` range integers.",
+  "output_format": "Minimum taps or -1.",
+  "constraints": "1 <= n <= 10^4",
+  "sample_tests": [
+    {
+      "input": "5\n3 4 1 1 0 0",
+      "output": "1",
+      "explanation": "Tap 1 can water [-3, 5], covering [0, 5]."
+    },
+    {
+      "input": "3\n0 0 0 0",
+      "output": "-1",
+      "explanation": "Cannot water garden."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "7\n1 2 1 0 2 1 0 1",
+      "output": "3"
+    },
+    {
+      "input": "4\n2 0 1 2 0",
+      "output": "2"
+    }
+  ],
+  "hints": [
+    "Convert taps into intervals [max(0, i - r), min(n, i + r)].",
+    "For each left boundary, compute the furthest right boundary reachable.",
+    "Apply Jump Game II greedy logic to count intervals required to cover [0, n]."
+  ],
+  "starter_code": {
+    "python": "# Minimum Number of Taps to Water a Garden\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Minimum Number of Taps to Water a Garden\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Minimum Number of Taps to Water a Garden\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Minimum Number of Taps to Water a Garden\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Minimum Number of Taps to Water a Garden\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    ranges = [int(x) for x in data[1:2+n]]\n    max_range = [0] * (n + 1)\n    for i, r in enumerate(ranges):\n        left = max(0, i - r)\n        right = min(n, i + r)\n        max_range[left] = max(max_range[left], right)\n    taps = cur_end = next_end = 0\n    for i in range(n):\n        next_end = max(next_end, max_range[i])\n        if i == cur_end:\n            if next_end <= cur_end: print(-1); sys.exit(0)\n            taps += 1\n            cur_end = next_end\n    print(taps)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

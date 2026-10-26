@@ -1,0 +1,4 @@
+INPUT:
+vvvlo
+EXPECTED:
+vlvov

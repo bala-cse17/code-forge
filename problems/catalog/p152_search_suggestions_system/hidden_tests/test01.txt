@@ -1,0 +1,7 @@
+INPUT:
+1 bag
+baggage
+EXPECTED:
+baggage
+baggage
+baggage

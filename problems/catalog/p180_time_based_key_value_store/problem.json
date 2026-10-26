@@ -1,0 +1,51 @@
+{
+  "id": "p180_time_based_key_value_store",
+  "number": 180,
+  "slug": "design-a-scalable-time-based-key-value-store",
+  "category_id": 18,
+  "category_name": "Mixed Advanced Problems",
+  "title": "Design a Scalable Time-Based Key-Value Store",
+  "difficulty": "Hard",
+  "points": 300,
+  "description": "Design a time-based key-value data structure that can store multiple values for the same key at different time stamps and retrieve the key's value at a certain timestamp. Operations: `SET key val timestamp` and `GET key timestamp`.",
+  "input_format": "First line contains `m` (number of operations). Following `m` lines contain commands.",
+  "output_format": "Space-separated outputs of GET commands.",
+  "constraints": "1 <= m <= 10^4\nTimestamps are strictly increasing.",
+  "sample_tests": [
+    {
+      "input": "4\nSET foo bar 1\nGET foo 1\nGET foo 3\nSET foo bar2 4",
+      "output": "bar bar",
+      "explanation": "GET foo 1 is bar. GET foo 3 is bar (prev timestamp)."
+    },
+    {
+      "input": "3\nSET a b 10\nGET a 5\nGET a 10",
+      "output": " b",
+      "explanation": "GET a 5 returns empty string, GET a 10 returns b."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2\nSET k v 1\nGET k 1",
+      "output": "v"
+    },
+    {
+      "input": "2\nGET x 1",
+      "output": ""
+    }
+  ],
+  "hints": [
+    "Maintain a list of timestamps and values for each key.",
+    "Since timestamps are strictly increasing, the lists are sorted.",
+    "Use binary search (`bisect_right(times, timestamp) - 1`) to find the most recent valid value."
+  ],
+  "starter_code": {
+    "python": "# Design a Scalable Time-Based Key-Value Store\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Design a Scalable Time-Based Key-Value Store\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Design a Scalable Time-Based Key-Value Store\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Design a Scalable Time-Based Key-Value Store\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Design a Scalable Time-Based Key-Value Store\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys, bisect\nlines = sys.stdin.read().splitlines()\nout = []\nstore = {}\nif lines:\n    m = int(lines[0])\n    for line in lines[1:1+m]:\n        cmd = line.split()\n        if not cmd: continue\n        if cmd[0] == 'SET':\n            k, v, t = cmd[1], cmd[2], int(cmd[3])\n            if k not in store: store[k] = ([], [])\n            store[k][0].append(t)\n            store[k][1].append(v)\n        elif cmd[0] == 'GET':\n            k, t = cmd[1], int(cmd[2])\n            if k not in store: out.append('')\n            else:\n                times, vals = store[k]\n                idx = bisect.bisect_right(times, t) - 1\n                out.append(vals[idx] if idx >= 0 else '')\nprint(' '.join(out))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

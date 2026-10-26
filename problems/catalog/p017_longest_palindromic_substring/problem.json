@@ -1,0 +1,64 @@
+{
+  "id": "p017_longest_palindromic_substring",
+  "number": 17,
+  "slug": "longest-palindromic-substring",
+  "category_id": 2,
+  "category_name": "Strings",
+  "title": "Longest Palindromic Substring",
+  "difficulty": "Medium",
+  "points": 200,
+  "description": "Given a string `s`, return the longest palindromic substring in `s`. If multiple exist, return the one that appears first.",
+  "input_format": "A single line containing string `s`.",
+  "output_format": "The longest palindromic substring.",
+  "constraints": "1 <= length(s) <= 1000",
+  "sample_tests": [
+    {
+      "input": "babad",
+      "output": "bab",
+      "explanation": "bab or aba is valid. First is bab."
+    },
+    {
+      "input": "cbbd",
+      "output": "bb",
+      "explanation": "Longest is bb."
+    },
+    {
+      "input": "a",
+      "output": "a",
+      "explanation": "Single character."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "racecar",
+      "output": "racecar"
+    },
+    {
+      "input": "ac",
+      "output": "a"
+    },
+    {
+      "input": "noon",
+      "output": "noon"
+    },
+    {
+      "input": "abacdfgdcaba",
+      "output": "aba"
+    }
+  ],
+  "hints": [
+    "A palindrome mirrors around its center.",
+    "Expand around each index: treat index i as center for odd lengths, (i, i+1) for even lengths.",
+    "Keep track of the longest palindrome substring found."
+  ],
+  "starter_code": {
+    "python": "# Longest Palindromic Substring\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Longest Palindromic Substring\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Longest Palindromic Substring\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Longest Palindromic Substring\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Longest Palindromic Substring\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ns = sys.stdin.read().rstrip('\\r\\n')\nif not s:\n    print('')\n    sys.exit(0)\ndef expand(l, r):\n    while l >= 0 and r < len(s) and s[l] == s[r]:\n        l -= 1; r += 1\n    return s[l+1:r]\nbest = ''\nfor i in range(len(s)):\n    p1 = expand(i, i)\n    p2 = expand(i, i + 1)\n    if len(p1) > len(best): best = p1\n    if len(p2) > len(best): best = p2\nprint(best)\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

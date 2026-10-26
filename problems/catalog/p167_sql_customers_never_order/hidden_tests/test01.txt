@@ -1,0 +1,6 @@
+INPUT:
+CREATE TABLE Customers (id INT, name TEXT);
+CREATE TABLE Orders (id INT, customerId INT);
+INSERT INTO Customers VALUES (1, 'Alice');
+EXPECTED:
+Alice

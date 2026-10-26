@@ -1,0 +1,4 @@
+INPUT:
+leetcode
+EXPECTED:
+0

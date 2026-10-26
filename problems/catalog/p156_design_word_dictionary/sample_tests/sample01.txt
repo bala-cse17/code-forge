@@ -1,0 +1,9 @@
+INPUT:
+5
+ADD bad
+ADD dad
+ADD mad
+SEARCH pad
+SEARCH .ad
+EXPECTED:
+false true

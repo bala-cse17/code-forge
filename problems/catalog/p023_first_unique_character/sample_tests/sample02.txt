@@ -1,0 +1,4 @@
+INPUT:
+loveleetcode
+EXPECTED:
+2

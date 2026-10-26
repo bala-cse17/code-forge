@@ -1,0 +1,64 @@
+{
+  "id": "p104_unique_paths",
+  "number": 104,
+  "slug": "unique-paths",
+  "category_id": 11,
+  "category_name": "Dynamic Programming",
+  "title": "Unique Paths",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "There is a robot on an `m x n` grid. The robot is initially located at top-left corner `(0, 0)` and can only move either down or right at any point in time. Return the number of possible unique paths to the bottom-right corner `(m - 1, n - 1)`.",
+  "input_format": "A single line containing `m` and `n`.",
+  "output_format": "Number of unique paths.",
+  "constraints": "1 <= m, n <= 100",
+  "sample_tests": [
+    {
+      "input": "3 7",
+      "output": "28",
+      "explanation": "28 unique paths on a 3x7 grid."
+    },
+    {
+      "input": "3 2",
+      "output": "3",
+      "explanation": "3 paths on a 3x2 grid."
+    },
+    {
+      "input": "1 1",
+      "output": "1",
+      "explanation": "Already at destination."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "3 3",
+      "output": "6"
+    },
+    {
+      "input": "7 3",
+      "output": "28"
+    },
+    {
+      "input": "10 10",
+      "output": "48620"
+    },
+    {
+      "input": "1 5",
+      "output": "1"
+    }
+  ],
+  "hints": [
+    "Total moves required: (m - 1) down moves and (n - 1) right moves.",
+    "Any path is a sequence of (m - 1 + n - 1) total moves.",
+    "The answer is combination: `C(m + n - 2, m - 1)`."
+  ],
+  "starter_code": {
+    "python": "# Unique Paths\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Unique Paths\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Unique Paths\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Unique Paths\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Unique Paths\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys, math\ndata = sys.stdin.read().split()\nif data:\n    m, n = int(data[0]), int(data[1])\n    print(math.comb(m + n - 2, m - 1))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

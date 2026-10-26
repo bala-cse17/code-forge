@@ -1,0 +1,7 @@
+INPUT:
+3
+INSERT cat
+SEARCH cat
+STARTSWITH ca
+EXPECTED:
+true true

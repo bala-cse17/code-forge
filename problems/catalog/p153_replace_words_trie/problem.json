@@ -1,0 +1,51 @@
+{
+  "id": "p153_replace_words_trie",
+  "number": 153,
+  "slug": "replace-words-using-a-trie",
+  "category_id": 16,
+  "category_name": "Tries and Advanced Data Structures",
+  "title": "Replace Words Using a Trie",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "In English, we have a concept called root, which can be followed by some other word to form another longer word. You are given a `dictionary` of roots and a `sentence`. Replace all words with the shortest root that forms them.",
+  "input_format": "First line contains `k` (number of roots). Second line contains `k` roots. Third line contains sentence.",
+  "output_format": "Sentence with words replaced by shortest matching root.",
+  "constraints": "1 <= k <= 1000",
+  "sample_tests": [
+    {
+      "input": "3\ncat bat rat\nthe cattle was rattled by the battery",
+      "output": "the cat was rat by the bat",
+      "explanation": "cattle -> cat, rattled -> rat, battery -> bat."
+    },
+    {
+      "input": "2\na b\naadsfasf absbs bbab cadsfafs",
+      "output": "a a b cadsfafs",
+      "explanation": "Replaced with single letter roots."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1\nc\ncat car copy",
+      "output": "c c c"
+    },
+    {
+      "input": "2\nre pre\nprepare rebuild react",
+      "output": "pre re re"
+    }
+  ],
+  "hints": [
+    "Store all root words in a Trie or hash set.",
+    "For each word in the sentence, find the shortest prefix present in the roots.",
+    "Replace the word with this root."
+  ],
+  "starter_code": {
+    "python": "# Replace Words Using a Trie\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Replace Words Using a Trie\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Replace Words Using a Trie\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Replace Words Using a Trie\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Replace Words Using a Trie\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nif len(lines) >= 3:\n    roots = set(lines[1].split())\n    words = lines[2].split()\n    res = []\n    for w in words:\n        replaced = w\n        for i in range(1, len(w) + 1):\n            sub = w[:i]\n            if sub in roots: replaced = sub; break\n        res.append(replaced)\n    print(' '.join(res))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

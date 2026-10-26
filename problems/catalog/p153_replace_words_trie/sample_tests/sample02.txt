@@ -1,0 +1,6 @@
+INPUT:
+2
+a b
+aadsfasf absbs bbab cadsfafs
+EXPECTED:
+a a b cadsfafs

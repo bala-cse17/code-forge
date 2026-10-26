@@ -1,0 +1,51 @@
+{
+  "id": "p092_flood_fill",
+  "number": 92,
+  "slug": "flood-fill",
+  "category_id": 10,
+  "category_name": "Graphs",
+  "title": "Flood Fill",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "An image is represented by an `m x n` integer grid `image`. Perform flood fill starting at `(sr, sc)` with `newColor`. Output the modified image grid.",
+  "input_format": "First line contains `m`, `n`, `sr`, `sc`, `newColor`. Following `m` lines contain `n` integers.",
+  "output_format": "The modified grid with space-separated row values.",
+  "constraints": "1 <= m, n <= 50",
+  "sample_tests": [
+    {
+      "input": "3 3 1 1 2\n1 1 1\n1 1 0\n1 0 1",
+      "output": "2 2 2\n2 2 0\n2 0 1",
+      "explanation": "Flood fill replaces color 1 with 2."
+    },
+    {
+      "input": "2 2 0 0 0\n0 0 0\n0 0 0",
+      "output": "0 0\n0 0",
+      "explanation": "Color already 0."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "1 1 0 0 5\n1",
+      "output": "5"
+    },
+    {
+      "input": "2 3 0 0 9\n1 1 1\n1 2 2",
+      "output": "9 9 9\n9 2 2"
+    }
+  ],
+  "hints": [
+    "Check if the starting pixel already has the target color to prevent infinite recursion.",
+    "Recursively visit up, down, left, right neighbors that have the original color.",
+    "Replace each neighbor's color with `newColor`."
+  ],
+  "starter_code": {
+    "python": "# Flood Fill\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Flood Fill\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Flood Fill\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Flood Fill\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Flood Fill\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    m, n, sr, sc, nc = int(data[0]), int(data[1]), int(data[2]), int(data[3]), int(data[4])\n    grid = []\n    idx = 5\n    for _ in range(m):\n        grid.append([int(x) for x in data[idx:idx+n]])\n        idx += n\n    orig = grid[sr][sc]\n    if orig != nc:\n        def fill(r, c):\n            if r < 0 or r >= m or c < 0 or c >= n or grid[r][c] != orig: return\n            grid[r][c] = nc\n            fill(r+1, c); fill(r-1, c); fill(r, c+1); fill(r, c-1)\n        fill(sr, sc)\n    for row in grid:\n        print(' '.join(map(str, row)))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

@@ -1,0 +1,51 @@
+{
+  "id": "p062_implement_queue_using_stacks",
+  "number": 62,
+  "slug": "implement-a-queue-using-stacks",
+  "category_id": 7,
+  "category_name": "Stacks and Queues",
+  "title": "Implement a Queue Using Stacks",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Implement a FIFO queue using only two stacks. Operations: `PUSH x`, `POP`, `PEEK`, `EMPTY`.",
+  "input_format": "First line contains integer `m`. Following `m` lines contain commands.",
+  "output_format": "Outputs of POP, PEEK, and EMPTY separated by space.",
+  "constraints": "1 <= m <= 1000",
+  "sample_tests": [
+    {
+      "input": "5\nPUSH 1\nPUSH 2\nPEEK\nPOP\nEMPTY",
+      "output": "1 1 false",
+      "explanation": "PEEK gives 1, POP gives 1, EMPTY returns false."
+    },
+    {
+      "input": "3\nPUSH 5\nPOP\nEMPTY",
+      "output": "5 true",
+      "explanation": "Queue emptied."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "4\nPUSH 10\nPUSH 20\nPEEK\nPOP",
+      "output": "10 10"
+    },
+    {
+      "input": "2\nPUSH 42\nEMPTY",
+      "output": "false"
+    }
+  ],
+  "hints": [
+    "Stack 1 (`in_stk`) accepts all new incoming pushes.",
+    "Stack 2 (`out_stk`) serves all pops and peeks.",
+    "When `out_stk` is empty, transfer all elements from `in_stk` to reverse their order."
+  ],
+  "starter_code": {
+    "python": "# Implement a Queue Using Stacks\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Implement a Queue Using Stacks\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Implement a Queue Using Stacks\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Implement a Queue Using Stacks\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Implement a Queue Using Stacks\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\nlines = sys.stdin.read().splitlines()\nout = []\nin_stk, out_stk = [], []\ndef transfer():\n    if not out_stk:\n        while in_stk: out_stk.append(in_stk.pop())\nif lines:\n    m = int(lines[0])\n    for line in lines[1:1+m]:\n        cmd = line.split()\n        if not cmd: continue\n        if cmd[0] == 'PUSH': in_stk.append(int(cmd[1]))\n        elif cmd[0] == 'POP': transfer(); out.append(str(out_stk.pop()))\n        elif cmd[0] == 'PEEK': transfer(); out.append(str(out_stk[-1]))\n        elif cmd[0] == 'EMPTY': out.append('true' if not in_stk and not out_stk else 'false')\nprint(' '.join(out))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}

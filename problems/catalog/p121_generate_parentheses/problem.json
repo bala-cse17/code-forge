@@ -1,0 +1,51 @@
+{
+  "id": "p121_generate_parentheses",
+  "number": 121,
+  "slug": "generate-parentheses",
+  "category_id": 13,
+  "category_name": "Backtracking and Recursion",
+  "title": "Generate Parentheses",
+  "difficulty": "Easy",
+  "points": 100,
+  "description": "Given `n` pairs of parentheses, write a function to generate all combinations of well-formed parentheses. Output them sorted in lexicographical order, separated by space.",
+  "input_format": "A single line containing integer `n`.",
+  "output_format": "Space-separated well-formed parentheses combinations.",
+  "constraints": "1 <= n <= 8",
+  "sample_tests": [
+    {
+      "input": "3",
+      "output": "((())) (()()) (())() ()(()) ()()()",
+      "explanation": "5 combinations for n = 3."
+    },
+    {
+      "input": "1",
+      "output": "()",
+      "explanation": "Single pair."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "input": "2",
+      "output": "(()) ()()"
+    },
+    {
+      "input": "4",
+      "output": "(((()))) ((()())) ((())()) ((()))() (()(())) (()()()) (()())() (())(()) (())()() ()((())) ()(()()) ()(())() ()()(()) ()()()()"
+    }
+  ],
+  "hints": [
+    "Use backtracking: keep track of number of open and closed brackets placed.",
+    "Add '(' if `open_cnt < n`.",
+    "Add ')' only if `close_cnt < open_cnt` to ensure valid prefix balance."
+  ],
+  "starter_code": {
+    "python": "# Generate Parentheses\nimport sys\n\ndef solve():\n    data = sys.stdin.read().split()\n    if not data: return\n    # Write your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "c": "// Generate Parentheses\n#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    // Read input from standard input\n    return 0;\n}\n",
+    "cpp": "// Generate Parentheses\n#include <iostream>\n#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    return 0;\n}\n",
+    "java": "// Generate Parentheses\nimport java.util.*;\nimport java.io.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n    }\n}\n",
+    "javascript": "// Generate Parentheses\nconst fs = require('fs');\nconst input = fs.readFileSync(0, 'utf-8').trim().split(/\\s+/);\n\nfunction solve() {\n    if (input.length === 0 || input[0] === '') return;\n}\nsolve();\n"
+  },
+  "reference_solution": "import sys\ndata = sys.stdin.read().split()\nif data:\n    n = int(data[0])\n    res = []\n    def backtrack(s, open_cnt, close_cnt):\n        if len(s) == 2 * n:\n            res.append(s)\n            return\n        if open_cnt < n: backtrack(s + '(', open_cnt + 1, close_cnt)\n        if close_cnt < open_cnt: backtrack(s + ')', open_cnt, close_cnt + 1)\n    backtrack('', 0, 0)\n    res.sort()\n    print(' '.join(res))\n",
+  "time_limit": 3.0,
+  "memory_limit": 256
+}
